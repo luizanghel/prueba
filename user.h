@@ -4,6 +4,7 @@
 // Librerias
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 // Constantes 
 #define MAX_CHAR_SIMPLE 100
@@ -26,6 +27,7 @@ typedef struct {
 } Persona;
 
 // Operaciones
-
 void registerUser ();
+void leerPersona(Persona p);
+
 #endif
