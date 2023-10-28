@@ -60,7 +60,7 @@ int main () {
 		option = showMenu ();
 		switch (option) {
 			case 1:
-				// Iniciar sesion
+				iniciarSesion();
 				break;
 			case 2:
 				registerUser();

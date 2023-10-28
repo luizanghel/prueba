@@ -28,6 +28,7 @@ typedef struct {
 
 // Operaciones
 void registerUser ();
+void iniciarSesion ();
 void leerPersona(Persona p);
 
 #endif

@@ -620,3 +620,11 @@ void registerUser () {
 	}
 }
 
+void iniciarSesion() {
+	Persona p;
+
+	printf ("Registro: Rellena todos los campos que aparecen a continuación:\n");
+	solicitarCorreo("Introduce correo: ", p.correo);
+	solicitarContrasena("Introduce contraseña: ", p.password);
+}
+
