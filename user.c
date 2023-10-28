@@ -146,10 +146,10 @@ int revisarParametrosID (char palabra[MAX_CHAR_SIMPLE], int *numeros, char *letr
 			}
 		}
 		if (error == 1) {
-			printf ("ERROR (Los primeros 8 caracteres deben ser numeros).\n");
+			printf ("\tERROR (Los primeros 8 caracteres deben ser numeros).\n");
 		}
 		if (!esMajuscula(palabra[8])) {
-			printf ("ERROR (El ultimo caracter debe ser una letra mayuscula).\n");
+			printf ("\tERROR (El ultimo caracter debe ser una letra mayuscula).\n");
 			error = 1;
 		}
 		if (error == 0) {
@@ -284,15 +284,15 @@ int revisarParametrosContrasena(char contra[MAX_CHAR_SIMPLE], int option) {
 		}
 
 		if (!majuscula) {
-			printf ("ERROR: La contrasenya no cumple con los caracteres requeridos. Es necesario que ingreses minimo UNA mayuscula.\n");
+			printf ("\tERROR (La contrasenya no cumple con los caracteres requeridos. Es necesario que ingreses minimo UNA mayuscula).\n");
 			error = 1;
 		}
 		if (!minuscula) {
-			printf ("ERROR: La contrasenya no cumple con los caracteres requeridos. Es necesario que ingreses minimo UNA minuscula.\n");
+			printf ("\tERROR (La contrasenya no cumple con los caracteres requeridos. Es necesario que ingreses minimo UNA minuscula).\n");
 			error = 1;
 		}
 		if (!especial) {
-			printf ("ERROR: La contrasenya no cumple con los caracteres requeridos. Es necesario que ingreses minimo UN caracter especial.\n");
+			printf ("\tERROR (La contrasenya no cumple con los caracteres requeridos. Es necesario que ingreses minimo UN caracter especial).\n");
 			error = 1;
 		}
 	}
@@ -355,17 +355,19 @@ int revisarParametrosTelefono (char telefono[MAX_CHAR_SIMPLE]) {
 ************************************************/
 int solicitarTelefono (char texto[MAX_CHAR_SIMPLE]) {
 	int error = 0, telefono;
-	char palabra[MAX_CHAR_SIMPLE];
+	char palabra[MAX_CHAR_SIMPLE]; // aux;
+	
 	do {
 		printf ("%s", texto);
 		fgets(palabra, MAX_CHAR_SIMPLE, stdin);
 		palabra[strlen(palabra) - 1] = '\0';
 		error = revisarParametrosTelefono(palabra);
 	} while (error);
-
+	
 	if (!error) {
 		telefono = atoi(palabra);
 	}
+	//scanf("%c", &aux);
 	return telefono;
 }
 
@@ -387,7 +389,6 @@ Persona requestData () {
 	solicitarCorreo("Correo: ", p.correo);
 	solicitarContrasena("Contraseña: ", p.password);
 	p.telefono = solicitarTelefono("Numero de telefono: ");
-	
 	return p;
 }
 
@@ -408,6 +409,13 @@ void leerPersona (Persona p) {
 	printf("DNI: %d%c.\n", p.dni.numeros, p.dni.letra);
 }
 
+/***********************************************
+*
+* @Finalidad: Crear una LinkedList a partir de la informacion procedente de un fichero.
+* @Parametros: ----.
+* @Retorno: Retorna la LinkedList con la informacion del fichero..
+* 
+************************************************/
 LinkedList ficheroALista () {
 	LinkedList users_list;
 	FILE *users = NULL;
@@ -444,17 +452,37 @@ LinkedList ficheroALista () {
 	return users_list;
 }
 
+/***********************************************
+*
+* @Finalidad: Muestra el contenido de una lista.
+* @Parametros: in: usuarios = Lista a mostrar.
+* @Retorno: ----.
+* 
+************************************************/
 void mostrarLista(LinkedList usuarios) {
 	FilePersona p;
 
 	LINKEDLIST_goToHead(&usuarios);
 	while (!LINKEDLIST_isAtEnd(usuarios)) {
 		p =	LINKEDLIST_get(&usuarios);
-		printf ("%s\n", p.nombre);
+		printf ("Nombre: %s\n", p.nombre);
+		printf ("Apellido1: %s\n", p.apellido1);
+		printf ("Apellido2: %s\n", p.apellido2);
+		printf ("Correo: %s\n", p.correo);
+		printf ("Contraseña: %s\n", p.password);
+		printf ("Tipus: %d\n", p.tipus);
 		LINKEDLIST_next(&usuarios);
 	}
 }
 
+/***********************************************
+*
+* @Finalidad: Verificar si no hay registrados correos iguales.
+* @Parametros: 	in: correo[] = Correo a comprobar
+*				in: *usuarios = Lista donde se busca el resto de correos.
+* @Retorno: Retorna un 1 en caso que el correo sea unico, mientras que retorna un 0 si no lo es.
+* 
+************************************************/
 int esPersonaUnica (char correo[MAX_CHAR_SIMPLE], LinkedList *usuarios) {
 	FilePersona p;
 	int error = 0;
@@ -474,6 +502,98 @@ int esPersonaUnica (char correo[MAX_CHAR_SIMPLE], LinkedList *usuarios) {
 
 /***********************************************
 *
+* @Finalidad: Verificar si un usuario es cliente o productor.
+* @Parametros: in: dni = Dato que identifica si un usuario es cliente o productor.
+* @Retorno: Retorna un 1 en caso que sea un productor y un 0 si es un cliente.
+* 
+************************************************/
+int tipoUsuario (Dni dni) {
+	FILE *id_productores = NULL;
+	int numero, tipo = 0;
+	char letra, aux;
+	
+	id_productores = fopen("productors.txt", "r");
+	if (id_productores == NULL) {
+		printf ("\tERROR DE SISTEMA (El sistema ha caído. Pongase en contacto con un administrador en la mayor brevedad posible).\n");
+	}
+	else {
+		fscanf(id_productores, "%d", &numero);
+		while (!feof(id_productores)) {
+			fscanf (id_productores, "%c", &letra);
+			if (numero == dni.numeros && letra == dni.letra) {
+				tipo = 1;
+			}
+			fscanf (id_productores, "%c", &aux);
+			fscanf (id_productores, "%d", &numero);
+		}
+		fclose(id_productores);
+	}
+	return tipo;
+}
+
+/***********************************************
+*
+* @Finalidad: Convertir el tipo de los datos al tipo de la lista.
+* @Parametros: in: p = Tipo persona del dato.c/dato.h.
+* @Retorno: Retorna el tipo convertido asociado a la linkedlist.
+* 
+************************************************/
+FilePersona userFileToList (Persona p) {
+	FilePersona p2;
+
+	strcpy(p2.nombre, p.nombre);
+	strcpy(p2.apellido1, p.apellido1);
+	strcpy(p2.apellido2, p.apellido2);
+	strcpy(p2.correo, p.correo);
+	strcpy(p2.password, p.password);
+	p2.telefono = p.telefono;
+	p2.dni.numeros = p.dni.numeros;
+	p2.dni.letra = p.dni.letra;
+	p2.tipus = p.tipus;
+
+	return p2;
+
+}
+
+/***********************************************
+*
+* @Finalidad: Escribir el contenido de una lista en un fichero.
+* @Parametros: in: usuarios = Lista de donde saca la informacion.
+* @Retorno: ----.
+* 
+************************************************/
+void actualizarFichero (LinkedList usuarios) {
+	FILE *actualizado = NULL;
+	FilePersona p;
+
+	actualizado = fopen("nuevo.txt", "w");
+	if (actualizado == NULL) {
+		printf ("\tERROR DE SISTEMA (El sistema ha caído. Pongase en contacto con un administrador en la mayor brevedad posible).\n");
+	}
+	else {
+		LINKEDLIST_goToHead(&usuarios);
+		while (!LINKEDLIST_isAtEnd(usuarios)) {
+			p = LINKEDLIST_get(&usuarios);
+			fprintf(actualizado, "%d%c\n", p.dni.numeros, p.dni.letra);
+	   		fprintf(actualizado, "%s\n", p.nombre);
+	   		fprintf(actualizado, "%s\n", p.apellido1);
+	   	 	fprintf(actualizado, "%s\n", p.apellido2);
+	    	fprintf(actualizado, "%s\n", p.correo);
+	    	fprintf(actualizado, "%s\n", p.password);
+		    fprintf(actualizado, "%d\n", p.telefono);
+		    fprintf(actualizado, "%d\n", p.tipus);
+			LINKEDLIST_next(&usuarios);
+		}
+		fclose(actualizado);
+		LINKEDLIST_destroy(&usuarios);
+		remove("clients.txt");
+		rename("nuevo.txt", "clients.txt");
+	}
+
+}
+
+/***********************************************
+*
 * @Finalidad: Solicita los datos del usuario para proceder con el registro..
 * @Parametros: ----.
 * @Retorno: ----.
@@ -481,6 +601,7 @@ int esPersonaUnica (char correo[MAX_CHAR_SIMPLE], LinkedList *usuarios) {
 ************************************************/
 void registerUser () {
 	Persona p;
+	FilePersona registrada;
 	int error = 0;
 	LinkedList usuarios;
 
@@ -488,7 +609,11 @@ void registerUser () {
 	usuarios = ficheroALista();
 	error = esPersonaUnica(p.correo, &usuarios);
 	if (!error) {
-		printf ("El correo es unico.\n");
+		p.tipus = tipoUsuario(p.dni);
+		registrada = userFileToList(p);
+		LINKEDLIST_add(&usuarios, registrada);
+		actualizarFichero(usuarios);
+		printf ("¡Bienvenido/a! El registro se ha completado correctamente.\n");
 	}
 	else {
 		printf ("El correo ya esta en uso. Vuelva a intentarlo o inicie sesión.\n");
