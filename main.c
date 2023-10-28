@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "user.h"
+
 #define MAX_CHAR_SIMPLE 100
 
 /***********************************************
@@ -53,15 +55,15 @@ int showMenu () {
 
 int main () {
 	int option, quit = 0;
-	
+
 	do {
 		option = showMenu ();
 		switch (option) {
 			case 1:
-				// Registrarse
+				// Iniciar sesion
 				break;
 			case 2:
-				// Iniciar sesion
+				registerUser();
 				break;
 			case 3:
 				quit = 1;
@@ -73,4 +75,3 @@ int main () {
 	
 	return 0;
 }
-
