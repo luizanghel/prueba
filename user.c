@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "user.h"
+#include "linkedlist.h"
 
 /***********************************************
 *
@@ -407,6 +408,69 @@ void leerPersona (Persona p) {
 	printf("DNI: %d%c.\n", p.dni.numeros, p.dni.letra);
 }
 
+LinkedList ficheroALista () {
+	LinkedList users_list;
+	FILE *users = NULL;
+	char aux;
+	FilePersona p;
+
+	users = fopen("clients.txt", "r");
+	if (users == NULL) {
+		printf ("\tERROR DE SISTEMA (El sistema ha caído. Pongase en contacto con un administrador en la mayor brevedad posible).\n");
+	}
+	else {
+		users_list = LINKEDLIST_create();
+		fscanf(users, "%d", &p.dni.numeros);
+		while (!feof(users)) {
+			fscanf(users, "%c", &p.dni.letra);
+			fscanf(users, "%c", &aux);
+			fgets(p.nombre, MAX_CHAR_SIMPLE, users);
+			p.nombre[strlen(p.nombre) - 1] = '\0';
+			fgets(p.apellido1, MAX_CHAR_SIMPLE, users);
+			p.apellido1[strlen(p.apellido1) - 1] = '\0';
+			fgets(p.apellido2, MAX_CHAR_SIMPLE, users);
+			p.apellido2[strlen(p.apellido2) - 1] = '\0';	
+			fgets(p.correo, MAX_CHAR_SIMPLE, users);
+			p.correo[strlen(p.correo) - 1] = '\0';
+			fscanf(users, "%s", p.password);
+			fscanf(users, "%d", &p.telefono);
+			fscanf(users, "%d", &p.tipus);
+			LINKEDLIST_add(&users_list, p);
+			fscanf(users, "%d", &p.dni.numeros);
+		}
+		fclose(users);
+		
+	}
+	return users_list;
+}
+
+void mostrarLista(LinkedList usuarios) {
+	FilePersona p;
+
+	LINKEDLIST_goToHead(&usuarios);
+	while (!LINKEDLIST_isAtEnd(usuarios)) {
+		p =	LINKEDLIST_get(&usuarios);
+		printf ("%s\n", p.nombre);
+		LINKEDLIST_next(&usuarios);
+	}
+}
+
+int esPersonaUnica (char correo[MAX_CHAR_SIMPLE], LinkedList *usuarios) {
+	FilePersona p;
+	int error = 0;
+
+	LINKEDLIST_goToHead(usuarios);
+	while (!LINKEDLIST_isAtEnd(*usuarios) && !error) {
+		p =	LINKEDLIST_get(usuarios);
+		if (!strcmp(p.correo, correo)) {
+			error = 1;
+		}
+		else {
+			LINKEDLIST_next(usuarios);
+		}
+	}
+	return error;
+}
 
 /***********************************************
 *
@@ -417,7 +481,17 @@ void leerPersona (Persona p) {
 ************************************************/
 void registerUser () {
 	Persona p;
+	int error = 0;
+	LinkedList usuarios;
 
 	p = requestData();
-	leerPersona(p);
+	usuarios = ficheroALista();
+	error = esPersonaUnica(p.correo, &usuarios);
+	if (!error) {
+		printf ("El correo es unico.\n");
+	}
+	else {
+		printf ("El correo ya esta en uso. Vuelva a intentarlo o inicie sesión.\n");
+	}
 }
+
