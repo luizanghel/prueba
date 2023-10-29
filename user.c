@@ -465,12 +465,14 @@ void mostrarLista(LinkedList usuarios) {
 	LINKEDLIST_goToHead(&usuarios);
 	while (!LINKEDLIST_isAtEnd(usuarios)) {
 		p =	LINKEDLIST_get(&usuarios);
-		printf ("Nombre: %s\n", p.nombre);
-		printf ("Apellido1: %s\n", p.apellido1);
-		printf ("Apellido2: %s\n", p.apellido2);
-		printf ("Correo: %s\n", p.correo);
-		printf ("Contraseña: %s\n", p.password);
-		printf ("Tipus: %d\n", p.tipus);
+		if (p.tipus == 0) {
+			printf ("Nombre: %s\n", p.nombre);
+			printf ("Primer apellido: %s\n", p.apellido1);
+			printf ("Segundo apellido: %s\n", p.apellido2);
+			printf ("Correo: %s\n", p.correo);
+			printf ("Contraseña: %s\n", p.password);
+		}
+		
 		LINKEDLIST_next(&usuarios);
 	}
 }
@@ -599,7 +601,7 @@ void actualizarFichero (LinkedList usuarios) {
 * @Retorno: ----.
 * 
 ************************************************/
-void registerUser () {
+Persona registerUser () {
 	Persona p;
 	FilePersona registrada;
 	int error = 0;
@@ -613,13 +615,24 @@ void registerUser () {
 		registrada = userFileToList(p);
 		LINKEDLIST_add(&usuarios, registrada);
 		actualizarFichero(usuarios);
-		printf ("\n¡Bienvenido/a! El registro se ha completado correctamente.\n");
+		printf ("\n¡Registro completado!. Bienvenido/a %s.\n", registrada.nombre);
 	}
 	else {
 		printf ("\nEl correo ya esta en uso. Vuelva a intentarlo o inicie sesión.\n");
 	}
+	
+	return p;
 }
 
+/***********************************************
+*
+* @Finalidad: Verifica si existe el usuario.
+* @Parametros: 	in: correo[] = Correo a verificar.
+				in: password[] = Contraseña a verificar.
+				out: *existe = Indica si la persona ha sido encontrada o no.
+* @Retorno: Retorna los datos completos en caso que el usuario exista. Sino, se ignoran.
+* 
+************************************************/
 FilePersona existeUsuario(char correo[MAX_CHAR_SIMPLE], char password[MAX_CHAR_SIMPLE], int *existe) {
 	FilePersona p;
 	LinkedList usuarios;
@@ -639,7 +652,38 @@ FilePersona existeUsuario(char correo[MAX_CHAR_SIMPLE], char password[MAX_CHAR_S
 	return p;
 }
 
-void iniciarSesion() {
+/***********************************************
+*
+* @Finalidad: Convierte una estructura FilePersona a una Persona..
+* @Parametros:	in: p = Tipo a convertir.
+* @Retorno: Retorna el tipo convertido.
+* 
+************************************************/
+Persona desdeListaAFile (FilePersona p) {
+	Persona p2;
+
+	strcpy(p2.nombre, p.nombre);
+	strcpy(p2.apellido1, p.apellido1);
+	strcpy(p2.apellido2, p.apellido2);
+	strcpy(p2.correo, p.correo);
+	strcpy(p2.password, p.password);
+	p2.telefono = p.telefono;
+	p2.dni.numeros = p.dni.numeros;
+	p2.dni.letra = p.dni.letra;
+	p2.tipus = p.tipus;
+
+	return p2;
+}
+
+
+/***********************************************
+*
+* @Finalidad: Iniciar sesion en el sistema.
+* @Parametros: ----.
+* @Retorno: Los datos de la persona.
+* 
+************************************************/
+Persona iniciarSesion() {
 	FilePersona p, usuario;
 	int existe = 0;
 
@@ -653,6 +697,49 @@ void iniciarSesion() {
 	else {
 		printf ("\nEl correo electronico o la contraseña son incorrectos. Vuelva a intentarlo o registrese.\n");
 	}
+
+	return desdeListaAFile(usuario);
 }
 
+int menuProductor () {
+	int option;
+	char aux;
 
+	printf ("Bienvenido al MODO PRODUCTOR. ¿Que desea realizar?\n");
+	printf ("1- Visualizar clientes\n");
+	printf ("2- Modificar clientes\n");
+	printf ("Enter option: ");
+	scanf ("%d", &option);
+	scanf ("%c", &aux);
+
+	return option;
+}
+
+void modificarClientes () {
+	int option;
+
+	printf ("\t Que deseas modificar?\n");
+	printf ("1.Nombre/Apellidos | 2.Correo | 3.Contrasena | 4.Telefono | 5.Volver atras\n");
+	printf ("Enter option: ");
+	switch (option) {
+		
+	}
+
+}
+
+void modoProductor () {
+	int option;
+
+	option = menuProductor();
+	LinkedList clients;
+
+	clients = ficheroALista();
+	switch (option) {
+		case 1:
+			mostrarLista(clients);
+			break;
+		case 2:
+			modificarClientes();
+			break;
+	}
+}

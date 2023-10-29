@@ -55,19 +55,30 @@ int showMenu () {
 
 int main () {
 	int option, quit = 0;
+	Persona p;
 
 	do {
 		option = showMenu ();
 		switch (option) {
 			case 1:
-				iniciarSesion();
+				p = iniciarSesion();
 				break;
 			case 2:
-				registerUser();
+				p = registerUser();
 				break;
 			case 3:
 				quit = 1;
 				printf ("¡Hasta pronto!\n");
+				break;
+		}
+
+		switch(p.tipus) {
+			case 0:
+				// Modo cliente
+				break;
+			case 1:
+				// Modo productor
+				modoProductor();
 				break;
 		}
 
