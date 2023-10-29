@@ -466,11 +466,12 @@ void mostrarLista(LinkedList usuarios) {
 	while (!LINKEDLIST_isAtEnd(usuarios)) {
 		p =	LINKEDLIST_get(&usuarios);
 		if (p.tipus == 0) {
-			printf ("Nombre: %s\n", p.nombre);
-			printf ("Primer apellido: %s\n", p.apellido1);
-			printf ("Segundo apellido: %s\n", p.apellido2);
-			printf ("Correo: %s\n", p.correo);
-			printf ("Contraseña: %s\n", p.password);
+			printf ("--CLIENTE--\n");
+			printf ("\tNombre: %s\n", p.nombre);
+			printf ("\tPrimer apellido: %s\n", p.apellido1);
+			printf ("\tSegundo apellido: %s\n", p.apellido2);
+			printf ("\tCorreo: %s\n", p.correo);
+			printf ("\tContraseña: %s\n", p.password);
 		}
 		
 		LINKEDLIST_next(&usuarios);
@@ -708,6 +709,7 @@ int menuProductor () {
 	printf ("Bienvenido al MODO PRODUCTOR. ¿Que desea realizar?\n");
 	printf ("1- Visualizar clientes\n");
 	printf ("2- Modificar clientes\n");
+	printf ("3- Eliminar clientes\n");
 	printf ("Enter option: ");
 	scanf ("%d", &option);
 	scanf ("%c", &aux);
@@ -715,31 +717,47 @@ int menuProductor () {
 	return option;
 }
 
-void modificarClientes () {
-	int option;
+void eliminarClientes () {
+	LinkedList users;
+	int found = 0;
+	FilePersona p;
+	char correo[MAX_CHAR_SIMPLE];
 
-	printf ("\t Que deseas modificar?\n");
-	printf ("1.Nombre/Apellidos | 2.Correo | 3.Contrasena | 4.Telefono | 5.Volver atras\n");
-	printf ("Enter option: ");
-	switch (option) {
-		
+	solicitarCorreo("Introduce el correo del usuario a eliminar: ", correo);
+	users = ficheroALista();
+	LINKEDLIST_goToHead(&users);
+	while (!LINKEDLIST_isAtEnd(users) && !found) {
+		p = LINKEDLIST_get(&users);
+		if (!strcmp(p.correo, correo) && p.tipus == 0) {
+			LINKEDLIST_remove(&users);
+			found = 1;
+		}
+		LINKEDLIST_next(&users);
 	}
-
 }
 
 void modoProductor () {
-	int option;
-
-	option = menuProductor();
+	int option, quit = 0;
 	LinkedList clients;
 
-	clients = ficheroALista();
-	switch (option) {
-		case 1:
-			mostrarLista(clients);
-			break;
-		case 2:
-			modificarClientes();
-			break;
-	}
+	do {
+	
+		option = menuProductor();
+		clients = ficheroALista();
+
+		switch (option) {
+			case 1:
+				mostrarLista(clients);
+				break;
+			case 2:
+				// modificarClientes();
+				break;
+			case 3:
+				eliminarClientes();
+				break;
+			case 4:
+				quit = 1;
+				break;
+		}
+	} while (!quit);
 }
