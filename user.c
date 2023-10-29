@@ -613,18 +613,46 @@ void registerUser () {
 		registrada = userFileToList(p);
 		LINKEDLIST_add(&usuarios, registrada);
 		actualizarFichero(usuarios);
-		printf ("¡Bienvenido/a! El registro se ha completado correctamente.\n");
+		printf ("\n¡Bienvenido/a! El registro se ha completado correctamente.\n");
 	}
 	else {
-		printf ("El correo ya esta en uso. Vuelva a intentarlo o inicie sesión.\n");
+		printf ("\nEl correo ya esta en uso. Vuelva a intentarlo o inicie sesión.\n");
 	}
 }
 
+FilePersona existeUsuario(char correo[MAX_CHAR_SIMPLE], char password[MAX_CHAR_SIMPLE], int *existe) {
+	FilePersona p;
+	LinkedList usuarios;
+
+	*existe = 0;
+	usuarios = ficheroALista();
+	LINKEDLIST_goToHead(&usuarios);
+	while (!LINKEDLIST_isAtEnd(usuarios) && !*existe) {
+		p = LINKEDLIST_get(&usuarios);
+		if (!strcmp(correo, p.correo) && !strcmp(password, p.password)) {
+			*existe = 1;
+		}
+		else {
+			LINKEDLIST_next(&usuarios);
+		}
+	}
+	return p;
+}
+
 void iniciarSesion() {
-	Persona p;
+	FilePersona p, usuario;
+	int existe = 0;
 
 	printf ("Registro: Rellena todos los campos que aparecen a continuación:\n");
 	solicitarCorreo("Introduce correo: ", p.correo);
 	solicitarContrasena("Introduce contraseña: ", p.password);
+	usuario = existeUsuario(p.correo, p.password, &existe);
+	if (existe) {
+		printf ("\n¡Inicio de sesion completado!. Bienvenido/a %s.\n", usuario.nombre);
+	}
+	else {
+		printf ("\nEl correo electronico o la contraseña son incorrectos. Vuelva a intentarlo o registrese.\n");
+	}
 }
+
 
