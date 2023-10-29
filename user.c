@@ -734,6 +734,13 @@ void eliminarClientes () {
 		}
 		LINKEDLIST_next(&users);
 	}
+	if (!found) {
+		printf ("\tNo se ha encontrado ningun cliente con el correo que ha adjuntado.\n");
+	}
+	else {
+		printf ("Se he eliminado correctamente el usuario adscrito al correo %s.\n", correo);
+		actualizarFichero(users);
+	}
 }
 
 void modoProductor () {
