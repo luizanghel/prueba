@@ -15,6 +15,45 @@ struct canal{
 * @
 *
 *****************************************/
+void crearNuevoCanal(struct Canal *canales, int *numCanales, struct Programa *programas, int idCanal, int i) {
+		//Programas
+		//char c;
+
+		if (*numCanales < 10) {
+
+		printf("Ingrese el nombre del nuevo Canal: ");
+		scanf("%s", canales[*numCanales].nombre);
+
+		printf("Ingrese el nombre de la programacion del nuevo canal: ");
+		scanf("%s", canales[*numCanales].programacion);
+
+	//	printf("Desea Crear un programa s/n: ");
+	//	scanf("%s", canales[*numCanales].nombre);
+	//	if ((*numCanales == 0)||(i>0)){
+	//		idCanal = i;
+	//	}
+	//	if(( c == 's') || (c == 'S')){
+	//		crearPrograma(programas, &idCanal);
+	//	}
+
+		printf("Ingrese el costo de suscripcion del nuevo canal: ");
+		scanf("%lf", &canales[*numCanales].costoSuscripcion);
+
+		canales[*numCanales].costoEmpresa = 2.0 * canales[*numCanales].costoSuscripcion;
+
+		// Info del Canal Creado
+
+
+
+		printf("\nNuevo canal creado:\n");
+		printf("Nombre: %s\n", canales[*numCanales].nombre);
+		printf("Programacion: %s\n", canales[*numCanales].programacion);
+		printf("Costo de suscripcion: %.2lf\n", canales[*numCanales].costoSuscripcion);
+		printf("Costo para la empresa: %.2lf\n", canales[*numCanales].costoEmpresa);
+		(*numCanales)++;
+	}
+}
+
 
 /*****************************************
 *
