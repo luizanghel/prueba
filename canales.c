@@ -50,6 +50,25 @@ void crearNuevoCanal(struct Canal *canales, int *numCanales, struct Programa *pr
 		printf("Costo de suscripcion: %.2lf\n", canales[*numCanales].costoSuscripcion);
 		printf("Costo para la empresa: %.2lf\n", canales[*numCanales].costoEmpresa);
 		(*numCanales)++;
+
+
+		FILE *archivo = fopen("canales.txt", "a");
+
+		if (archivo != NULL){
+
+			fprintf(archivo, "Canal N°%d \n", *numCanales);
+			fprintf(archivo, "Nombre: %s\n", canales[*numCanales - 1].nombre);
+			fprintf(archivo, "Programacion: %s\n", canales[*numCanales - 1].programacion);
+			fprintf(archivo, "Costo de suscripcion: %.2lf\n", canales[*numCanales - 1].costoSuscripcion);
+			fprintf(archivo, "Costo para la empresa: %.2lf\n", canales[*numCanales - 1].costoEmpresa);
+			fprintf(archivo, "\n");
+
+			fclose(archivo);
+		} else {
+
+		printf("No se pueden crear mas canales. Se alcanzo el limite.\n");
+		}
+
 	}
 }
 
