@@ -710,6 +710,7 @@ int menuProductor () {
 	printf ("1- Visualizar clientes\n");
 	printf ("2- Modificar clientes\n");
 	printf ("3- Eliminar clientes\n");
+    printf ("4- Comprobar presupuesto\n");
 	printf ("Enter option: ");
 	scanf ("%d", &option);
 	scanf ("%c", &aux);
@@ -746,6 +747,7 @@ void eliminarClientes () {
 void modoProductor () {
 	int option, quit = 0;
 	LinkedList clients;
+    float presupuesto = 10000;
 
 	do {
 	
