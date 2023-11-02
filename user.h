@@ -27,7 +27,9 @@ typedef struct {
 } Persona;
 
 // Operaciones
-void registerUser ();
+Persona registerUser ();
+Persona iniciarSesion ();
+void modoProductor ();
 void leerPersona(Persona p);
 
 #endif
