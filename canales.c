@@ -15,6 +15,7 @@ struct canal{
 * @
 *
 *****************************************/
+
 void crearNuevoCanal(struct Canal *canales, int *numCanales, struct Programa *programas, int idCanal, int i) {
 		//Programas
 		//char c;
@@ -43,8 +44,6 @@ void crearNuevoCanal(struct Canal *canales, int *numCanales, struct Programa *pr
 
 		// Info del Canal Creado
 
-
-
 		printf("\nNuevo canal creado:\n");
 		printf("Nombre: %s\n", canales[*numCanales].nombre);
 		printf("Programacion: %s\n", canales[*numCanales].programacion);
@@ -53,7 +52,6 @@ void crearNuevoCanal(struct Canal *canales, int *numCanales, struct Programa *pr
 		(*numCanales)++;
 	}
 }
-
 
 /*****************************************
 *
