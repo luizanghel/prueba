@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "user.h"
+#include "presupuesto.h"
 #include "linkedlist.h"
 
 /***********************************************
@@ -744,94 +745,11 @@ void eliminarClientes () {
 	}
 }
 
-void listaringresos(){
-    float totalingresos=0;
-    FILE *f;
-    char descripcion[100];
-    float ingreso;
-    char aux;
 
-    f=fopen("ingresos.txt", "r");
-
-    if (f==NULL){
-        printf("No hay ningun ingreso\n");
-    }else{
-        printf("\nLista de ingresos:\n");
-        fgets(descripcion, 100, f);
-        descripcion[strlen(descripcion) - 1] = '\0';
-        while (!feof(f)){
-            fscanf(f, "%f", &ingreso);
-            fscanf(f, "%c", &aux);
-            printf("%s->%.1f€\n", descripcion, ingreso);
-            printf("-----------------------------\n");
-            fgets(descripcion, 100, f);
-            descripcion[strlen(descripcion) - 1] = '\0';
-            totalingresos=totalingresos+ingreso;
-        }
-        printf("Total ingresos: %.1f€\n", totalingresos);
-        fclose(f);
-    }
-}
-void listarperdidas(){
-    float totalperdidas=0;
-    FILE *f;
-    char descripcion[100];
-    float perdida;
-    char aux;
-
-    f=fopen("perdidas.txt", "r");
-    if (f==NULL){
-        printf("No hay ninguna perdida\n");
-    }else{
-        printf("\nLista de perdidas:\n");
-        fgets(descripcion, 100, f);
-        descripcion[strlen(descripcion) - 1] = '\0';
-        while (!feof(f)){
-            fscanf(f, "%f", &perdida);
-            fscanf(f, "%c", &aux);
-            printf("%s->%.1f€\n", descripcion, perdida);
-            printf("-----------------------------\n");
-            fgets(descripcion, 100, f);
-            descripcion[strlen(descripcion) - 1] = '\0';
-            totalperdidas=totalperdidas+perdida;
-        }
-        printf("Total perdidas: %.1f€\n", totalperdidas);
-        fclose(f);
-    }
-}
-void comprobarpresupuesto(float presupuesto){
-    int opcion, quit=0;
-
-    do {
-        printf("\nQue deseas comprobar? \n");
-        printf("1- Listar ingresos\n");
-        printf("2- Listar perdidas\n");
-        printf("3- Comprobar total presupuesto\n");
-        printf("Enter option: ");
-        scanf("%d", &opcion);
-
-        switch (opcion) {
-            case 1:
-                listaringresos();
-                break;
-            case 2:
-                listarperdidas();
-                break;
-            case 3:
-                printf("El presupuesto total es de %.1f\n", presupuesto);
-                break;
-            case 4:
-                quit=1;
-                break;
-        }
-    }while (!quit);
-
-}
-
-void modoProductor () {
+void modoProductor (float *presupuesto) {
 	int option, quit = 0;
 	LinkedList clients;
-    float presupuesto = 10000;
+
 
 	do {
 	
@@ -849,7 +767,7 @@ void modoProductor () {
 				eliminarClientes();
 				break;
 			case 4:
-                comprobarpresupuesto(presupuesto);
+                comprobarpresupuesto(*presupuesto);
                 break;
             case 5:
 				quit = 1;
