@@ -56,6 +56,7 @@ int showMenu () {
 int main () {
 	int option, quit = 0;
 	Persona p;
+    float presupuesto=10000;
 
 	do {
 		option = showMenu ();
@@ -78,7 +79,7 @@ int main () {
 				break;
 			case 1:
 				// Modo productor
-				modoProductor();
+				modoProductor(&presupuesto);
 				break;
 		}
 
