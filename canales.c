@@ -126,6 +126,21 @@ void crearNuevoCanal(struct Canal *canales, int *numCanales, struct Programa *pr
 *
 *****************************************/
 
+void listarCanal(struct Canal *canales, int numCanales){
+	FILE *archivo = fopen("canales.txt", "r");
+		if(archivo != NULL){
+			char linea[200];
+			
+			while(fgets(linea, sizeof(linea), archivo) != NULL){
+				printf("%s",linea);
+			}
+
+			fclose(archivo);
+		}else {
+			printf("No se pudo abrir el archivo. \n");
+		}
+}
+
 /*****************************************
 *
 * @Finalidad: Menu para Canales 
@@ -178,7 +193,7 @@ void menuCanales(){
 				i++;
 				break;
 			case 2:
-			//	crearNuevoCanal(canales, &numCanales, programas, idCanal, i);
+				listarCanal(canales, numCanales);
 				break;
 			case 3:
 			//	crearNuevoCanal(canales, &numCanales, programas, idCanal, i);
