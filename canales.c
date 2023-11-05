@@ -7,6 +7,37 @@ struct canal{
 	double costoSuscripcion;
 	double costoEmpresa;
 };
+int myStricmp(const char *s1, const char *s2){
+	while (*s1 && *s2){
+		if(tolower(*s1) != tolower(*s2)) {
+			return *s1 - *s2;
+		}
+		s1++;
+		s2++;
+	}
+	return tolower(*s1)- tolower(*s2);
+}
+
+int CanalExistente(const char *nombre, const struct Canal *canales, int numCanales){
+		for (int i = 0; i < numCanales; i++){
+			if (myStricmp(nombre, canales[i].nombre) == 0){
+				return 1;
+			}
+		}
+
+		FILE *archivo = fopen("canales.txt", "r");
+		if (archivo != NULL){
+			char linea[100];
+			while (fgets(linea, sizeof(linea), archivo) != NULL){
+				if (strstr(linea, nombre) != NULL){
+					fclose(archivo);
+					return 1;
+				}
+			}
+		}
+
+		return 0;
+}
 
 /*****************************************
 *
@@ -25,9 +56,10 @@ void crearNuevoCanal(struct Canal *canales, int *numCanales, struct Programa *pr
 		//char c;
 
 		if (*numCanales < 10) {
-
-		printf("Ingrese el nombre del nuevo Canal: ");
-		scanf("%s", canales[*numCanales].nombre);
+		do {
+			printf("Ingrese el nombre del nuevo Canal: ");
+			scanf("%s", canales[*numCanales].nombre);
+		} while(CanalExistente(canales[*numCanales].nombre, canales, *numCanales) == 1);
 
 
 		limpiarBuffer();
