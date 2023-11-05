@@ -15,6 +15,10 @@ struct canal{
 * @
 *
 *****************************************/
+void limpiarBuffer(){
+	int c
+	while((c = getchar()) != '\n' && c != EOF);
+}
 
 void crearNuevoCanal(struct Canal *canales, int *numCanales, struct Programa *programas, int idCanal, int i) {
 		//Programas
@@ -25,8 +29,13 @@ void crearNuevoCanal(struct Canal *canales, int *numCanales, struct Programa *pr
 		printf("Ingrese el nombre del nuevo Canal: ");
 		scanf("%s", canales[*numCanales].nombre);
 
+
+		limpiarBuffer();
 		printf("Ingrese el nombre de la programacion del nuevo canal: ");
-		scanf("%s", canales[*numCanales].programacion);
+		fgets(canales[*numCanales].programacion, sizeof(canales[*numCanales].programacion), stdin);
+        canales[*numCanales].programacion[strcspn(canales[*numCanales].programacion, "\n")] = '\0';
+
+	//	scanf("%s", canales[*numCanales].programacion);
 
 	//	printf("Desea Crear un programa s/n: ");
 	//	scanf("%s", canales[*numCanales].nombre);
@@ -36,11 +45,16 @@ void crearNuevoCanal(struct Canal *canales, int *numCanales, struct Programa *pr
 	//	if(( c == 's') || (c == 'S')){
 	//		crearPrograma(programas, &idCanal);
 	//	}
-
-		printf("Ingrese el costo de suscripcion del nuevo canal: ");
-		scanf("%lf", &canales[*numCanales].costoSuscripcion);
-
-		canales[*numCanales].costoEmpresa = 2.0 * canales[*numCanales].costoSuscripcion;
+		
+		do{
+			printf("Ingrese el costo de suscripcion del nuevo canal: ");
+			while (scanf("%lf", &canales[*numCanales].costoSuscripcion) != 1){
+				printf("Entrada no valida. Por favor, Ingrese un numero: ");
+				scanf("%*[^\n]");
+				scanf("%*c");
+			}
+			canales[*numCanales].costoEmpresa = 2.0 * canales[*numCanales].costoSuscripcion;
+		}while ((getchar()) != '\n');
 
 		// Info del Canal Creado
 
