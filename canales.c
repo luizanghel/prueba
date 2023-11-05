@@ -7,6 +7,7 @@ struct canal{
 	double costoSuscripcion;
 	double costoEmpresa;
 };
+
 int myStricmp(const char *s1, const char *s2){
 	while (*s1 && *s2){
 		if(tolower(*s1) != tolower(*s2)) {
@@ -141,6 +142,89 @@ void listarCanal(struct Canal *canales, int numCanales){
 		}
 }
 
+void modificarCanal(struct Canal *canales, int numCanales){
+	int numeroActual = 0;
+
+	if (numCanales > 0){
+		int opcion;
+		int op;
+
+		printf("Seleccione el numero del canal a modificar: ");
+		scanf("%d", &opcion);
+
+		if (opcion >= 1 && opcion <= numCanales){
+			do {
+				printf("\n Ingrese la opcion a modificar \n");
+				printf("1. Nombre del Canal\n");
+				printf("2. Programacion del Canal\n");
+				printf("3. Costo de Suscripcion del Canal\n");
+				printf("0. Salir\n");
+				printf("Seleccione una opcion\n");
+				scanf("%d", &op);
+
+				switch (op) {
+				
+					case 1:
+						printf("Ingrese el nuevo nombre para el canal %s: ", canales[opcion - 1].nombre);
+						scanf("%s", canales[opcion - 1].nombre;
+						break;
+					case 2:
+						printf("Ingrese la nueva programacion para el canal %s: ", canales[opcion - 1].nombre);
+						scanf("%s", canales[opcion - 1].programacion;
+						break;
+					case 3:
+						printf("Ingrese el nuevo coste de suscripcion para el canal %s: ", canales[opcion - 1].nombre);
+						scanf("%lf", &canales[opcion - 1].costoSuscripcion);
+						canales[opcion - 1].costoEmpresa = 2.0 * canales[opcion - 1].costoSuscripcion;
+						break;
+					case 0:
+						printf("Saliendo del programa.\n");
+						break;
+					default:
+						printf("Opcion no valida. Intentelo de nuevo.\n");
+
+				}
+		} while (op != 0);
+
+		FILE *archivo = fopen("canales.txt", "r");
+		FILE *temporal = fopen("temporal.txt", "w");
+
+		if (archivo == NULL || temporal == NULL){
+			printf("Error al abrir el archivo. \n");
+			return;
+		}
+
+		char linea[200];
+
+		while (fgets(linea, sizeof(linea), archivo) != NULL) {
+			if (strstr(linea, "Canal N°") != NULL){
+			    sscanf(linea, "Canal N°%d", &numeroActual);
+			}
+
+			if (numeroActual == opcion){
+				fprintf(temporal, "Canal N°%d\n", opcion);
+				fprintf(temporal, "Nombre: %s\n", canales[opcion - 1].nombre);
+				fprintf(temporal, "Programacion: %s\n", canales[opcion - 1].programacion);
+				fprintf(temporal, "Costo de suscripcion: %.2lf\n", canales[opcion - 1].costoSuscripcion);
+				fprintf(temporal, "Costo para la empresa: %.2lf\n", canales[opcion - 1].costoEmpresa);
+				fprintf(temporal, "\n");
+				numeroActual++;
+			} else{
+				fprintf(temporal, "%s", linea);
+			}
+
+		fclose(archivo);
+		fclose(temporal);
+
+		remove("canales.txt");
+		rename("temporal.txt", "canales.txt");
+		} else {
+			printf("Opcion no valida. \n");
+		}
+	}
+}
+
+
 /*****************************************
 *
 * @Finalidad: Menu para Canales 
@@ -196,7 +280,7 @@ void menuCanales(){
 				listarCanal(canales, numCanales);
 				break;
 			case 3:
-			//	crearNuevoCanal(canales, &numCanales, programas, idCanal, i);
+				modificarCanal(canales, numCanales);
 				break;
 			case 4:
 			//	crearNuevoCanal(canales, &numCanales, programas, idCanal, i);
