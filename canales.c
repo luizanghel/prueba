@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 struct canal{
 	char nombre[50];
@@ -7,6 +8,63 @@ struct canal{
 	double costoSuscripcion;
 	double costoEmpresa;
 };
+
+struct Programa {
+	char nombre[50];
+	char cadenaEmision[50];
+	char categoria[20];
+	char horaEmision[10];
+	int duracionMinutos;
+	char actores[3][30];
+	int idCanal;
+};
+
+void crearPrograma(struct Programa *programas, int *idCanal){
+	if (*idCanal < 20){
+		printf("Ingrese el nomnbre del Programa: ");
+		scanf("%s", programas[*idCanal].nombre);
+
+		printf("Ingrese el nomnbre de la cadena de Emision: ");
+		scanf("%s", programas[*idCanal].cadenaEmision);
+
+		printf("Ingrese la categoria del Programa: ");
+		scanf("%s", programas[*idCanal].categoria);
+
+		printf("Ingrese la hora de emision en el formato de 24 horas HH:MM : ");
+		scanf("%s", programas[*idCanal].horaEmision);
+
+		printf("Ingrese la duracion del programa en Minutos: ");
+		scanf("%d", &programas[*idCanal].duracionMinutos);
+
+		printf("Ingrese hasta 3 Actores para el nuevo Programa: ");
+		for (int i = 0; i < 3; ++i){
+			printf("Actor %d:", i+1);
+			scanf("%s", programas[*idCanal].actores[i]);
+		}
+
+		FILE *archivop = fopen("programas.txt", "a");
+
+		if (archivop != NULL) {
+			fprintf(archivop, "Canal al que pertenece el programa %d \n", *idCanal + 1);
+			fprintf(archivop, "Nombre del Programa: %s\n", programas[*idCanal].nombre);
+			fprintf(archivop, "Cadena de Emision: %s\n", programas[*idCanal].cadenaEmision);
+			fprintf(archivop, "Categoria: %s\n", programas[*idCanal].categoria);
+			fprintf(archivop, "Hombre Emision HH:MM: %s\n", programas[*idCanal].horaEmision);
+			fprintf(archivop, "Duracion en Minutos: %d\n", programas[*idCanal].duracionMinutos);
+
+			for (int i = 0; i < 3; ++i){
+				fprintf(archivop, "Actor %d: %s\n", i+1, programas[*idCanal].actores[i]);
+			}
+				fprintf(archivop, "\n");
+
+			fclose(archivop);
+		} else {
+		
+		printf("No se pueden crear mas Programas");
+		}
+	}
+}
+
 
 int myStricmp(const char *s1, const char *s2){
 	while (*s1 && *s2){
@@ -283,13 +341,15 @@ void menuCanales(){
 				modificarCanal(canales, numCanales);
 				break;
 			case 4:
-			//	crearNuevoCanal(canales, &numCanales, programas, idCanal, i);
+			//	eliminarCanal();
 				break;
 			case 5:
-			//	crearNuevoCanal(canales, &numCanales, programas, idCanal, i);
+				printf("Ingrese el Id del Canal al que pertenece el Programa \n");
+				scanf("%d", &idCanal);
+				crearPrograma(programas, idCanal - 1);
 				break;
 			case 6:
-			//	crearNuevoCanal(canales, &numCanales, programas, idCanal, i);
+			//	eliminarPrograma();
 				break;
 			case 0:
 				printf("Saliendo del Programa.\n");
