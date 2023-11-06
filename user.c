@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "user.h"
+#include "presupuesto.h"
 #include "linkedlist.h"
 
 /***********************************************
@@ -710,6 +711,7 @@ int menuProductor () {
 	printf ("1- Visualizar clientes\n");
 	printf ("2- Modificar clientes\n");
 	printf ("3- Eliminar clientes\n");
+    printf ("4- Comprobar presupuesto\n");
 	printf ("Enter option: ");
 	scanf ("%d", &option);
 	scanf ("%c", &aux);
@@ -743,9 +745,11 @@ void eliminarClientes () {
 	}
 }
 
-void modoProductor () {
+
+void modoProductor (float *presupuesto) {
 	int option, quit = 0;
 	LinkedList clients;
+
 
 	do {
 	
@@ -763,6 +767,9 @@ void modoProductor () {
 				eliminarClientes();
 				break;
 			case 4:
+                comprobarpresupuesto(*presupuesto);
+                break;
+            case 5:
 				quit = 1;
 				break;
 		}
