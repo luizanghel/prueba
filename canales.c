@@ -9,7 +9,7 @@ struct canal{
 	double costoEmpresa;
 };
 
-struct Programa {
+struct Programa{
 	char nombre[50];
 	char cadenaEmision[50];
 	char categoria[20];
@@ -64,7 +64,6 @@ void crearPrograma(struct Programa *programas, int *idCanal){
 		}
 	}
 }
-
 
 int myStricmp(const char *s1, const char *s2){
 	while (*s1 && *s2){
@@ -282,7 +281,6 @@ void modificarCanal(struct Canal *canales, int numCanales){
 	}
 }
 
-
 /*****************************************
 *
 * @Finalidad: Menu para Canales 
@@ -341,7 +339,7 @@ void menuCanales(){
 				modificarCanal(canales, numCanales);
 				break;
 			case 4:
-			//	eliminarCanal();
+			//eliminarCanal();
 				break;
 			case 5:
 				printf("Ingrese el Id del Canal al que pertenece el Programa \n");
@@ -349,7 +347,7 @@ void menuCanales(){
 				crearPrograma(programas, idCanal - 1);
 				break;
 			case 6:
-			//	eliminarPrograma();
+			//eliminarPrograma();
 				break;
 			case 0:
 				printf("Saliendo del Programa.\n");
