@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 struct canal{
 	char nombre[50];
@@ -7,6 +8,63 @@ struct canal{
 	double costoSuscripcion;
 	double costoEmpresa;
 };
+
+struct Programa{
+	char nombre[50];
+	char cadenaEmision[50];
+	char categoria[20];
+	char horaEmision[10];
+	int duracionMinutos;
+	char actores[3][30];
+	int idCanal;
+};
+
+void crearPrograma(struct Programa *programas, int *idCanal){
+	if (*idCanal < 20){
+		printf("Ingrese el nomnbre del Programa: ");
+		scanf("%s", programas[*idCanal].nombre);
+
+		printf("Ingrese el nomnbre de la cadena de Emision: ");
+		scanf("%s", programas[*idCanal].cadenaEmision);
+
+		printf("Ingrese la categoria del Programa: ");
+		scanf("%s", programas[*idCanal].categoria);
+
+		printf("Ingrese la hora de emision en el formato de 24 horas HH:MM : ");
+		scanf("%s", programas[*idCanal].horaEmision);
+
+		printf("Ingrese la duracion del programa en Minutos: ");
+		scanf("%d", &programas[*idCanal].duracionMinutos);
+
+		printf("Ingrese hasta 3 Actores para el nuevo Programa: ");
+		for (int i = 0; i < 3; ++i){
+			printf("Actor %d:", i+1);
+			scanf("%s", programas[*idCanal].actores[i]);
+		}
+
+		FILE *archivop = fopen("programas.txt", "a");
+
+		if (archivop != NULL) {
+			fprintf(archivop, "Canal al que pertenece el programa %d \n", *idCanal + 1);
+			fprintf(archivop, "Nombre del Programa: %s\n", programas[*idCanal].nombre);
+			fprintf(archivop, "Cadena de Emision: %s\n", programas[*idCanal].cadenaEmision);
+			fprintf(archivop, "Categoria: %s\n", programas[*idCanal].categoria);
+			fprintf(archivop, "Hombre Emision HH:MM: %s\n", programas[*idCanal].horaEmision);
+			fprintf(archivop, "Duracion en Minutos: %d\n", programas[*idCanal].duracionMinutos);
+
+			for (int i = 0; i < 3; ++i){
+				fprintf(archivop, "Actor %d: %s\n", i+1, programas[*idCanal].actores[i]);
+			}
+				fprintf(archivop, "\n");
+
+			fclose(archivop);
+		} else {
+		
+		printf("No se pueden crear mas Programas");
+		}
+	}
+}
+
 int myStricmp(const char *s1, const char *s2){
 	while (*s1 && *s2){
 		if(tolower(*s1) != tolower(*s2)) {
@@ -126,6 +184,103 @@ void crearNuevoCanal(struct Canal *canales, int *numCanales, struct Programa *pr
 *
 *****************************************/
 
+void listarCanal(struct Canal *canales, int numCanales){
+	FILE *archivo = fopen("canales.txt", "r");
+		if(archivo != NULL){
+			char linea[200];
+			
+			while(fgets(linea, sizeof(linea), archivo) != NULL){
+				printf("%s",linea);
+			}
+
+			fclose(archivo);
+		}else {
+			printf("No se pudo abrir el archivo. \n");
+		}
+}
+
+void modificarCanal(struct Canal *canales, int numCanales){
+	int numeroActual = 0;
+
+	if (numCanales > 0){
+		int opcion;
+		int op;
+
+		printf("Seleccione el numero del canal a modificar: ");
+		scanf("%d", &opcion);
+
+		if (opcion >= 1 && opcion <= numCanales){
+			do {
+				printf("\n Ingrese la opcion a modificar \n");
+				printf("1. Nombre del Canal\n");
+				printf("2. Programacion del Canal\n");
+				printf("3. Costo de Suscripcion del Canal\n");
+				printf("0. Salir\n");
+				printf("Seleccione una opcion\n");
+				scanf("%d", &op);
+
+				switch (op) {
+				
+					case 1:
+						printf("Ingrese el nuevo nombre para el canal %s: ", canales[opcion - 1].nombre);
+						scanf("%s", canales[opcion - 1].nombre;
+						break;
+					case 2:
+						printf("Ingrese la nueva programacion para el canal %s: ", canales[opcion - 1].nombre);
+						scanf("%s", canales[opcion - 1].programacion;
+						break;
+					case 3:
+						printf("Ingrese el nuevo coste de suscripcion para el canal %s: ", canales[opcion - 1].nombre);
+						scanf("%lf", &canales[opcion - 1].costoSuscripcion);
+						canales[opcion - 1].costoEmpresa = 2.0 * canales[opcion - 1].costoSuscripcion;
+						break;
+					case 0:
+						printf("Saliendo del programa.\n");
+						break;
+					default:
+						printf("Opcion no valida. Intentelo de nuevo.\n");
+
+				}
+		} while (op != 0);
+
+		FILE *archivo = fopen("canales.txt", "r");
+		FILE *temporal = fopen("temporal.txt", "w");
+
+		if (archivo == NULL || temporal == NULL){
+			printf("Error al abrir el archivo. \n");
+			return;
+		}
+
+		char linea[200];
+
+		while (fgets(linea, sizeof(linea), archivo) != NULL) {
+			if (strstr(linea, "Canal N°") != NULL){
+			    sscanf(linea, "Canal N°%d", &numeroActual);
+			}
+
+			if (numeroActual == opcion){
+				fprintf(temporal, "Canal N°%d\n", opcion);
+				fprintf(temporal, "Nombre: %s\n", canales[opcion - 1].nombre);
+				fprintf(temporal, "Programacion: %s\n", canales[opcion - 1].programacion);
+				fprintf(temporal, "Costo de suscripcion: %.2lf\n", canales[opcion - 1].costoSuscripcion);
+				fprintf(temporal, "Costo para la empresa: %.2lf\n", canales[opcion - 1].costoEmpresa);
+				fprintf(temporal, "\n");
+				numeroActual++;
+			} else{
+				fprintf(temporal, "%s", linea);
+			}
+
+		fclose(archivo);
+		fclose(temporal);
+
+		remove("canales.txt");
+		rename("temporal.txt", "canales.txt");
+		} else {
+			printf("Opcion no valida. \n");
+		}
+	}
+}
+
 /*****************************************
 *
 * @Finalidad: Menu para Canales 
@@ -178,19 +333,21 @@ void menuCanales(){
 				i++;
 				break;
 			case 2:
-			//	crearNuevoCanal(canales, &numCanales, programas, idCanal, i);
+				listarCanal(canales, numCanales);
 				break;
 			case 3:
-			//	crearNuevoCanal(canales, &numCanales, programas, idCanal, i);
+				modificarCanal(canales, numCanales);
 				break;
 			case 4:
-			//	crearNuevoCanal(canales, &numCanales, programas, idCanal, i);
+			//eliminarCanal();
 				break;
 			case 5:
-			//	crearNuevoCanal(canales, &numCanales, programas, idCanal, i);
+				printf("Ingrese el Id del Canal al que pertenece el Programa \n");
+				scanf("%d", &idCanal);
+				crearPrograma(programas, idCanal - 1);
 				break;
 			case 6:
-			//	crearNuevoCanal(canales, &numCanales, programas, idCanal, i);
+			//eliminarPrograma();
 				break;
 			case 0:
 				printf("Saliendo del Programa.\n");
