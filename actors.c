@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include "actors.h"
 #include "linkedlistactores.h"
 
 void addActor(){
@@ -45,4 +45,18 @@ void addActor(){
             printf("\nERROR!");
         }
     }while( contract_status != 0 && contract_status != 1);
+    
+    strcpy (actor.nombre, name);
+    strcpy (actor.apellido1, surname1);
+    strcpy (actor.apellido2, surname2);
+    
+    actor.telefono = phone;
+    actor.salari = salario;
+    actor.contract = contract_status;
+    
+    dni_pedir.numeros = numdni;
+    dni_pedir.letra = pedir_letra;
+    
+    actor.dni = dni_pedir;
+    LINKEDLISTactors_add (lista, actor);
 }
