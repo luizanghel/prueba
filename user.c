@@ -390,6 +390,7 @@ Persona requestData () {
 	solicitarCorreo("Correo: ", p.correo);
 	solicitarContrasena("Contraseña: ", p.password);
 	p.telefono = solicitarTelefono("Numero de telefono: ");
+
 	return p;
 }
 
