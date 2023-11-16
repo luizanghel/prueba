@@ -3,6 +3,8 @@
 #include "user.h"
 #include "presupuesto.h"
 #include "linkedlist.h"
+#include "canales.h"
+#include "actores.h"
 
 /***********************************************
 *
@@ -706,17 +708,49 @@ Persona iniciarSesion() {
 int menuProductor () {
 	int option;
 	char aux;
+	do{
+		printf ("Bienvenido al MODO PRODUCTOR. ¿Que desea realizar?\n");
+		printf ("1- Menú clientes\n");
+		printf ("2- Menú actores\n");
+		printf ("3- Menú canales\n");
+    	printf ("4- Comprobar presupuesto\n");
+		printf ("5- Salir\n");
+		printf ("Enter option: ");
+		scanf ("%d", &option);
+		scanf ("%c", &aux);
+		
+		switch(option){
 
-	printf ("Bienvenido al MODO PRODUCTOR. ¿Que desea realizar?\n");
-	printf ("1- Visualizar clientes\n");
-	printf ("2- Modificar clientes\n");
-	printf ("3- Eliminar clientes\n");
-    printf ("4- Comprobar presupuesto\n");
-	printf ("Enter option: ");
-	scanf ("%d", &option);
-	scanf ("%c", &aux);
+			case 1:
+				ficheroALista();		
+			break;
 
-	return option;
+			case 2:
+				//menuActores();
+			break;
+
+			case 3:
+				menuCanales();
+			break;
+
+			case 4:
+				comprobarPresupuesto();
+			break;
+
+			case 5:
+				//menu();
+			break;
+
+			default:
+				printf("Opción no válida, intentalo de nuevo\n");
+			break;
+			
+		}
+
+	}while(option !=0);
+	//return option;
+
+
 }
 
 void eliminarClientes () {
