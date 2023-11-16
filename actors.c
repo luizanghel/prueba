@@ -1,7 +1,7 @@
 #include <stdio.h>
-
 #include "actors.h"
 #include "linkedlistactores.h"
+
 void addActor(){
     FileActor actor;
     FileDni dni_pedir;
@@ -57,8 +57,6 @@ void addActor(){
     dni_pedir.numeros = numdni;
     dni_pedir.letra = pedir_letra;
     
-    
-    
     actor.dni = dni_pedir;
-    LINKEDLISTactors_add (lista, actor)
+    LINKEDLISTactors_add (lista, actor);
 }
