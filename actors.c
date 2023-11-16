@@ -2,6 +2,66 @@
 #include "actors.h"
 #include "linkedlistactores.h"
 
+void menuActors(){
+
+	int option=0, error=0;
+	char aux;
+	
+	do{
+		printf("\nMenu Actores");	
+		printf("\n1. Registrar actor");	
+		printf("\n2. Contratar actor");	
+		printf("\n3. Dar de baja a un actor");	
+		printf("\n4. Listar actores");	
+		printf("\n5. Gestionar actores");	
+		printf("\n6. Eliminar actores");
+		printf("\n7. Salir");
+		printf("\nEscoge una opción: ");
+		scanf("%d", &option);
+		
+		opcionesActores(option);
+
+	}while(error==0);	
+	return option;
+}
+
+void opcionesActores(int opcion){
+
+	switch (opcion){
+		case 1:
+			//RegistrarActor();
+			break;
+		case 2:
+			//ContratarActor();
+			break;
+		case 3:
+			//DarDeBaja();
+			break;
+
+		case 4:
+			//ListarActores();
+			break;
+
+		case 5:
+			//GestionarActores();
+			break;
+			
+		case 6:
+			//EliminarActores();
+			break;
+
+		case 7:
+			//quit();
+			break;
+
+		default:
+			printf("\nOpcion no válida. Prueba otra vez.");
+			break;
+	}
+
+}
+
+
 void addActor(){
     FileActor actor;
     FileDni dni_pedir;
