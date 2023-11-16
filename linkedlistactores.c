@@ -1,8 +1,5 @@
 #include "linkedlistactores.h"
 
-#include "linkedlistactores.h"
-
-
 /****************************************************************************
  *
  * @Objective: Creates an empty linked list.
@@ -53,7 +50,7 @@ LinkedList LINKEDLISTactors_create () {
 /****************************************************************************
  *
  * @Objective: Inserts the specified element in this list before the element
- *			    who is the current point of view. Shifts the point of view
+ *			   who is the current point of view. Shifts the point of view
  *				element (if any) and any subsequent elements to the right.
  *			   If the list fails to create the new node to store the element,
  *				it will set	the error code to LIST_ERROR_MALLOC.
@@ -113,7 +110,7 @@ void 	LINKEDLISTactors_add (LinkedList * list, Element element) {
  *				element of the list. That will also happen for an empty list.
  *				In that situation, this operation will set the error code to
  *				LIST_ERROR_END.
-  *
+ *
  *        +---+
  *   head | o-|---------                        aux (free aux!)
  *        +---+         |                        |

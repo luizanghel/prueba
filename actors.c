@@ -4,19 +4,19 @@
 
 void addActor(){
     FileActor actor;
-    FileDni dni_pedir;
     LinkedList lista;
     lista = LINKEDLISTactors_create ();
     
-    char name[100], pedir_letra[100], surname1[100], surname2[100];
-    int numdni , phone, salario, contract_status;
+    char name[100], surname1[100], surname2[100];
+    int phone, salario, contract_status;
     
-    printf ("\nEnter your actor DNI number: ");
-    scanf("%d", &numdni);
-    
-    printf ("\nEnter your actor DNI letter: ");
-    scanf("%s", pedir_letra);
-    
+   		 
+   	printf("Entra el numero del DNI: ");
+	scanf ("%d", &actor.dni.numeros);
+
+	printf ("Entra la letra del DNI: ");
+	scanf ("%c", &actor.dni.letra);
+
     printf ("\nEnter your actor name: ");
     scanf("%s", name);
     
@@ -49,14 +49,10 @@ void addActor(){
     strcpy (actor.nombre, name);
     strcpy (actor.apellido1, surname1);
     strcpy (actor.apellido2, surname2);
-    
+
     actor.telefono = phone;
     actor.salari = salario;
-    actor.contract = contract_status;
+    actor.contractat = contract_status; 
     
-    dni_pedir.numeros = numdni;
-    dni_pedir.letra = pedir_letra;
-    
-    actor.dni = dni_pedir;
-    LINKEDLISTactors_add (lista, actor);
+    LINKEDLISTactors_add (&lista, actor);
 }
