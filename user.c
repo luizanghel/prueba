@@ -735,6 +735,52 @@ int menuProductor () {
 	return option;
 }
 
+int menuModificacion() {
+	int option, error = 0;
+
+	do {
+	
+		printf ("\tQue deseas modificar?\n");
+		printf ("\t  1- Nombre\n");
+		printf ("\t  2- Primer apellido\n");
+		printf ("\t  3- Segundo apellido\n");
+		printf ("\t  4- Correo\n");
+		printf ("\t  5- Contraseña\n");
+		printf ("\t  6- Numero de telefono\n");
+		printf ("\t  7- Salir\n");
+		printf ("\t  Enter option: ");
+		error = option2AsNumber(&option, 1, 7);
+	
+	} while (error);
+
+	return option;
+}
+
+void modificarClientes (LinkedList *users) {
+	int option, found;
+	FilePersona p;
+	char correo[MAX_CHAR_SIMPLE];
+	
+	do {
+		option = menuModificacion();
+		if (option != 7) {
+			solicitarCorreo("Introduce el correo del usuario: ", correo);
+			found = 0;
+			mostrarLista(*users);
+			LINKEDLIST_goToHead(users);
+			while (!LINKEDLIST_isAtEnd(*users) && !found) {
+				p = LINKEDLIST_get(users);
+				if (!strcmp(p.correo, correo) && p.tipus == 0) {
+					found = 1;
+				}
+				else {
+					LINKEDLIST_next(users);
+				}
+			}
+		}
+	} while (option != 7);
+}
+
 void eliminarClientes () {
 	LinkedList users;
 	int found = 0;
@@ -775,7 +821,7 @@ void modoProductor () {
 				mostrarLista(clients);
 				break;
 			case 2:
-				// modificarClientes(&clients);
+				modificarClientes(&clients);
 				break;
 			case 3:
 				eliminarClientes();
