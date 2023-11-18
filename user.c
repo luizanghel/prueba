@@ -824,6 +824,7 @@ void modificarClientes (LinkedList *users) {
 			else {
 				actualizarFichero(*users);
 				printf ("El %s de %s ha sido modificado correctamente.\n", tipo[option-1], correo);
+			
 			}
 		}
 	} while (option != 7);
