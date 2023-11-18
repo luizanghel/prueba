@@ -797,7 +797,7 @@ void runOption (int option, FilePersona *p) {
 void modificarClientes (LinkedList *users) {
 	int option, found;
 	FilePersona p;
-	char correo[MAX_CHAR_SIMPLE];
+	char correo[MAX_CHAR_SIMPLE], tipo[6][MAX_CHAR_SIMPLE] = {"nombre", "primer apellido", "segundo apellido", "correo", "contraseña", "numero de telefono"};
 	
 	do {
 		option = menuModificacion();
@@ -820,6 +820,10 @@ void modificarClientes (LinkedList *users) {
 			}
 			if (!found) {
 				printf ("ERROR (No se ha encontrado ningun usuario con este correo).\n");
+			}
+			else {
+				actualizarFichero(*users);
+				printf ("El %s de %s ha sido modificado correctamente.\n", tipo[option-1], correo);
 			}
 		}
 	} while (option != 7);
