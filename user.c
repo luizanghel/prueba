@@ -1,10 +1,7 @@
 #include <stdio.h>
 
 #include "user.h"
-#include "presupuesto.h"
 #include "linkedlist.h"
-#include "canales.h"
-#include "actors.h"
 
 /***********************************************
 *
@@ -16,7 +13,7 @@
 int esMinuscula (char letra) {
 	int hoEs = 0;
 
-	if (letra >= 'a' && letra  <= 'z' ) {
+	if (letra >= 'a' && letra  <= 'z') {
 		hoEs = 1;
 	}
 	
@@ -392,7 +389,6 @@ Persona requestData () {
 	solicitarCorreo("Correo: ", p.correo);
 	solicitarContrasena("Contraseña: ", p.password);
 	p.telefono = solicitarTelefono("Numero de telefono: ");
-
 	return p;
 }
 
@@ -465,12 +461,13 @@ LinkedList ficheroALista () {
 ************************************************/
 void mostrarLista(LinkedList usuarios) {
 	FilePersona p;
-
+	int n_clients = 0;
 	LINKEDLIST_goToHead(&usuarios);
 	while (!LINKEDLIST_isAtEnd(usuarios)) {
 		p =	LINKEDLIST_get(&usuarios);
 		if (p.tipus == 0) {
-			printf ("--CLIENTE--\n");
+			n_clients++;
+			printf ("-CLIENTE %d-\n", n_clients);
 			printf ("\tNombre: %s\n", p.nombre);
 			printf ("\tPrimer apellido: %s\n", p.apellido1);
 			printf ("\tSegundo apellido: %s\n", p.apellido2);
@@ -480,6 +477,7 @@ void mostrarLista(LinkedList usuarios) {
 		
 		LINKEDLIST_next(&usuarios);
 	}
+	printf ("Hay %d clientes registrados.\n", n_clients);
 }
 
 /***********************************************
@@ -592,7 +590,6 @@ void actualizarFichero (LinkedList usuarios) {
 			LINKEDLIST_next(&usuarios);
 		}
 		fclose(actualizado);
-		LINKEDLIST_destroy(&usuarios);
 		remove("clients.txt");
 		rename("nuevo.txt", "clients.txt");
 	}
@@ -688,15 +685,16 @@ Persona desdeListaAFile (FilePersona p) {
 * @Retorno: Los datos de la persona.
 * 
 ************************************************/
-Persona iniciarSesion() {
+Persona iniciarSesion(int *existe) {
 	FilePersona p, usuario;
-	int existe = 0;
+	
+	*existe = 0;
 
 	printf ("Registro: Rellena todos los campos que aparecen a continuación:\n");
 	solicitarCorreo("Introduce correo: ", p.correo);
 	solicitarContrasena("Introduce contraseña: ", p.password);
-	usuario = existeUsuario(p.correo, p.password, &existe);
-	if (existe) {
+	usuario = existeUsuario(p.correo, p.password, existe);
+	if (*existe) {
 		printf ("\n¡Inicio de sesion completado!. Bienvenido/a %s.\n", usuario.nombre);
 	}
 	else {
@@ -706,52 +704,35 @@ Persona iniciarSesion() {
 	return desdeListaAFile(usuario);
 }
 
+int option2AsNumber (int *option, int min, int max) {
+	char option_char[MAX_CHAR_SIMPLE];
+	int error = 0;
+
+	fgets (option_char, MAX_CHAR_SIMPLE, stdin);
+	option_char[strlen(option_char) - 1] = '\0';	
+	*option = atoi(option_char);				
+	
+	if (*option < min || *option > max) {
+		printf ("\n\tERROR: Debes introducir una de las opciones posibles.\n\n");
+		error = 1;
+	}
+	return error;
+}
+
 int menuProductor () {
-	int option;
-	char aux;
-	do{
+	int option, error = 0;
+
+	do {
 		printf ("Bienvenido al MODO PRODUCTOR. ¿Que desea realizar?\n");
-		printf ("1- Menú clientes\n");
-		printf ("2- Menú actores\n");
-		printf ("3- Menú canales\n");
-    	printf ("4- Comprobar presupuesto\n");
-		printf ("5- Salir\n");
+		printf ("1- Visualizar clientes\n");
+		printf ("2- Modificar clientes\n");
+		printf ("3- Eliminar clientes\n");
+		printf ("4- Salir\n");
 		printf ("Enter option: ");
-		scanf ("%d", &option);
-		scanf ("%c", &aux);
-		
-		switch(option){
+		error = option2AsNumber(&option, 1, 4);
+	} while (error);
 
-			case 1:
-				ficheroALista();		
-			break;
-
-			case 2:
-				//menuActores();
-			break;
-
-			case 3:
-				menuCanales();
-			break;
-
-			case 4:
-				comprobarPresupuesto();
-			break;
-
-			case 5:
-				//menu();
-			break;
-
-			default:
-				printf("Opción no válida, intentalo de nuevo\n");
-			break;
-			
-		}
-
-	}while(option !=0);
-	//return option;
-
-
+	return option;
 }
 
 void eliminarClientes () {
@@ -780,11 +761,9 @@ void eliminarClientes () {
 	}
 }
 
-
-void modoProductor (float *presupuesto) {
+void modoProductor () {
 	int option, quit = 0;
 	LinkedList clients;
-
 
 	do {
 	
@@ -796,15 +775,12 @@ void modoProductor (float *presupuesto) {
 				mostrarLista(clients);
 				break;
 			case 2:
-				// modificarClientes();
+				// modificarClientes(&clients);
 				break;
 			case 3:
 				eliminarClientes();
 				break;
 			case 4:
-                comprobarpresupuesto(*presupuesto);
-                break;
-            case 5:
 				quit = 1;
 				break;
 		}
