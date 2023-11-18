@@ -756,6 +756,44 @@ int menuModificacion() {
 	return option;
 }
 
+void runOption (int option, FilePersona *p) {
+	char cambio[MAX_CHAR_SIMPLE];
+	int numero;
+	
+	switch (option) {
+		case 1:
+			printf ("Su nombre actual es %s.", p->nombre);
+			solicitarPalabra("Introduce nombre a modificar: ", cambio, option--);
+			strcpy(p->nombre, cambio);
+			break;
+		case 2:
+			printf ("Su primer apellido actual es %s.", p->apellido1);
+			solicitarPalabra("Introduce primer apellido a modificar: ", cambio, option--);
+			strcpy(p->apellido1, cambio);
+			break;
+		case 3:
+			printf ("Su segundo apellido actual es %s.", p->apellido2);
+			solicitarPalabra("Introduce segundo apellido a modificar: ", cambio, option--);
+			strcpy(p->apellido2, cambio);
+			break;
+		case 4:
+			printf ("Su correo actual es %s.", p->correo);
+			solicitarCorreo("Introduce primer apellido a modificar: ", cambio);
+			strcpy(p->correo, cambio);
+			break;
+		case 5:
+			printf ("Su contraseña actual es %s.", p->password);
+			solicitarContrasena("Introduce contraseña a modificar: ", cambio);
+			strcpy(p->password, cambio);
+			break;
+		case 6:
+			printf ("Su numero de telefono actual es %d.", p->telefono);
+			numero = solicitarTelefono("Introduce telefono a modificar: ");
+			p->telefono = numero;
+			break;
+	}
+}
+
 void modificarClientes (LinkedList *users) {
 	int option, found;
 	FilePersona p;
@@ -772,10 +810,16 @@ void modificarClientes (LinkedList *users) {
 				p = LINKEDLIST_get(users);
 				if (!strcmp(p.correo, correo) && p.tipus == 0) {
 					found = 1;
+					runOption(option, &p);
+					LINKEDLIST_remove(users);
+					LINKEDLIST_add(users, p);
 				}
 				else {
 					LINKEDLIST_next(users);
 				}
+			}
+			if (!found) {
+				printf ("ERROR (No se ha encontrado ningun usuario con este correo).\n");
 			}
 		}
 	} while (option != 7);
