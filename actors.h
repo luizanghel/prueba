@@ -3,6 +3,7 @@
 
 #include <string.h>
 
-int addActor();
+
+void addActor();
 
 #endif

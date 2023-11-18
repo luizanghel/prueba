@@ -1,4 +1,4 @@
-#include <stdio.h>
+/*#include <stdio.h>
 #include "actors.h"
 #include "linkedlistactores.h"
 
@@ -40,21 +40,6 @@ LinkedList actorsALista () {
 }
 
 
-
-int addActor(){
-    FileActor actor, actor2;
-    LinkedList lista;
-    int found = 0;
-
-    char name[100], surname1[100], surname2[100];
-    int phone, salario, contract_status;
-    
-   		 
-   	printf("Entra el numero del DNI: ");
-	scanf ("%d", &actor.dni.numeros);
-
-	printf ("Entra la letra del DNI: ");
-	scanf ("%c", &actor.dni.letra);
 
 void menuActors(){
 
@@ -191,4 +176,4 @@ void addActor(){
 	}
 
 	return !found;
-}
+}*/

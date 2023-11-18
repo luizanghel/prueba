@@ -19,7 +19,7 @@ typedef struct {
 } Dni;
 
 typedef struct {
-    Dni dni
+    Dni dni;
 	char nombre[100];
     char apellido1[100];
     char apellido2[100];
