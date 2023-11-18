@@ -2,6 +2,60 @@
 #include "actors.h"
 #include "linkedlistactores.h"
 
+#define MAX_CHAR_SIMPLE 100
+
+LinkedList actorsALista () {
+	LinkedList lista;
+	FILE *f;
+	FileActor p;
+	char aux;
+
+	f = fopen ("actores.txt", "r");
+	if (f == NULL) {
+		printf ("Error! Debe contactar con un administrador en el menor tiempo posible\n");
+	}
+	else {
+		lista = LINKEDLISTactors_create();
+		fscanf(f, "%d", &p.dni.numeros);
+		while (!feof(f)) {
+			fscanf(f, "%c", &p.dni.letra);
+			fscanf(f, "%c", &aux);
+			fgets(p.nombre, MAX_CHAR_SIMPLE, f);
+			p.nombre[strlen(p.nombre) - 1] = '\0';
+			fgets(p.apellido1, MAX_CHAR_SIMPLE, f);
+			p.apellido1[strlen(p.apellido1) - 1] = '\0';
+			fgets(p.apellido2, MAX_CHAR_SIMPLE, f);
+			p.apellido2[strlen(p.apellido2) - 1] = '\0';	
+			fscanf(f, "%d", &p.telefono);
+			fscanf(f, "%d", &p.salari);
+			fscanf(f, "%d", &p.contractat);
+			LINKEDLISTactors_add(&lista, p);
+			fscanf(f, "%d", &p.dni.numeros);
+		}
+		fclose(f);
+			
+	}
+
+	return lista;
+}
+
+
+
+int addActor(){
+    FileActor actor, actor2;
+    LinkedList lista;
+    int found = 0;
+
+    char name[100], surname1[100], surname2[100];
+    int phone, salario, contract_status;
+    
+   		 
+   	printf("Entra el numero del DNI: ");
+	scanf ("%d", &actor.dni.numeros);
+
+	printf ("Entra la letra del DNI: ");
+	scanf ("%c", &actor.dni.letra);
+
 void menuActors(){
 
 	int option=0, error=0;
@@ -109,14 +163,32 @@ void addActor(){
     strcpy (actor.nombre, name);
     strcpy (actor.apellido1, surname1);
     strcpy (actor.apellido2, surname2);
-    
+
     actor.telefono = phone;
     actor.salari = salario;
-    actor.contract = contract_status;
-    
-    dni_pedir.numeros = numdni;
-    dni_pedir.letra = pedir_letra;
-    
-    actor.dni = dni_pedir;
-    LINKEDLISTactors_add (lista, actor);
+    actor.contractat = contract_status; 
+	
+	lista = actorsALista();
+
+    LINKEDLISTactors_goToHead(&lista);
+	while (!LINKEDLISTactors_isAtEnd(lista) && !found) {
+		actor2 = LINKEDLISTactors_get(&lista);
+		if (actor2.dni.numeros == actor.dni.numeros && actor2.dni.letra == actor.dni.letra) {
+			found = 1;
+		}
+		else {
+			LINKEDLISTactors_next(&lista);
+		}
+	}
+
+	
+	if (!found) {
+    	LINKEDLISTactors_add (&lista, actor);
+		printf ("S'ha afegit correctament el actor %s amb identificador %d%c.\n", actor.nombre, actor.dni.numeros, actor.dni.letra);
+	}
+	else {
+		printf ("Ya se ha encontrado un actor con este identificador.\n");
+	}
+
+	return !found;
 }
