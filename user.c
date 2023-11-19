@@ -1,7 +1,6 @@
 #include <stdio.h>
 
 #include "user.h"
-#include "linkedlist.h"
 
 /***********************************************
 *
@@ -719,16 +718,15 @@ int option2AsNumber (int *option, int min, int max) {
 	return error;
 }
 
-int menuProductor () {
+int menuProductorClientes () {
 	int option, error = 0;
 
 	do {
-		printf ("Bienvenido al MODO PRODUCTOR. ¿Que desea realizar?\n");
-		printf ("1- Visualizar clientes\n");
-		printf ("2- Modificar clientes\n");
-		printf ("3- Eliminar clientes\n");
-		printf ("4- Salir\n");
-		printf ("Enter option: ");
+		printf ("\t1- Visualizar clientes\n");
+		printf ("\t2- Modificar clientes\n");
+		printf ("\t3- Eliminar clientes\n");
+		printf ("\t4- Salir\n");
+		printf ("\tEnter option: ");
 		error = option2AsNumber(&option, 1, 4);
 	} while (error);
 
@@ -856,13 +854,13 @@ void eliminarClientes () {
 	}
 }
 
-void modoProductor () {
+void modoProductorClientes() {
 	int option, quit = 0;
 	LinkedList clients;
-
+	
 	do {
 	
-		option = menuProductor();
+		option = menuProductorClientes();
 		clients = ficheroALista();
 
 		switch (option) {
@@ -879,5 +877,89 @@ void modoProductor () {
 				quit = 1;
 				break;
 		}
+	} while (!quit);
+}
+
+int menuProductorGeneral() {
+	int option, error = 0;
+
+	do {
+		printf ("Bienvenido al MENU PRODUCTOR. ¿Que deseas realizar?\n");
+		printf ("1- Gestionar clientes\n");
+		printf ("2- Gestionar canales\n");
+		printf ("3- Salir\n");
+		printf ("Entra opcion: ");
+		error = option2AsNumber(&option, 1, 3);
+	} while (error);
+
+	return option;
+}
+
+/*int menuProductorCanales() {
+	int option, error;
+
+	do {
+		printf ("\t1- Listar canales\n");
+		printf ("\t2- Crear canal\n");
+		printf ("\t3- Modificar canal\n");
+		printf ("\t4- Eliminar canal\n");
+		printf ("\t5- Crear programa\n");
+		printf ("\t6- Salir\n");
+		printf ("\tEnter option: ");
+		error = option2AsNumber(&option, 1, 6);
+	} while (error);
+	
+	return option;
+}
+
+void runMenuCanales (int option, int *quit) {
+	
+	switch (option) {
+		case 1:
+			listarCanal();
+			break;
+		case 2:
+			 crearNuevoCanal();
+			break;
+		case 3:
+			modificarCanal();
+			break;
+		case 4:
+			//eliminarCanal();
+			break;
+		case 5:
+			crearPrograma();
+			break;
+		case 6:
+			*quit = 1;
+			break;
+	}
+}
+
+void modoProductorCanales() {
+	int option, quit = 0;
+
+	do {
+		option = menuProductorCanales();
+		runMenuCanales(option, &quit);
+	} while (!quit);
+}
+*/
+void modoProductor () {
+	int option, quit = 0;
+	
+	do {
+		option = menuProductorGeneral();
+		switch (option) {
+			case 1:
+				modoProductorClientes();
+				break;
+			case 2:
+				menuCanales();
+				break;
+			case 3:
+				quit = 1;
+				break;
+		} 
 	} while (!quit);
 }
