@@ -1,4 +1,9 @@
-Canal N°1 
+Canal N°1
+Nombre: Juan
+Programacion: 
+Costo de suscripcion: 0.00
+Costo para la empresa: 0.00
+
 Nombre: Eneco
 Programacion: 
 Costo de suscripcion: 120.00

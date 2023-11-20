@@ -16,20 +16,20 @@
 typedef struct {
     int numeros;
     char letra;
-} Dni;
+} DniActors;
 
 typedef struct {
-    Dni dni;
+    DniActors dni;
 	char nombre[100];
     char apellido1[100];
     char apellido2[100];
     int telefono;
     int salari;
     int contractat; // 0-no contratado | 1-contratado
-} FileActor;
+} Actor;
 
 // Data types
-typedef FileActor Element;
+typedef Actor Element2;
 
 /*
  * Node is a recursive structure that will contain each one of the elements.
@@ -38,10 +38,10 @@ typedef FileActor Element;
  * The structure is recursively defined (a Node has a pointer to another node),
  *  so we need to define a new type (typedef) from a structure (struct _Node).
  */
-typedef struct _Node {
-    Element element;
-    struct _Node * next;
-} Node;
+typedef struct _Node2 {
+    Element2 element;
+    struct _Node2 * next;
+} Node2;
 
 /*
  * A linked list is a linear data structure, in which the elements are not
@@ -87,9 +87,9 @@ typedef struct _Node {
  */
 typedef struct {
     int error;			// Error code to keep track of failing operations;
-    Node * head;	 	// Head/First element or Phantom node;
-    Node * previous; 	// Previous node before the point of view;
-} LinkedList;
+    Node2 * head;	 	// Head/First element or Phantom node;
+    Node2 * previous; 	// Previous node before the point of view;
+} LinkedList2;
 
 
 // Procedures & Functions
@@ -114,7 +114,7 @@ typedef struct {
  * @Return: An empty linked list
  *
  ****************************************************************************/
-LinkedList LINKEDLISTactors_create ();
+LinkedList2 LINKEDLISTactors_create ();
 
 
 /****************************************************************************
@@ -145,7 +145,7 @@ LinkedList LINKEDLISTactors_create ();
  * @Return: ---
  *
  ****************************************************************************/
-void 	LINKEDLISTactors_add (LinkedList * list, Element element);
+void 	LINKEDLISTactors_add (LinkedList2 * list, Element2 element);
 
 
 /****************************************************************************
@@ -174,7 +174,7 @@ void 	LINKEDLISTactors_add (LinkedList * list, Element element);
  * @Return: ---
  *
  ****************************************************************************/
-void 	LINKEDLISTactors_remove (LinkedList * list);
+void 	LINKEDLISTactors_remove (LinkedList2 * list);
 
 
 /****************************************************************************
@@ -189,7 +189,7 @@ void 	LINKEDLISTactors_remove (LinkedList * list);
  * @Return: ---
  *
  ****************************************************************************/
-Element LINKEDLISTactors_get (LinkedList * list);
+Element2 LINKEDLISTactors_get (LinkedList2 * list);
 
 
 /****************************************************************************
@@ -199,7 +199,7 @@ Element LINKEDLISTactors_get (LinkedList * list);
  * @Return: true (!0) if this list contains no elements, false (0) otherwise
  *
  ****************************************************************************/
-int 	LINKEDLISTactors_isEmpty (LinkedList list);
+int 	LINKEDLISTactors_isEmpty (LinkedList2 list);
 
 
 /****************************************************************************
@@ -209,7 +209,7 @@ int 	LINKEDLISTactors_isEmpty (LinkedList list);
  * @Return: ---
  *
  ****************************************************************************/
-void 	LINKEDLISTactors_goToHead (LinkedList * list);
+void 	LINKEDLISTactors_goToHead (LinkedList2 * list);
 
 
 /****************************************************************************
@@ -222,7 +222,7 @@ void 	LINKEDLISTactors_goToHead (LinkedList * list);
  * @Return: ---
  *
  ****************************************************************************/
-void 	LINKEDLISTactors_next (LinkedList * list);
+void 	LINKEDLISTactors_next (LinkedList2 * list);
 
 
 /****************************************************************************
@@ -233,7 +233,7 @@ void 	LINKEDLISTactors_next (LinkedList * list);
  * @Return: true (!0) if the POV is after the last element in the list
  *
  ****************************************************************************/
-int 	LINKEDLISTactors_isAtEnd (LinkedList list);
+int 	LINKEDLISTactors_isAtEnd (LinkedList2 list);
 
 
 /****************************************************************************
@@ -245,7 +245,7 @@ int 	LINKEDLISTactors_isAtEnd (LinkedList list);
  * @Return: ---
  *
  ****************************************************************************/
-void 	LINKEDLISTactors_destroy (LinkedList * list);
+void 	LINKEDLISTactors_destroy (LinkedList2 * list);
 
 
 /****************************************************************************
@@ -257,6 +257,6 @@ void 	LINKEDLISTactors_destroy (LinkedList * list);
  * @Return: an error code from the list of constants defined.
  *
  ****************************************************************************/
-int		LINKEDLISTactors_getErrorCode (LinkedList list);
+int		LINKEDLISTactors_getErrorCode (LinkedList2 list);
 
 #endif
