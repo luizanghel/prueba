@@ -1,5 +1,7 @@
 #include <stdio.h>
+
 #include "actors.h"
+#include "canales.h"
 
 #define MAX_CHAR_SIMPLE 100
 
@@ -21,6 +23,7 @@ void mostrarActores (LinkedList2 list) {
 
 	
 }
+
 
 LinkedList2 actorsALista () {
 	LinkedList2 lista;
@@ -94,8 +97,6 @@ void actualizarFicheroActors (LinkedList2 usuarios) {
 
 }
 
-
-
 void addActor(LinkedList2 *lista){
    	Actor actor, actor2;
    	int found = 0;
@@ -161,9 +162,49 @@ void addActor(LinkedList2 *lista){
 
 }
 
+
+
+void contratarActor (LinkedList2 *actores) {
+	int numeros, found = 0;
+	char letra;
+	Actor a;
+
+	printf ("Numeros dni actor: ");
+	scanf ("%d", &numeros);
+	printf ("Letra dni actor: ");
+	scanf ("%c", &letra);
+	scanf ("%c", &letra);
+	
+	LINKEDLISTactors_goToHead(actores);
+	while (!LINKEDLISTactors_isAtEnd(*actores) && !found) {
+		a = LINKEDLISTactors_get(actores);
+		if (a.dni.numeros == numeros && a.dni.letra == letra) {
+			found = 1;
+			if (!a.contractat) {
+				//if (// Funcion assignar)) {
+					a.contractat = 1;
+					LINKEDLISTactors_remove(actores);
+					LINKEDLISTactors_add(actores, a);
+					actualizarFicheroActors(*actores);
+					printf ("\tEl actor se ha contratado correctamente\n");
+				//}
+				//else {
+					printf ("El programa no existe\n");
+				//}
+			}
+			else {
+				printf ("\tERROR (El actor ya ha sido contratado)\n");
+			}
+		}
+		LINKEDLISTactors_next(actores);
+	}
+	if (!found) {
+		printf ("\tERROR (No se ha encontrado ningun actor con el identificador)\n");
+	}
+}
+
 void opcionesActores(int opcion){
 	LinkedList2 actors;
-	
 	actors = actorsALista();
 		
 	switch (opcion){
@@ -171,7 +212,7 @@ void opcionesActores(int opcion){
 			addActor(&actors);
 			break;
 		case 2:
-			//ContratarActor();
+			contratarActor(&actors);
 			break;
 		case 3:
 			//DarDeBaja();
@@ -207,15 +248,14 @@ void menuActors(){
 	
 	do {
 		do{
-			printf("\nMenu Actores");	
-			printf("\n1. Registrar actor");	
-			printf("\n2. Contratar actor");	
-			printf("\n3. Dar de baja a un actor");	
-			printf("\n4. Listar actores");	
-			printf("\n5. Gestionar actores");	
-			printf("\n6. Eliminar actores");
-			printf("\n7. Salir");
-			printf("\nEscoge una opción: ");
+			printf("\t1- Registrar actor\n");	
+			printf("\t2- Contratar actor\n");	
+			printf("\t3- Dar de baja a un actor\n");	
+			printf("\t4- Listar actores\n");	
+			printf("\t5- Gestionar actores\n");	
+			printf("\t6- Eliminar actores\n");
+			printf("\t7- Salir\n");
+			printf("\tEscoge una opción: ");
 			scanf("%d", &option);
 			scanf("%c", &aux);	
 			if (option < 1 || option > 7) {

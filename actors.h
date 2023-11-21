@@ -4,7 +4,6 @@
 #include <string.h>
 #include "linkedlistactores.h"
 
-void addActor();
 void menuActors();
 
 #endif
