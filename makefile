@@ -1,13 +1,28 @@
 all: project
 
-main.o: main.c linkedlist.h user.h
+main.o: main.c linkedlist.h user.h presupuesto.h actors.h linkedlistactores.h canales.h linkedlistcanales.h linkedlistprograma.h
 	gcc main.c -c
 
 user.o: user.c user.h
 	gcc user.c -c
 
+presupuesto.o: presupuesto.c presupuesto.h
+	gcc presupuesto.c -c
+
 linkedlist.o: linkedlist.c linkedlist.h
 	gcc linkedlist.c -c
 
-project: main.o linkedlist.o user.o
-	gcc main.o linkedlist.o user.o -o project
+linkedlistactores.o: linkedlistactores.c linkedlistactores.h
+	gcc linkedlistactores.c -c
+
+linkedlistcanales.o: linkedlistcanales.c linkedlistcanales.h
+	gcc linkedlistcanales.c -c
+
+actors.o: actors.c actors.h
+	gcc actors.c -c
+
+canales.o: canales.c canales.h
+	gcc canales.c -c
+
+project: main.o linkedlist.o user.o presupuesto.o actors.o linkedlistactores.o canales.o linkedlistcanales.o linkedlistprograma.o
+	gcc main.o linkedlist.o user.o presupuesto.o actors.o linkedlistactores.o canales.o linkedlistcanales.o linkedlistprograma.o -o project

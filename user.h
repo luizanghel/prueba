@@ -6,6 +6,10 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "linkedlist.h"
+#include "canales.h"
+#include "actors.h"
+
 // Constantes 
 #define MAX_CHAR_SIMPLE 100
 

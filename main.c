@@ -39,7 +39,7 @@ int optionAsNumber (int *option, int min, int max) {
 ************************************************/
 int showMenu () {
 	int option, error = 0;
-	
+
 	do {
 		printf ("\t1. Iniciar sessión\n");
 		printf ("\t2. Registrarse\n");
@@ -54,15 +54,15 @@ int showMenu () {
 }
 
 int main () {
-	int option, quit = 0;
+	int option, quit = 0, completado = 0;
 	Persona p;
-    float presupuesto=10000;
+    //float presupuesto=10000;
 
 	do {
 		option = showMenu ();
 		switch (option) {
 			case 1:
-				p = iniciarSesion();
+				p = iniciarSesion(&completado);
 				break;
 			case 2:
 				p = registerUser();
@@ -72,17 +72,18 @@ int main () {
 				printf ("¡Hasta pronto!\n");
 				break;
 		}
-
-		switch(p.tipus) {
-			case 0:
-				// Modo cliente
-				break;
-			case 1:
-				// Modo productor
-				modoProductor(&presupuesto);
-				break;
+		if (completado) {
+			completado = 0;
+			switch(p.tipus) {
+				case 0:
+					// Modo cliente
+					break;
+				case 1:
+					// Modo productor
+					modoProductor();
+					break;
+			}
 		}
-
 	} while(!quit);
 	
 	return 0;

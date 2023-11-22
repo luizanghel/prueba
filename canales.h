@@ -1,11 +1,7 @@
 #ifndef CANALES_H
 #define CANALES_H
 
-void crearNuevoCanal();
-void listarCanal();
-void modificarCanal();
-void eliminarCanal();
-void crearPrograma();
-
+void menuCanales();
+int assignarAlPrograma(int numero, char letra);
 #endif
 

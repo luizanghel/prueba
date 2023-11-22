@@ -1,6 +1,10 @@
 #include <stdio.h>
 
 #include "user.h"
+#include "presupuesto.h"
+#include "linkedlist.h"
+#include "canales.h"
+#include "actors.h"
 
 /***********************************************
 *
@@ -12,7 +16,7 @@
 int esMinuscula (char letra) {
 	int hoEs = 0;
 
-	if (letra >= 'a' && letra  <= 'z') {
+	if (letra >= 'a' && letra  <= 'z' ) {
 		hoEs = 1;
 	}
 	
@@ -388,6 +392,7 @@ Persona requestData () {
 	solicitarCorreo("Correo: ", p.correo);
 	solicitarContrasena("Contraseña: ", p.password);
 	p.telefono = solicitarTelefono("Numero de telefono: ");
+
 	return p;
 }
 
@@ -460,13 +465,12 @@ LinkedList ficheroALista () {
 ************************************************/
 void mostrarLista(LinkedList usuarios) {
 	FilePersona p;
-	int n_clients = 0;
+
 	LINKEDLIST_goToHead(&usuarios);
 	while (!LINKEDLIST_isAtEnd(usuarios)) {
 		p =	LINKEDLIST_get(&usuarios);
 		if (p.tipus == 0) {
-			n_clients++;
-			printf ("-CLIENTE %d-\n", n_clients);
+			printf ("--CLIENTE--\n");
 			printf ("\tNombre: %s\n", p.nombre);
 			printf ("\tPrimer apellido: %s\n", p.apellido1);
 			printf ("\tSegundo apellido: %s\n", p.apellido2);
@@ -476,7 +480,6 @@ void mostrarLista(LinkedList usuarios) {
 		
 		LINKEDLIST_next(&usuarios);
 	}
-	printf ("Hay %d clientes registrados.\n", n_clients);
 }
 
 /***********************************************
@@ -589,6 +592,7 @@ void actualizarFichero (LinkedList usuarios) {
 			LINKEDLIST_next(&usuarios);
 		}
 		fclose(actualizado);
+		LINKEDLIST_destroy(&usuarios);
 		remove("clients.txt");
 		rename("nuevo.txt", "clients.txt");
 	}
@@ -684,16 +688,15 @@ Persona desdeListaAFile (FilePersona p) {
 * @Retorno: Los datos de la persona.
 * 
 ************************************************/
-Persona iniciarSesion(int *existe) {
+Persona iniciarSesion() {
 	FilePersona p, usuario;
-	
-	*existe = 0;
+	int existe = 0;
 
 	printf ("Registro: Rellena todos los campos que aparecen a continuación:\n");
 	solicitarCorreo("Introduce correo: ", p.correo);
 	solicitarContrasena("Introduce contraseña: ", p.password);
-	usuario = existeUsuario(p.correo, p.password, existe);
-	if (*existe) {
+	usuario = existeUsuario(p.correo, p.password, &existe);
+	if (existe) {
 		printf ("\n¡Inicio de sesion completado!. Bienvenido/a %s.\n", usuario.nombre);
 	}
 	else {
@@ -703,129 +706,51 @@ Persona iniciarSesion(int *existe) {
 	return desdeListaAFile(usuario);
 }
 
-int option2AsNumber (int *option, int min, int max) {
-	char option_char[MAX_CHAR_SIMPLE];
-	int error = 0;
+int menuProductor () {
+	int option;
+	char aux;
+	do{
+		printf ("Bienvenido al MODO PRODUCTOR. ¿Que desea realizar?\n");
+		printf ("1- Menú clientes\n");
+		printf ("2- Menú actores\n");
+		printf ("3- Menú canales\n");
+    	printf ("4- Comprobar presupuesto\n");
+		printf ("5- Salir\n");
+		printf ("Enter option: ");
+		scanf ("%d", &option);
+		scanf ("%c", &aux);
+		
+		switch(option){
 
-	fgets (option_char, MAX_CHAR_SIMPLE, stdin);
-	option_char[strlen(option_char) - 1] = '\0';	
-	*option = atoi(option_char);				
-	
-	if (*option < min || *option > max) {
-		printf ("\n\tERROR: Debes introducir una de las opciones posibles.\n\n");
-		error = 1;
-	}
-	return error;
-}
-
-int menuProductorClientes () {
-	int option, error = 0;
-
-	do {
-		printf ("\t1- Visualizar clientes\n");
-		printf ("\t2- Modificar clientes\n");
-		printf ("\t3- Eliminar clientes\n");
-		printf ("\t4- Salir\n");
-		printf ("\tEnter option: ");
-		error = option2AsNumber(&option, 1, 4);
-	} while (error);
-
-	return option;
-}
-
-int menuModificacion() {
-	int option, error = 0;
-
-	do {
-	
-		printf ("\tQue deseas modificar?\n");
-		printf ("\t  1- Nombre\n");
-		printf ("\t  2- Primer apellido\n");
-		printf ("\t  3- Segundo apellido\n");
-		printf ("\t  4- Correo\n");
-		printf ("\t  5- Contraseña\n");
-		printf ("\t  6- Numero de telefono\n");
-		printf ("\t  7- Salir\n");
-		printf ("\t  Enter option: ");
-		error = option2AsNumber(&option, 1, 7);
-	
-	} while (error);
-
-	return option;
-}
-
-void runOption (int option, FilePersona *p) {
-	char cambio[MAX_CHAR_SIMPLE];
-	int numero;
-	
-	switch (option) {
-		case 1:
-			printf ("Su nombre actual es %s.", p->nombre);
-			solicitarPalabra("Introduce nombre a modificar: ", cambio, option--);
-			strcpy(p->nombre, cambio);
+			case 1:
+				ficheroALista();		
 			break;
-		case 2:
-			printf ("Su primer apellido actual es %s.", p->apellido1);
-			solicitarPalabra("Introduce primer apellido a modificar: ", cambio, option--);
-			strcpy(p->apellido1, cambio);
-			break;
-		case 3:
-			printf ("Su segundo apellido actual es %s.", p->apellido2);
-			solicitarPalabra("Introduce segundo apellido a modificar: ", cambio, option--);
-			strcpy(p->apellido2, cambio);
-			break;
-		case 4:
-			printf ("Su correo actual es %s.", p->correo);
-			solicitarCorreo("Introduce primer apellido a modificar: ", cambio);
-			strcpy(p->correo, cambio);
-			break;
-		case 5:
-			printf ("Su contraseña actual es %s.", p->password);
-			solicitarContrasena("Introduce contraseña a modificar: ", cambio);
-			strcpy(p->password, cambio);
-			break;
-		case 6:
-			printf ("Su numero de telefono actual es %d.", p->telefono);
-			numero = solicitarTelefono("Introduce telefono a modificar: ");
-			p->telefono = numero;
-			break;
-	}
-}
 
-void modificarClientes (LinkedList *users) {
-	int option, found;
-	FilePersona p;
-	char correo[MAX_CHAR_SIMPLE], tipo[6][MAX_CHAR_SIMPLE] = {"nombre", "primer apellido", "segundo apellido", "correo", "contraseña", "numero de telefono"};
-	
-	do {
-		option = menuModificacion();
-		if (option != 7) {
-			solicitarCorreo("Introduce el correo del usuario: ", correo);
-			found = 0;
-			mostrarLista(*users);
-			LINKEDLIST_goToHead(users);
-			while (!LINKEDLIST_isAtEnd(*users) && !found) {
-				p = LINKEDLIST_get(users);
-				if (!strcmp(p.correo, correo) && p.tipus == 0) {
-					found = 1;
-					runOption(option, &p);
-					LINKEDLIST_remove(users);
-					LINKEDLIST_add(users, p);
-				}
-				else {
-					LINKEDLIST_next(users);
-				}
-			}
-			if (!found) {
-				printf ("ERROR (No se ha encontrado ningun usuario con este correo).\n");
-			}
-			else {
-				actualizarFichero(*users);
-				printf ("El %s de %s ha sido modificado correctamente.\n", tipo[option-1], correo);
+			case 2:
+				//menuActores();
+			break;
+
+			case 3:
+				//menuCanales();
+			break;
+
+			case 4:
+				//comprobarpresupuesto();
+			break;
+
+			case 5:
+				//menu();
+			break;
+
+			default:
+				printf("Opción no válida, intentalo de nuevo\n");
+			break;
 			
-			}
 		}
-	} while (option != 7);
+
+	}while(option !=0);
+	return option;
+
 }
 
 void eliminarClientes () {
@@ -854,13 +779,15 @@ void eliminarClientes () {
 	}
 }
 
-void modoProductorClientes() {
+
+void modoProductor (float *presupuesto) {
 	int option, quit = 0;
 	LinkedList clients;
-	
+
+
 	do {
 	
-		option = menuProductorClientes();
+		option = menuProductor();
 		clients = ficheroALista();
 
 		switch (option) {
@@ -868,52 +795,17 @@ void modoProductorClientes() {
 				mostrarLista(clients);
 				break;
 			case 2:
-				modificarClientes(&clients);
+				// modificarClientes();
 				break;
 			case 3:
 				eliminarClientes();
 				break;
 			case 4:
+                comprobarpresupuesto(*presupuesto);
+                break;
+            case 5:
 				quit = 1;
 				break;
 		}
-	} while (!quit);
-}
-
-int menuProductorGeneral() {
-	int option, error = 0;
-
-	do {
-		printf ("Bienvenido al MENU PRODUCTOR. ¿Que deseas realizar?\n");
-		printf ("1- Gestionar clientes\n");
-		printf ("2- Gestionar canales\n");
-		printf ("3- Gestionar actores\n");
-		printf ("4- Salir\n");
-		printf ("Entra opcion: ");
-		error = option2AsNumber(&option, 1, 4);
-	} while (error);
-
-	return option;
-}
-
-void modoProductor () {
-	int option, quit = 0;
-	
-	do {
-		option = menuProductorGeneral();
-		switch (option) {
-			case 1:
-				modoProductorClientes();
-				break;
-			case 2:
-				menuCanales();
-				break;
-			case 3:
-				menuActors();
-				break;
-			case 4:
-				quit = 1;
-				break;
-		} 
 	} while (!quit);
 }
