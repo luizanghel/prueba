@@ -1,6 +1,5 @@
-#ifndef _LINKEDLISTACTORES_H
-#define _LINKEDLISTACTORES_H
-
+#ifndef _LINKEDLISTPROGRAMA_H_
+#define _LINKEDLISTPROGRAMA_H_
 
 // Libraries
 #include <stdlib.h>					// To use dynamic memory.
@@ -12,24 +11,22 @@
 #define LIST_ERROR_MALLOC 3			// Error, a malloc failed.
 #define LIST_ERROR_END 4			// Error, the POV is at the end.
 
+typedef struct {
+	int num;
+	char letra;
+} ActorID;
 
 typedef struct {
-    int numeros;
-    char letra;
-} DniActors;
-
-typedef struct {
-    DniActors dni;
-	char nombre[100];
-    char apellido1[100];
-    char apellido2[100];
-    int telefono;
-    int salari;
-    int contractat; // 0-no contratado | 1-contratado
-} Actor;
+	char nom[100];
+	char cadena[100];
+	char categoria[100];
+	char emisio[50];
+	char duracio[50];
+	ActorID actorID[3];
+} Programa;
 
 // Data types
-typedef Actor Element2;
+typedef Programa Element4;
 
 /*
  * Node is a recursive structure that will contain each one of the elements.
@@ -38,18 +35,18 @@ typedef Actor Element2;
  * The structure is recursively defined (a Node has a pointer to another node),
  *  so we need to define a new type (typedef) from a structure (struct _Node).
  */
-typedef struct _Node2 {
-    Element2 element;
-    struct _Node2 * next;
-} Node2;
+typedef struct _Node4 {		
+	Element4 element;
+	struct _Node4 * next;
+} Node4;
 
 /*
- * A linked list is a linear data structure, in which the elements are not
- *  stored at contiguous memory locations. The elements in a linked list
+ * A linked list is a linear data structure, in which the elements are not 
+ *  stored at contiguous memory locations. The elements in a linked list 
  *  are stored inside Nodes that are linked using pointers.
  *
- *  +---+----+     +---+----+     +----+----+
- *  | 1 |  o-|---> | 2 |  o-|---> | 3  |NULL|
+ *  +---+----+     +---+----+     +----+----+ 
+ *  | 1 |  o-|---> | 2 |  o-|---> | 3  |NULL| 
  *  +---+----+     +---+----+     +----+----+
  *
  * This implementation of the linked list will be using an auxiliary Node
@@ -59,17 +56,17 @@ typedef struct _Node2 {
  *  have one node in the list.
  *
  * Example of an empty list:
- *
+ *  
  *               Phantom node
  *       +---+   +---+----+
  *  head | o-|-->|   |NULL|
  *       +---+   +---+----+
  *
  * The linked list will have a "Point of View" (POV). This point of view is the
- *  element (Node) we are visiting at the moment from the list. Whenever
- *  we decide to add, remove or get an element, we will work from the point
+ *  element (Node) we are visiting at the moment from the list. Whenever 
+ *  we decide to add, remove or get an element, we will work from the point 
  *  of view. This point of view is represented by the "previous" pointer in
- *  the LinkedList type. This previous pointer will always point to "the
+ *  the LinkedList type. This previous pointer will always point to "the 
  *  element before the point of view". That is why is called previous. We need
  *  to point to the element before the point of view to be able to add new
  *  elements before the first element.
@@ -80,21 +77,21 @@ typedef struct _Node2 {
  *   prev | o-|---------|-----------
  *        +---+         |           |
  *                      v           v          Point of View
- *                    +---+---+   +---+---+     +---+---+     +---+----+
- *                    |   | o-|-->| 1 | o-|---> | 2 | o-|---> | 3 |NULL|
+ *                    +---+---+   +---+---+     +---+---+     +---+----+ 
+ *                    |   | o-|-->| 1 | o-|---> | 2 | o-|---> | 3 |NULL| 
  *                    +---+---+   +---+---+     +---+---+     +---+----+
  *
  */
 typedef struct {
-    int error;			// Error code to keep track of failing operations;
-    Node2 * head;	 	// Head/First element or Phantom node;
-    Node2 * previous; 	// Previous node before the point of view;
-} LinkedList2;
+	int error;			// Error code to keep track of failing operations;
+	Node4 * head;	 	// Head/First element or Phantom node;
+	Node4 * previous; 	// Previous node before the point of view;
+} LinkedList4;
 
 
 // Procedures & Functions
 
-/****************************************************************************
+/**************************************************************************** 
  *
  * @Objective: Creates an empty linked list.
  *			   If the list fails to create the phantom node, it will set
@@ -106,18 +103,18 @@ typedef struct {
  *   prev | o-|---------|--
  *        +---+         | |
  *                      v v          Point of View (After the last element)
- *                    +---+----+
- *                    |   |NULL|
- *                    +---+----+
+ *                    +---+----+   
+ *                    |   |NULL| 
+ *                    +---+----+   
  *
  * @Parameters: ---
  * @Return: An empty linked list
  *
  ****************************************************************************/
-LinkedList2 LINKEDLISTactors_create ();
+LinkedList4 LINKEDLISTPROGRAMA_create ();
 
 
-/****************************************************************************
+/**************************************************************************** 
  *
  * @Objective: Inserts the specified element in this list before the element
  *			    who is the current point of view. Shifts the point of view
@@ -131,8 +128,8 @@ LinkedList2 LINKEDLISTactors_create ();
  *   prev | o-|---------|-----------  Will point to 4.
  *        +---+         |           |
  *                      v           v          Point of View
- *                    +---+---+   +---+---+     +---+---+     +---+----+
- *                    |   | o-|-->| 1 | o-|--X->| 2 | o-|---->| 3 |NULL|
+ *                    +---+---+   +---+---+     +---+---+     +---+----+ 
+ *                    |   | o-|-->| 1 | o-|--X->| 2 | o-|---->| 3 |NULL| 
  *                    +---+---+   +---+---+ |   +---+---+     +---+----+
  *										    |         ^
  *										    |         |
@@ -145,12 +142,12 @@ LinkedList2 LINKEDLISTactors_create ();
  * @Return: ---
  *
  ****************************************************************************/
-void 	LINKEDLISTactors_add (LinkedList2 * list, Element2 element);
+void 	LINKEDLISTPROGRAMA_add (LinkedList4 * list, Element4 element);
 
 
-/****************************************************************************
+/**************************************************************************** 
  *
- * @Objective: Removes the element currently at the point of view in this
+ * @Objective: Removes the element currently at the point of view in this 
  *				list. Shifts any subsequent elements to the left.
  *			   This operation will fail if the POV is after the last valid
  *				element of the list. That will also happen for an empty list.
@@ -163,8 +160,8 @@ void 	LINKEDLISTactors_add (LinkedList2 * list, Element2 element);
  *   prev | o-|---------|-----------             |
  *        +---+         |           |            |
  *                      v           v          	 v  POV         NEW POV
- *                    +---+---+   +---+---+     +---+---+     +---+----+
- *                    |   | o-|-->| 1 | o-|--X->| 2 | o-|---->| 3 |NULL|
+ *                    +---+---+   +---+---+     +---+---+     +---+----+ 
+ *                    |   | o-|-->| 1 | o-|--X->| 2 | o-|---->| 3 |NULL| 
  *                    +---+---+   +---+---+ |   +---+---+     +---+----+
  *										    |                   ^
  *										    |                   |
@@ -174,10 +171,10 @@ void 	LINKEDLISTactors_add (LinkedList2 * list, Element2 element);
  * @Return: ---
  *
  ****************************************************************************/
-void 	LINKEDLISTactors_remove (LinkedList2 * list);
+void 	LINKEDLISTPROGRAMA_remove (LinkedList4 * list);
 
 
-/****************************************************************************
+/**************************************************************************** 
  *
  * @Objective: Returns the element currently at the point of view in this list.
  *			   This operation will fail if the POV is after the last valid
@@ -189,43 +186,43 @@ void 	LINKEDLISTactors_remove (LinkedList2 * list);
  * @Return: ---
  *
  ****************************************************************************/
-Element2 LINKEDLISTactors_get (LinkedList2 * list);
+Element4 LINKEDLISTPROGRAMA_get (LinkedList4 * list);
 
 
-/****************************************************************************
+/**************************************************************************** 
  *
  * @Objective: Returns true (!0) if this list contains no elements.
  * @Parameters: (in)     list = the linked list to check
  * @Return: true (!0) if this list contains no elements, false (0) otherwise
  *
  ****************************************************************************/
-int 	LINKEDLISTactors_isEmpty (LinkedList2 list);
+int 	LINKEDLISTPROGRAMA_isEmpty (LinkedList4 list);
 
 
-/****************************************************************************
+/**************************************************************************** 
  *
  * @Objective: Moves the point of view to the first element in the list.
  * @Parameters: (in/out) list = the linked list to move the POV.
  * @Return: ---
  *
  ****************************************************************************/
-void 	LINKEDLISTactors_goToHead (LinkedList2 * list);
+void 	LINKEDLISTPROGRAMA_goToHead (LinkedList4 * list);
 
 
-/****************************************************************************
+/**************************************************************************** 
  *
  * @Objective: Moves the point of view to the next element in the list.
- *				If the POV is after the last element in the list (or when
- *				the list is empty), this function will set the list's error
- *				to LIST_ERROR_END.
+ *				If the POV is after the last element in the list (or when 
+ *				the list is empty), this function will set the list's error 
+ *				to LIST_ERROR_END. 
  * @Parameters: (in/out) list = the linked list to move the POV.
  * @Return: ---
  *
  ****************************************************************************/
-void 	LINKEDLISTactors_next (LinkedList2 * list);
+void 	LINKEDLISTPROGRAMA_next (LinkedList4 * list);
 
 
-/****************************************************************************
+/**************************************************************************** 
  *
  * @Objective: Returns true (!0) if the POV is after the last element in the
  *				list.
@@ -233,10 +230,10 @@ void 	LINKEDLISTactors_next (LinkedList2 * list);
  * @Return: true (!0) if the POV is after the last element in the list
  *
  ****************************************************************************/
-int 	LINKEDLISTactors_isAtEnd (LinkedList2 list);
+int 	LINKEDLISTPROGRAMA_isAtEnd (LinkedList4 list);
 
 
-/****************************************************************************
+/**************************************************************************** 
  *
  * @Objective: Removes all the elements from the list and frees any dynamic
  *				memory block the list was using. The list must be created
@@ -245,18 +242,20 @@ int 	LINKEDLISTactors_isAtEnd (LinkedList2 list);
  * @Return: ---
  *
  ****************************************************************************/
-void 	LINKEDLISTactors_destroy (LinkedList2 * list);
+void 	LINKEDLISTPROGRAMA_destroy (LinkedList4 * list);
 
 
-/****************************************************************************
+/**************************************************************************** 
  *
- * @Objective: This function returns the error code provided by the last
+ * @Objective: This function returns the error code provided by the last 
  *				operation run. The operations that update the error code are:
  *				Create, Add, Remove and Get.
  * @Parameters: (in)     list = the linked list to check.
  * @Return: an error code from the list of constants defined.
  *
  ****************************************************************************/
-int		LINKEDLISTactors_getErrorCode (LinkedList2 list);
+int		LINKEDLISTPROGRAMA_getErrorCode (LinkedList4 list);
+
 
 #endif
+

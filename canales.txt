@@ -1,23 +1,18 @@
-Canal N°1 
-Nombre: Eneco
-Programacion: 
-Costo de suscripcion: 120.00
-Costo para la empresa: 240.00
-
-Canal N°2
-Nombre: Ramirez
-Programacion: Hola
-Costo de suscripcion: 120.00
-Costo para la empresa: 240.00
-
-Nombre: Flownek
-Programacion: Hola
-Costo de suscripcion: 120.00
-Costo para la empresa: 240.00
-
-Canal N°3 
-Nombre: Juan
-Programacion: 
-Costo de suscripcion: 10.00
-Costo para la empresa: 20.00
-
+Juan
+150.000000
+Ramonete
+125.000000
+JuanAntonio
+12.000000
+Flownek
+12.000000
+a
+12.000000
+b
+12.000000
+c
+12.000000
+Buenas
+2.785000
+Rosario
+12.500000

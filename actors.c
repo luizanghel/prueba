@@ -1,18 +1,39 @@
-/*#include <stdio.h>
+#include <stdio.h>
+
 #include "actors.h"
-#include "linkedlistactores.h"
+#include "canales.h"
 
 #define MAX_CHAR_SIMPLE 100
 
-LinkedList actorsALista () {
-	LinkedList lista;
+void mostrarActores (LinkedList2 list) {
+	Actor actor;
+
+	LINKEDLISTactors_goToHead(&list);
+	while (!LINKEDLISTactors_isAtEnd(list)) {
+		actor = LINKEDLISTactors_get(&list);
+		printf ("Nombre: %s\n", actor.nombre);
+		printf ("Primer apellido: %s\n", actor.apellido1);
+		printf ("Segundo apellido: %s\n", actor.apellido2);
+		printf ("DNI: %d%c\n", actor.dni.numeros, actor.dni.letra);
+		printf ("Salario: %d€\n", actor.salari);
+		printf ("Contractat: %d\n", actor.contractat);
+		printf ("Telefono: %d\n", actor.telefono);
+		LINKEDLISTactors_next(&list);
+	}
+
+	
+}
+
+
+LinkedList2 actorsALista () {
+	LinkedList2 lista;
 	FILE *f;
-	FileActor p;
+	Actor p;
 	char aux;
 
-	f = fopen ("actores.txt", "r");
+	f = fopen ("actors.txt", "r");
 	if (f == NULL) {
-		printf ("Error! Debe contactar con un administrador en el menor tiempo posible\n");
+		printf ("No hay actores registrados.\n");
 	}
 	else {
 		lista = LINKEDLISTactors_create();
@@ -40,45 +61,165 @@ LinkedList actorsALista () {
 }
 
 
+/***********************************************
+*
+* @Finalidad: Escribir el contenido de una lista en un fichero.
+* @Parametros: in: usuarios = Lista de donde saca la informacion.
+* @Retorno: ----.
+* 
+************************************************/
+void actualizarFicheroActors (LinkedList2 usuarios) {
+	FILE *actualizado = NULL;
+	Actor p;
 
-void menuActors(){
-
-	int option=0, error=0;
-	char aux;
-	
-	do{
-		printf("\nMenu Actores");	
-		printf("\n1. Registrar actor");	
-		printf("\n2. Contratar actor");	
-		printf("\n3. Dar de baja a un actor");	
-		printf("\n4. Listar actores");	
-		printf("\n5. Gestionar actores");	
-		printf("\n6. Eliminar actores");
-		printf("\n7. Salir");
-		printf("\nEscoge una opción: ");
-		scanf("%d", &option);
+	actualizado = fopen("nuevo.txt", "w");
+	if (actualizado == NULL) {
+		printf ("\tERROR DE SISTEMA (El sistema ha caído. Pongase en contacto con un administrador en la mayor brevedad posible).\n");
 		
-		opcionesActores(option);
+	}
+	else {
+		LINKEDLISTactors_goToHead(&usuarios);
+		while (!LINKEDLISTactors_isAtEnd(usuarios)) {
+			p = LINKEDLISTactors_get(&usuarios);
+			fprintf(actualizado, "%d%c\n", p.dni.numeros, p.dni.letra);
+	   		fprintf(actualizado, "%s\n", p.nombre);
+	   		fprintf(actualizado, "%s\n", p.apellido1);
+	   	 	fprintf(actualizado, "%s\n", p.apellido2);
+	    	fprintf(actualizado, "%d\n", p.telefono);
+	    	fprintf(actualizado, "%d\n", p.salari);
+		    fprintf(actualizado, "%d\n", p.contractat);
+			LINKEDLISTactors_next(&usuarios);
+		}
+		fclose(actualizado);
+		remove("actors.txt");
+		rename("nuevo.txt", "actors.txt");
+	}
 
-	}while(error==0);	
-	return option;
+}
+
+void addActor(LinkedList2 *lista){
+   	Actor actor, actor2;
+   	int found = 0;
+
+    printf ("\nEnter your actor DNI number: ");
+    scanf("%d", &actor.dni.numeros);
+    
+    printf ("\nEnter your actor DNI letter: ");
+    scanf("%c", &actor.dni.letra);
+    scanf("%c", &actor.dni.letra);
+    
+    printf ("\nEnter your actor name: ");
+    scanf("%s", actor.nombre);
+    
+    printf ("\nEnter your actor first surname: ");
+    scanf("%s", actor.apellido1);
+    
+    printf ("\nEnter your actor second surname: ");
+    scanf("%s", actor.apellido2);
+    
+    do{
+        printf ("\nEnter your actor phone number: ");
+        scanf("%d", &actor.telefono);
+        if(actor.telefono > 999999999 || actor.telefono < 100000000){
+            printf("\nERROR! This is not a valid phone number"); 
+        }
+    }while(actor.telefono > 999999999 || actor.telefono < 100000000 );
+    
+    printf ("\nEnter your actor salari: ");
+    scanf("%d", &actor.salari);
+    
+    
+    do{
+        printf ("\nEnter your actor contract state (0 if not contracted, 1 if cotracted): ");
+        scanf("%d", &actor.contractat);
+        if (actor.contractat != 0 && actor.contractat != 1){
+            printf("\nERROR!");
+        }
+    } while(actor.contractat != 0 && actor.contractat != 1);
+    
+
+    LINKEDLISTactors_goToHead(lista);
+	while (!LINKEDLISTactors_isAtEnd(*lista) && !found) {
+		actor2 = LINKEDLISTactors_get(lista);
+		if (actor2.dni.numeros == actor.dni.numeros && actor2.dni.letra == actor.dni.letra) {
+			found = 1;
+		}
+		else {
+			LINKEDLISTactors_next(lista);
+		}
+	}
+
+	
+	if (!found) {
+    	LINKEDLISTactors_add (lista, actor);
+		printf ("S'ha afegit correctament el actor %s amb identificador %d%c.\n", actor.nombre, actor.dni.numeros, actor.dni.letra);
+		actualizarFicheroActors(*lista);
+	}
+	else {
+		printf ("Ya se ha encontrado un actor con este identificador.\n");
+	}
+	
+
+}
+
+
+
+void contratarActor (LinkedList2 *actores) {
+	int numeros, found = 0;
+	char letra;
+	Actor a;
+
+	printf ("Numeros dni actor: ");
+	scanf ("%d", &numeros);
+	printf ("Letra dni actor: ");
+	scanf ("%c", &letra);
+	scanf ("%c", &letra);
+	
+	LINKEDLISTactors_goToHead(actores);
+	while (!LINKEDLISTactors_isAtEnd(*actores) && !found) {
+		a = LINKEDLISTactors_get(actores);
+		if (a.dni.numeros == numeros && a.dni.letra == letra) {
+			found = 1;
+			if (!a.contractat) {
+				if (assignarAlPrograma(numeros, letra)) {
+					a.contractat = 1;
+					LINKEDLISTactors_remove(actores);
+					LINKEDLISTactors_add(actores, a);
+					actualizarFicheroActors(*actores);
+					printf ("\tEl actor se ha contratado correctamente\n");
+				}
+				else {
+					printf ("El programa no existe\n");
+				}
+			}
+			else {
+				printf ("\tERROR (El actor ya ha sido contratado)\n");
+			}
+		}
+		LINKEDLISTactors_next(actores);
+	}
+	if (!found) {
+		printf ("\tERROR (No se ha encontrado ningun actor con el identificador)\n");
+	}
 }
 
 void opcionesActores(int opcion){
-
+	LinkedList2 actors;
+	actors = actorsALista();
+		
 	switch (opcion){
 		case 1:
-			//RegistrarActor();
+			addActor(&actors);
 			break;
 		case 2:
-			//ContratarActor();
+			contratarActor(&actors);
 			break;
 		case 3:
 			//DarDeBaja();
 			break;
 
 		case 4:
-			//ListarActores();
+			mostrarActores(actors);
 			break;
 
 		case 5:
@@ -101,79 +242,29 @@ void opcionesActores(int opcion){
 }
 
 
-void addActor(){
-    FileActor actor;
-    FileDni dni_pedir;
-    LinkedList lista;
-    lista = LINKEDLISTactors_create ();
-    
-    char name[100], pedir_letra[100], surname1[100], surname2[100];
-    int numdni , phone, salario, contract_status;
-    
-    printf ("\nEnter your actor DNI number: ");
-    scanf("%d", &numdni);
-    
-    printf ("\nEnter your actor DNI letter: ");
-    scanf("%s", pedir_letra);
-    
-    printf ("\nEnter your actor name: ");
-    scanf("%s", name);
-    
-    printf ("\nEnter your actor first surname: ");
-    scanf("%s", surname1);
-    
-    printf ("\nEnter your actor second surname: ");
-    scanf("%s", surname2);
-    
-    do{
-        printf ("\nEnter your actor phone number: ");
-        scanf("%d", &phone);
-        if(phone > 999999999 || phone < 100000000){
-            printf("\nERROR! This is not a valid phone number"); 
-        }
-    }while(phone > 999999999 || phone < 100000000 );
-    
-    printf ("\nEnter your actor salari: ");
-    scanf("%d", &salario);
-    
-    
-    do{
-        printf ("\nEnter your actor contract state (0 if not contracted, 1 if cotracted): ");
-        scanf("%d", &contract_status);
-        if (contract_status != 0 && contract_status != 1){
-            printf("\nERROR!");
-        }
-    }while( contract_status != 0 && contract_status != 1);
-    
-    strcpy (actor.nombre, name);
-    strcpy (actor.apellido1, surname1);
-    strcpy (actor.apellido2, surname2);
-
-    actor.telefono = phone;
-    actor.salari = salario;
-    actor.contractat = contract_status; 
+void menuActors(){
+	int option=0, error=0;
+	char aux;
 	
-	lista = actorsALista();
-
-    LINKEDLISTactors_goToHead(&lista);
-	while (!LINKEDLISTactors_isAtEnd(lista) && !found) {
-		actor2 = LINKEDLISTactors_get(&lista);
-		if (actor2.dni.numeros == actor.dni.numeros && actor2.dni.letra == actor.dni.letra) {
-			found = 1;
-		}
-		else {
-			LINKEDLISTactors_next(&lista);
-		}
-	}
-
+	do {
+		do{
+			printf("\t1- Registrar actor\n");	
+			printf("\t2- Contratar actor\n");	
+			printf("\t3- Dar de baja a un actor\n");	
+			printf("\t4- Listar actores\n");	
+			printf("\t5- Gestionar actores\n");	
+			printf("\t6- Eliminar actores\n");
+			printf("\t7- Salir\n");
+			printf("\tEscoge una opción: ");
+			scanf("%d", &option);
+			scanf("%c", &aux);	
+			if (option < 1 || option > 7) {
+				printf ("ERROR: Introduce una opcion entre el 1 y el 7\n");
+			}
+		} while(error);	
 	
-	if (!found) {
-    	LINKEDLISTactors_add (&lista, actor);
-		printf ("S'ha afegit correctament el actor %s amb identificador %d%c.\n", actor.nombre, actor.dni.numeros, actor.dni.letra);
-	}
-	else {
-		printf ("Ya se ha encontrado un actor con este identificador.\n");
-	}
+		opcionesActores(option);
+	} while (option != 7);
 
-	return !found;
-}*/
+}
+

@@ -1,367 +1,533 @@
-#include <stdio.h>
 #include <string.h>
-#include <ctype.h>
+#include <stdio.h>
 
-struct Canal {
-	char nombre[50];
-	char programacion[50];
-	double costoSuscripcion;
-	double costoEmpresa;
-};
+#include "actors.h"
+#include "linkedlistcanales.h"
+#include "linkedlistprograma.h"
 
-struct Programa {
-	char nombre[50];
-	char cadenaEmision[50];
-	char categoria[20];
-	char horaEmision[10];
-	int duracionMinutos;
-	char actores[3][30];
-	int idCanal;
- };
+#define MAX_CHAR_SIMPLE 	  100
+#define MAX_ACTORES_PROGRAMA	3
 
-void crearPrograma(struct Programa *programas, int *idCanal){
-	if (*idCanal < 20){
-		printf("Ingrese el nomnbre del Programa: ");
-		scanf("%s", programas[*idCanal].nombre);
+/***********************************************
+*
+* @Finalidad: Actualizar 'canales.txt' para que se encuentren todos los canales registrados.
+* @Parametros: in: canal = LinkedList de canales.
+* @Retorno: ----.
+* 
+************************************************/
+void actualizarFicheroCanales (LinkedList3 canal) {
+	FILE *actualizado = NULL;
+	Canal c;
 
-		printf("Ingrese el nomnbre de la cadena de Emision: ");
-		scanf("%s", programas[*idCanal].cadenaEmision);
-
-		printf("Ingrese la categoria del Programa: ");
-		scanf("%s", programas[*idCanal].categoria);
-
-		printf("Ingrese la hora de emision en el formato de 24 horas HH:MM : ");
-		scanf("%s", programas[*idCanal].horaEmision);
-
-		printf("Ingrese la duracion del programa en Minutos: ");
-		scanf("%d", &programas[*idCanal].duracionMinutos);
-
-		printf("Ingrese hasta 3 Actores para el nuevo Programa: ");
-		for (int i = 0; i < 3; ++i){
-			printf("Actor %d:", i+1);
-			scanf("%s", programas[*idCanal].actores[i]);
+	actualizado = fopen("nuevo.txt", "w");
+	if (actualizado == NULL) {
+		printf ("\tERROR DE SISTEMA (El sistema ha caído. Pongase en contacto con un administrador en la mayor brevedad posible).\n");
+	}
+	else {
+		LINKEDLISTCANALES_goToHead(&canal);
+		while (!LINKEDLISTCANALES_isAtEnd(canal)) {
+			c = LINKEDLISTCANALES_get(&canal);
+			fprintf(actualizado, "%s\n", c.nombre);
+	   		fprintf(actualizado, "%f\n", c.coste_suscripcion);
+			LINKEDLISTCANALES_next(&canal);
 		}
+		fclose(actualizado);
+		remove("canales.txt");
+		rename("nuevo.txt", "canales.txt");
+	}
+}
 
-		FILE *archivop = fopen("programas.txt", "a");
+/***********************************************
+*
+* @Finalidad: Solicitar campos relevantes al usuario para la creacion del canal.
+* @Parametros: ----.
+* @Retorno: Retorna una estructura de tipo canal, con los datos introducidos por el usuario.
+* 
+************************************************/
+Canal solicitarDatosCanal () {
+	Canal c;
 
-		if (archivop != NULL) {
-			fprintf(archivop, "Canal al que pertenece el programa %d \n", *idCanal + 1);
-			fprintf(archivop, "Nombre del Programa: %s\n", programas[*idCanal].nombre);
-			fprintf(archivop, "Cadena de Emision: %s\n", programas[*idCanal].cadenaEmision);
-			fprintf(archivop, "Categoria: %s\n", programas[*idCanal].categoria);
-			fprintf(archivop, "Hombre Emision HH:MM: %s\n", programas[*idCanal].horaEmision);
-			fprintf(archivop, "Duracion en Minutos: %d\n", programas[*idCanal].duracionMinutos);
+	printf ("Entra nombre canal: ");
+	scanf ("%s", c.nombre);
 
-			for (int i = 0; i < 3; ++i){
-				fprintf(archivop, "Actor %d: %s\n", i+1, programas[*idCanal].actores[i]);
-			}
-				fprintf(archivop, "\n");
-
-			fclose(archivop);
-		} else {
+	printf ("Entra coste suscripcion: ");
+	scanf ("%f", &c.coste_suscripcion);
 		
-		printf("No se pueden crear mas Programas");
+	return c;
+}
+
+
+/***********************************************
+*
+* @Finalidad: Mostrar todos los programas.
+* @Parametros: in: programa = LinkedList de programas a mostrar.
+* @Retorno: ----.
+* 
+************************************************/
+void mostraProgramas (LinkedList4 programa) {
+	Programa p;
+
+	LINKEDLISTPROGRAMA_goToHead(&programa);
+	while (!LINKEDLISTPROGRAMA_isAtEnd(programa)) {
+		p = LINKEDLISTPROGRAMA_get(&programa);
+		printf ("Nombre: %s\n", p.nom);
+		printf ("Canal: %s\n", p.cadena);
+		printf ("Categoria: %s\n", p.categoria);
+		printf ("Emision: %s\n", p.emisio);
+		printf ("Duracio: %s\n", p.duracio);
+		for (int i = 0; i <3; i++) {
+			printf ("Actor -> [Numero: %d.] | [Letra: %c.]\n", p.actorID[i].num, p.actorID[i].letra);
 		}
+		LINKEDLISTPROGRAMA_next(&programa);
 	}
 }
 
-int myStricmp(const char *s1, const char *s2){
-	while (*s1 && *s2){
-		if(tolower(*s1) != tolower(*s2)) {
-			return *s1 - *s2;
-		}
-		s1++;
-		s2++;
-	}
-	return tolower(*s1)- tolower(*s2);
-}
-
-int CanalExistente(const char *nombre, const struct Canal *canales, int numCanales){
-		for (int i = 0; i < numCanales; i++){
-			if (myStricmp(nombre, canales[i].nombre) == 0){
-				return 1;
-			}
-		}
-
-		FILE *archivo = fopen("canales.txt", "r");
-		if (archivo != NULL){
-			char linea[100];
-			while (fgets(linea, sizeof(linea), archivo) != NULL){
-				if (strstr(linea, nombre) != NULL){
-					fclose(archivo);
-					return 1;
-				}
-			}
-		}
-
-		return 0;
-}
-
-
-/*****************************************
+/***********************************************
 *
-* @
-* @
-* @
-*
-*****************************************/
-
-void limpiarBuffer(){
-	int c;
-	while((c = getchar()) != '\n' && c != EOF);
-}
-
-void crearNuevoCanal(struct Canal *canales, int *numCanales, struct Programa *programas, int idCanal, int i) {
-		char c;
-
-		if (*numCanales < 10) {
-		do {
-			printf("Ingrese el nombre del nuevo Canal: ");
-			scanf("%s", canales[*numCanales].nombre);
-		 } while(CanalExistente(canales[*numCanales].nombre, canales, *numCanales) == 1);
-
-		printf("Ingrese el nombre de la programacion del nuevo canal (deje vacio para nulo): ");
-		limpiarBuffer();
-
-		fgets(canales[*numCanales].programacion, sizeof(canales[*numCanales].programacion), stdin);
-        canales[*numCanales].programacion[strcspn(canales[*numCanales].programacion, "\n")] = '\0';
-
-	//	scanf("%s", canales[*numCanales].programacion);
-
-		printf("Desea Crear un programa s/n: ");
-		scanf("%s", &c);
-		if ((*numCanales == 0)||(i>0)){
-			idCanal = i;
-		}
-		if(( c == 's') || (c == 'S')){
-			crearPrograma(programas, &idCanal);
-		}
-		
-		do{
-			printf("Ingrese el costo de suscripcion del nuevo canal: ");
-			while (scanf("%lf", &canales[*numCanales].costoSuscripcion) != 1){
-				printf("Entrada no valida. Por favor, Ingrese un numero: ");
-				scanf("%*[^\n]");
-				scanf("%*c");
-			}
-			canales[*numCanales].costoEmpresa = 2.0 * canales[*numCanales].costoSuscripcion;
-		}while ((getchar()) != '\n');
-
-		// Info del Canal Creado
-
-		printf("\nNuevo canal creado:\n");
-		printf("Nombre: %s\n", canales[*numCanales].nombre);
-		printf("Programacion: %s\n", canales[*numCanales].programacion);
-		printf("Costo de suscripcion: %.2lf\n", canales[*numCanales].costoSuscripcion);
-		printf("Costo para la empresa: %.2lf\n", canales[*numCanales].costoEmpresa);
-		(*numCanales)++;
-
-
-		FILE *archivo = fopen("canales.txt", "a");
-
-		if (archivo != NULL){
-
-			fprintf(archivo, "Canal N°%d \n", *numCanales);
-			fprintf(archivo, "Nombre: %s\n", canales[*numCanales - 1].nombre);
-			fprintf(archivo, "Programacion: %s\n", canales[*numCanales - 1].programacion);
-			fprintf(archivo, "Costo de suscripcion: %.2lf\n", canales[*numCanales - 1].costoSuscripcion);
-			fprintf(archivo, "Costo para la empresa: %.2lf\n", canales[*numCanales - 1].costoEmpresa);
-			fprintf(archivo, "\n");
-
-			fclose(archivo);
-		} else {
-
-		printf("No se pueden crear mas canales. Se alcanzo el limite.\n");
-		}
-
-	}
-}
-
-/*****************************************
-*
-* @
-* @
-* @
-*
-*****************************************/
-
-void listarCanal(struct Canal *canales, int numCanales){
-	FILE *archivo = fopen("canales.txt", "r");
-		if(archivo != NULL){
-			char linea[200];
-			
-			while(fgets(linea, sizeof(linea), archivo) != NULL){
-				printf("%s",linea);
-			}
-
-			fclose(archivo);
-		}else {
-			printf("No se pudo abrir el archivo. \n");
-		}
-}
-//
-void modificarCanal(struct Canal *canales, int numCanales) {
-    int numeroActual = 0;
-	double costSus = 0.0;
-
-    if (numCanales > 0) {
-        int opcion;
-        int op;
-
-        printf("Seleccione el numero del canal a modificar: ");
-        scanf("%d", &opcion);
-
-        if (opcion >= 1 && opcion <= numCanales) {
-		costSus = canales[opcion - 1].costoSuscripcion;
-            do {
-                printf("\n Ingrese la opcion a modificar \n");
-                printf("1. Nombre del Canal\n");
-                printf("2. Programacion del Canal\n");
-                printf("3. Costo de Suscripcion del Canal\n");
-                printf("0. Salir\n");
-                printf("Seleccione una opcion\n");
-                scanf("%d", &op);
-
-                switch (op) {
-                    case 1:
-                        printf("Ingrese el nuevo nombre para el canal %s: ", canales[opcion - 1].nombre);
-                        scanf("%s", canales[opcion - 1].nombre);
-                        break;
-                    case 2:
-                        printf("Ingrese la nueva programacion para el canal %s: ", canales[opcion - 1].nombre);
-                        scanf("%s", canales[opcion - 1].programacion);
-                        break;
-                    case 3:
-                        printf("Ingrese el nuevo coste de suscripcion para el canal %s: ", canales[opcion - 1].nombre);
-                        scanf("%lf", &canales[opcion - 1].costoSuscripcion);
-                        canales[opcion - 1].costoEmpresa = 2.0 * canales[opcion - 1].costoSuscripcion;
-                        break;
-                    case 0:
-                        printf("Saliendo del programa.\n");
-                        break;
-                    default:
-                        printf("Opcion no valida. Intentelo de nuevo.\n");
-                }
-            } while (op != 0);
-
-            FILE *archivo = fopen("canales.txt", "r");
-            FILE *temporal = fopen("temporal.txt", "w");
-
-            if (archivo == NULL || temporal == NULL) {
-                printf("Error al abrir el archivo. \n");
-                return;
-            }
-
-            char linea[200];
-            while (fgets(linea, sizeof(linea), archivo) != NULL) {
-                if (strstr(linea, "Canal N°") != NULL) {
-                    sscanf(linea, "Canal N°%d", &numeroActual);
-                }
-
-                if (numeroActual == opcion) {
-                    fprintf(temporal, "Canal N°%d\n", opcion);
-                    fprintf(temporal, "Nombre: %s\n", canales[opcion - 1].nombre);
-                    fprintf(temporal, "Programacion: %s\n", canales[opcion - 1].programacion);
-					if (canales[opcion - 1].costoSuscripcion == 0.00) {
-                    	fprintf(temporal, "Costo de suscripcion: %.2lf\n", costSus);
-                    	fprintf(temporal, "Costo para la empresa: %.2lf\n", costSus * 2);
-           			 }	else{
-                    	fprintf(temporal, "Costo de suscripcion: %.2lf\n", canales[opcion - 1].costoSuscripcion);
-                    	fprintf(temporal, "Costo para la empresa: %.2lf\n", canales[opcion - 1].costoEmpresa);}
-
-                    fprintf(temporal, "\n");
-                    numeroActual++;
-                } else {
-                    fprintf(temporal, "%s", linea);
-                }
-            }
-
-            fclose(archivo);
-            fclose(temporal);
-
-            remove("canales.txt");
-            rename("temporal.txt", "canales.txt");
-        } else {
-            printf("Opcion no valida. \n");
-        }
-    }
-}
-/*****************************************
-*
-* @Finalidad: Menu para Canales 
-* @Parametros:
-* @Retorno: -
-*
-*****************************************/
-
-void menuCanales(){
-	
-	struct Canal canales[10];
-	struct Programa programas[20];
-	int numCanales = 0;
-	int idCanal = 0;
-	int i = 0;
+* @Finalidad: Mostrar todos los programas.
+* @Parametros: ----.
+* @Retorno: Retorna una linkedlist con todos los programas registrados.
+* 
+************************************************/
+LinkedList4 programaFileToList () {
+	FILE *f = NULL;
+	LinkedList4 lista;
+	Programa p;
 	char aux;
-	int opcion;
 
-	FILE *archivo = fopen("canales.txt","r");
-	if (archivo == NULL){
-		numCanales = 0;
-	} else{
-		char linea[200];
-
-		while (fgets(linea, sizeof(linea),archivo) != NULL){
-			if (strstr(linea, "Canal N°") != NULL) {
-				sscanf(linea, "Canal N°%d", &numCanales);
+	f = fopen ("programas.txt", "r");
+	if (f == NULL) {
+		printf ("Error!\n");
+	}
+	else {
+		lista = LINKEDLISTPROGRAMA_create();
+		fgets(p.cadena, MAX_CHAR_SIMPLE, f);
+		while (!feof(f)) {
+			p.cadena[strlen(p.cadena) - 1] = '\0';
+			fgets(p.nom, MAX_CHAR_SIMPLE, f);
+			p.nom[strlen(p.nom) - 1] = '\0';
+			fgets(p.categoria, MAX_CHAR_SIMPLE, f);
+			p.categoria[strlen(p.categoria) - 1] = '\0';
+			fgets(p.emisio, MAX_CHAR_SIMPLE, f);
+			p.emisio[strlen(p.emisio) - 1] = '\0';
+			fgets(p.duracio, MAX_CHAR_SIMPLE, f);
+			p.duracio[strlen(p.duracio) - 1] = '\0';
+			
+			// Actores asignados
+			for (int i = 0; i < 3; i++) {
+				fscanf(f, "%d", &p.actorID[i].num);
+				fscanf(f, "%c", &p.actorID[i].letra);	// Enter
+				fscanf (f, "%c", &aux);
 			}
+			LINKEDLISTPROGRAMA_add(&lista, p);
+			fgets(p.cadena, MAX_CHAR_SIMPLE, f);
+		}
+		fclose(f);
+	}
+
+	return lista;
+}
+
+/***********************************************
+*
+* @Finalidad: Mostrar los canales con sus respectivos programas.
+* @Parametros: in: canales = Lista con todos los canales, que incluyen sus programas.
+* @Retorno: ----.
+* 
+************************************************/
+void leerCanalesYProgramas (LinkedList3 canales) {
+	Programa p;
+	Canal c;
+
+	LINKEDLISTCANALES_goToHead(&canales);
+	while (!LINKEDLISTCANALES_isAtEnd(canales)) {
+		c = LINKEDLISTCANALES_get(&canales);
+		printf ("Nombre: %s\n", c.nombre);
+		printf ("Coste suscripcion: %f\n", c.coste_suscripcion);
+		LINKEDLISTPROGRAMA_goToHead(&c.programas);
+		while (!LINKEDLISTPROGRAMA_isAtEnd(c.programas)) {
+			p = LINKEDLISTPROGRAMA_get(&c.programas);
+			printf ("Nombre programa: %s\n", p.nom);
+			LINKEDLISTPROGRAMA_next(&c.programas);
+		}
+		LINKEDLISTCANALES_next(&canales);
+	}
+}
+
+/***********************************************
+*
+* @Finalidad: Crear una estructura, mediante listas, de los canales y programas..
+* @Parametros: ----.
+* @Retorno: Retorna una lista con todos los canales y programas.
+* 
+************************************************/
+LinkedList3 canalesFileToList () {
+	FILE *f = NULL;
+	Canal c;
+	LinkedList3 canales;
+	char aux;
+	LinkedList4 programas;
+	Programa p;
+
+	f = fopen ("canales.txt", "r");
+	if (f == NULL) {
+		printf ("ERROR\n");
+	}
+	else {
+		programas = programaFileToList();
+		canales = LINKEDLISTCANALES_create();
+		fgets(c.nombre, MAX_CHAR_SIMPLE, f);
+		while (!feof(f)) {
+			c.nombre[strlen(c.nombre) - 1] = '\0';
+			fscanf(f, "%f", &c.coste_suscripcion);
+			fscanf(f, "%c", &aux);
+			c.programas = LINKEDLISTPROGRAMA_create();
+			
+			LINKEDLISTPROGRAMA_goToHead(&programas);
+			while (!LINKEDLISTPROGRAMA_isAtEnd(programas)) {
+				p = LINKEDLISTPROGRAMA_get(&programas);
+				if (!strcmp(p.cadena, c.nombre)) {
+					LINKEDLISTPROGRAMA_add(&c.programas, p);
+				}
+				LINKEDLISTPROGRAMA_next(&programas);
+			}
+
+			LINKEDLISTCANALES_add(&canales, c);
+			fgets(c.nombre, MAX_CHAR_SIMPLE, f);
+		}
+		LINKEDLISTPROGRAMA_destroy(&programas);
+	}
+
+	return canales;
+}
+
+
+
+/***********************************************
+*
+* @Finalidad: Solicitar los datos necesarios para el registro de un programa nuevo.
+* @Parametros: ----.
+* @Retorno: Retorna una estructura programa con los datos introducidos por el usuario.
+* 
+************************************************/
+Programa solicitarDatosPrograma () {
+	Programa p;
+
+	printf ("Introduce nombre del programa: ");
+	scanf ("%s", p.nom);
+	printf ("Introduce cadena del programa: ");
+	scanf ("%s", p.cadena);
+	printf ("Introduce categoria del programa: ");
+	scanf ("%s", p.categoria);
+	printf ("Introduce hora de emision(formato HH:MM): ");
+	scanf ("%s", p.emisio);
+	printf ("Introduce duracion del programa (formato HH:MM): ");
+	scanf ("%s", p.duracio);
+
+	return p;
+}
+
+/***********************************************
+*
+* @Finalidad: Plasmar la lista en un documento 'programas.txt'.
+* @Parametros: in: programas = Lista de programas.
+* @Retorno: ----.
+* 
+************************************************/
+void actualizarFicheroPrograma (LinkedList4 programas) {
+	FILE *actualizado = NULL;
+	Programa p;
+
+	actualizado = fopen("nuevo.txt", "w");
+	if (actualizado == NULL) {
+		printf ("\tERROR DE SISTEMA (El sistema ha caído. Pongase en contacto con un administrador en la mayor brevedad posible).\n");
+	}
+	else {
+		LINKEDLISTPROGRAMA_goToHead(&programas);
+		while (!LINKEDLISTPROGRAMA_isAtEnd(programas)) {
+			p = LINKEDLISTPROGRAMA_get(&programas);
+			fprintf(actualizado, "%s\n", p.cadena);
+	   		fprintf(actualizado, "%s\n", p.nom);
+	   		fprintf(actualizado, "%s\n", p.categoria);
+		 	fprintf(actualizado, "%s\n", p.emisio);
+	   		fprintf(actualizado, "%s\n", p.duracio);
+	    	for (int i = 0; i < 3; i++) {
+				fprintf(actualizado, "%d%c\n", p.actorID[i].num, p.actorID[i].letra);
+			}
+			LINKEDLISTPROGRAMA_next(&programas);
+		}
+		fclose(actualizado);
+		remove("programas.txt");
+		rename("nuevo.txt", "programas.txt");
+	}
+}
+
+/***********************************************
+*
+* @Finalidad: Mostrar de canales para los productores.
+* @Parametros: ----.
+* @Retorno: Retorna la opcion seleccionada por el usuario.
+* 
+************************************************/
+int mostrarMenuCanales () {
+	int option;
+	char aux;
+	
+	printf ("\t1- Crear nuevo canal\n");
+	printf ("\t2- Modificar canal\n");
+	printf ("\t3- Eliminar canal\n");
+	printf ("\t4- Mostrar canales\n");
+	printf ("\t5- Añadir programa\n");
+	printf ("\t6- Mostrar programas\n");
+	printf ("\t7- Salir\n");
+	printf ("\tEnter option: ");
+	scanf ("%d", &option);
+	scanf ("%c", &aux);
+
+	return option;
+}
+
+/***********************************************
+*
+* @Finalidad: Mostrar los canales registrados.
+* @Parametros: in: canales = Lista de canales.
+* @Retorno: ----.
+* 
+************************************************/
+void mostrarCanales (LinkedList3 canales) {
+	Canal c;
+
+	LINKEDLISTCANALES_goToHead(&canales);
+	while (!LINKEDLISTCANALES_isAtEnd(canales)) {
+		c = LINKEDLISTCANALES_get(&canales);	
+		printf ("Nombre canal: %s\n", c.nombre);
+		printf ("Coste suscripcion: %f€\n", c.coste_suscripcion);
+		printf ("Coste empresa: %f€\n", 2 *c.coste_suscripcion);
+		LINKEDLISTCANALES_next(&canales);
+	}	
+
+}
+
+/***********************************************
+*
+* @Finalidad: Verifica si el nombre de un canal es unico.
+* @Parametros:  in: nombre[] = Nombre de canal a verificar si es unico.
+*				out: *c = En caso que se detecte un canal con el nombre, lo devuelve en esta variable.
+* @Retorno: ----.
+* 
+************************************************/
+int canalUnico (char nombre[100], Canal *c) {
+	LinkedList3 canales;
+	int found = 0;
+
+	canales = canalesFileToList();
+	LINKEDLISTCANALES_goToHead(&canales);
+	while (!LINKEDLISTCANALES_isAtEnd(canales) && !found) {
+		*c = LINKEDLISTCANALES_get(&canales);
+		if (!strcmp(c->nombre, nombre)) {
+			found = 1;
+		}
+		LINKEDLISTCANALES_next(&canales);
+	}
+
+	return found;
+}
+
+/***********************************************
+*
+* @Finalidad: Verificar si el nombre de un canal es unico.
+* @Parametros: in: nombre[] = Nombre a verificar.
+* @Retorno: Retorna un 1 en caso que el nombre sea unico y un 0 en caso que no..
+* 
+************************************************/
+int nombreUnico (char nombre[100], Programa *p) {
+	int found = 0;
+	LinkedList3 canales;
+	Canal c;
+
+	canales = canalesFileToList();
+	LINKEDLISTCANALES_goToHead(&canales);
+	while (!LINKEDLISTCANALES_isAtEnd(canales)) {
+		c = LINKEDLISTCANALES_get(&canales);	
+		LINKEDLISTPROGRAMA_goToHead(&c.programas);
+		while (!LINKEDLISTPROGRAMA_isAtEnd(c.programas) && !found) {
+			*p = LINKEDLISTPROGRAMA_get(&c.programas);
+			if (!strcmp(p->nom, nombre)) {
+				found = 1;
+			}
+			else {
+				LINKEDLISTPROGRAMA_next(&c.programas);
+			}
+		}
+		LINKEDLISTCANALES_next(&canales);
+	}
+
+	return !found;
+}
+
+/***********************************************
+*
+* @Finalidad: Verificar si un programa puede contratar a mas actores.
+* @Parametros:  in: *p = Estructura programa a verificar.
+*				out: *posicion = Posicion libre para contratar.
+* @Retorno: Retorna si hay espacio o no.
+* 
+************************************************/
+int espacioDisponible(Programa *p, int *posicion) {
+	int found = 0, i;
+	
+	for (i = 0; i < MAX_ACTORES_PROGRAMA && !found; i++) {
+		if (p->actorID[i].num == 0) {
+			found = 1;
+			*posicion = i;
 		}
 	}
 
-	idCanal = numCanales;
+	return found;
 
-	do{
-        printf("\t1- Crear nuevo canal \n");
-        printf("\t2- Listar canales \n");
-        printf("\t3- Modificar canal \n");
-        printf("\t4- Eliminar canal \n");
-        printf("\t5- Crear programa \n");
-        printf("\t6- Eliminar programa \n");
-        printf("\t7-  Salir \n");
-        printf("\tIntroduce opcion: ");
-		scanf("%d", &opcion);
-		scanf("%c", &aux);
-		
-		switch (opcion){
+}
 
-			case 1:
-				crearNuevoCanal(canales, &numCanales, programas, idCanal, i);
-				i++;
-				break;
-			case 2:
-				listarCanal(canales, numCanales);
-				break;
-			case 3:
-				modificarCanal(canales, numCanales);
-				break;
-			case 4:
-			//eliminarCanal();
-				break;
-			case 5:
-				printf("Ingrese el Id del Canal al que pertenece el Programa \n");
-				scanf("%d", &idCanal);
-				crearPrograma(programas, &idCanal - 1);
-				break;
-			case 6:
-			//eliminarPrograma();
-				break;
-			case 7:
-				printf("Saliendo del Programa.\n");
-				break;
-			default:
-				printf("Opcion no valida.  Intentelo de nuevo.\n");
-				break;
+/***********************************************
+*
+* @Finalidad: Asignar, si el nombre existe, hay espacio (<3) y se introduce un identificador de actor valido, a un programa.
+* @Parametros: in: nombre[] = Nombre a verificar.ç+
+* @Retorno: Retorna un 1 en caso que el nombre sea unico y un 0 en caso que no.
+* 
+************************************************/
+int assignarAlPrograma(int numeros, char letra) {
+	char nombre[MAX_CHAR_SIMPLE];
+	Programa p;
+	int correcto = 0, posicion;
+	LinkedList4 programas;
+	
+	printf ("Introduce nombre de programa: ");
+	scanf ("%s", nombre);
+	programas = programaFileToList();
+	LINKEDLISTPROGRAMA_goToHead(&programas);
+	while (!LINKEDLISTPROGRAMA_isAtEnd(programas)) {
+		p = LINKEDLISTPROGRAMA_get(&programas);
+		if (!strcmp(p.nom, nombre)) {
+			if (espacioDisponible(&p, &posicion)) {
+				p.actorID[posicion].num = numeros;
+				p.actorID[posicion].letra = letra;
+				LINKEDLISTPROGRAMA_remove(&programas);
+				LINKEDLISTPROGRAMA_add(&programas, p);
+				actualizarFicheroPrograma(programas);
+				printf ("Se ha asignado correctamente\n");
+				correcto = 1;
+			}
+			else {
+				printf ("\tERROR (El programa tiene el maximo de actores contratados (%d))\n", MAX_ACTORES_PROGRAMA);
+			}
 		}
+		LINKEDLISTPROGRAMA_next(&programas);
+	}
 
-	}while (opcion != 7);
+	return correcto;
+}
 
+
+/***********************************************
+*
+* @Finalidad: Añadir un programa a un canal.
+* @Parametros: in: canales = Lista que engloba todos los canales y programas registrados.
+* @Retorno: ----.
+* 
+************************************************/
+void anadirProgramaACanal (LinkedList3 * canales) {
+	Canal c;
+	Programa p, aux; 
+	LinkedList4 programa;
+
+	p = solicitarDatosPrograma();
+	if (canalUnico(p.cadena, &c) && nombreUnico(p.nom, &aux)) {
+		for (int i = 0; i < 3; i++) {
+			p.actorID[i].num = 0;
+			p.actorID[i].letra = 'a';
+		}	
+		programa = programaFileToList();
+		LINKEDLISTPROGRAMA_add(&programa, p);
+		actualizarFicheroPrograma(programa);
+		LINKEDLISTCANALES_add(canales, c);
+		printf ("Se ha añadido el programa correctamente\n");
+	}
+	else {
+		printf ("No existe ningun canal con este nombre o ya hay un programa con este nombre.\n");
+	}
+}
+
+/***********************************************
+*
+* @Finalidad: Crear un canal nuevo.
+* @Parametros: in/out: *canales = Lista que engloba todos los programas y canales registrados.
+* @Retorno: ----.
+* 
+************************************************/
+void crearCanal (LinkedList3 *canales) {
+	Canal c, aux;
+
+	c = solicitarDatosCanal();
+	if (!canalUnico(c.nombre, &aux)) {
+		LINKEDLISTCANALES_add(canales, c);
+		actualizarFicheroCanales(*canales);
+		printf ("Se ha creado un canal correctamente\n");	
+	}
+	else {
+		printf ("Se ha detectado un canal con el mismo nombre\n");
+	}
+
+}
+
+/***********************************************
+*
+* @Finalidad: Ejecutar las opciones del menu.
+* @Parametros: 	in: option = Opcion a ejecutar.
+*				out: *quit = Flag que indica la salida del menu.
+* @Retorno: ----.
+* 
+************************************************/
+void runOptionCanales (int option, int *quit) {
+	LinkedList3 canales;
+	
+	canales = canalesFileToList();
+	switch (option) {
+		case 1:
+			crearCanal(&canales);
+			break;
+		case 2:
+			// modificarCanal();
+			break;
+		case 3: 
+			// eliminarCanal();
+			break;
+		case 4:
+			mostrarCanales(canales);
+			
+			break;
+		case 5: 
+			anadirProgramaACanal(&canales);
+			break;
+		case 6:
+			//mostraProgramas(programa);
+			break;
+		case 7:
+			*quit = 1;
+			break;
+	}
+
+}
+
+/***********************************************
+*
+* @Finalidad: Conjunto de interacciones de los canales..
+* @Parametros: ----.
+* @Retorno: ----.
+* 
+************************************************/
+void menuCanales () {
+	int option, quit = 0;
+	do {
+		option = mostrarMenuCanales();
+		runOptionCanales(option, &quit);
+	} while (!quit);
 }

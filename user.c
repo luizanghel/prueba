@@ -887,64 +887,15 @@ int menuProductorGeneral() {
 		printf ("Bienvenido al MENU PRODUCTOR. ¿Que deseas realizar?\n");
 		printf ("1- Gestionar clientes\n");
 		printf ("2- Gestionar canales\n");
-		printf ("3- Salir\n");
+		printf ("3- Gestionar actores\n");
+		printf ("4- Salir\n");
 		printf ("Entra opcion: ");
-		error = option2AsNumber(&option, 1, 3);
+		error = option2AsNumber(&option, 1, 4);
 	} while (error);
 
 	return option;
 }
 
-/*int menuProductorCanales() {
-	int option, error;
-
-	do {
-		printf ("\t1- Listar canales\n");
-		printf ("\t2- Crear canal\n");
-		printf ("\t3- Modificar canal\n");
-		printf ("\t4- Eliminar canal\n");
-		printf ("\t5- Crear programa\n");
-		printf ("\t6- Salir\n");
-		printf ("\tEnter option: ");
-		error = option2AsNumber(&option, 1, 6);
-	} while (error);
-	
-	return option;
-}
-
-void runMenuCanales (int option, int *quit) {
-	
-	switch (option) {
-		case 1:
-			listarCanal();
-			break;
-		case 2:
-			 crearNuevoCanal();
-			break;
-		case 3:
-			modificarCanal();
-			break;
-		case 4:
-			//eliminarCanal();
-			break;
-		case 5:
-			crearPrograma();
-			break;
-		case 6:
-			*quit = 1;
-			break;
-	}
-}
-
-void modoProductorCanales() {
-	int option, quit = 0;
-
-	do {
-		option = menuProductorCanales();
-		runMenuCanales(option, &quit);
-	} while (!quit);
-}
-*/
 void modoProductor () {
 	int option, quit = 0;
 	
@@ -958,6 +909,9 @@ void modoProductor () {
 				menuCanales();
 				break;
 			case 3:
+				menuActors();
+				break;
+			case 4:
 				quit = 1;
 				break;
 		} 

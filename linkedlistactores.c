@@ -20,12 +20,12 @@
  * @Return: An empty linked list
  *
  ****************************************************************************/
-LinkedList LINKEDLISTactors_create () {
-    LinkedList list;
+LinkedList2 LINKEDLISTactors_create () {
+    LinkedList2 list;
 
     // Request a Node. This node will be the auxiliary "Phantom" node.
     // The list's head now is the phantom node.
-    list.head = (Node*) malloc(sizeof(Node));
+    list.head = (Node2*) malloc(sizeof(Node2));
     if (NULL != list.head) {
         // There is noone after the phantom node, so next is NULL.
         list.head->next = NULL;
@@ -79,9 +79,9 @@ LinkedList LINKEDLISTactors_create () {
  * @Return: ---
  *
  ****************************************************************************/
-void 	LINKEDLISTactors_add (LinkedList * list, Element element) {
+void 	LINKEDLISTactors_add (LinkedList2 * list, Element2 element) {
     // 1- Create a new node to store the new element.
-    Node * new_node = (Node*) malloc (sizeof(Node));
+    Node2 * new_node = (Node2*) malloc (sizeof(Node2));
     if (NULL != new_node) {
         // 2- Set the element field in the new node with the provided element.
         new_node->element = element;
@@ -114,11 +114,6 @@ void 	LINKEDLISTactors_add (LinkedList * list, Element element) {
  *				element of the list. That will also happen for an empty list.
  *				In that situation, this operation will set the error code to
  *				LIST_ERROR_END.
-<<<<<<< HEAD
- *
-=======
-  *
->>>>>>> 4b80b16e942da54a0773813d7298aa5f2e1d93b1
  *        +---+
  *   head | o-|---------                        aux (free aux!)
  *        +---+         |                        |
@@ -136,8 +131,8 @@ void 	LINKEDLISTactors_add (LinkedList * list, Element element) {
  * @Return: ---
  *
  ****************************************************************************/
-void 	LINKEDLISTactors_remove (LinkedList * list) {
-    Node * aux = NULL;
+void 	LINKEDLISTactors_remove (LinkedList2 * list) {
+    Node2 * aux = NULL;
     // We cannot remove an element if the POV is not valid.
     // The POV will not be valid when the previous pointer points to the last
     //  node in the list (there is noone after PREVIOUS).
@@ -171,8 +166,8 @@ void 	LINKEDLISTactors_remove (LinkedList * list) {
  * @Return: ---
  *
  ****************************************************************************/
-Element LINKEDLISTactors_get (LinkedList * list) {
-    Element element;
+Element2 LINKEDLISTactors_get (LinkedList2 * list) {
+    Element2 element;
 
     // We cannot return an element if the POV is not valid.
     // The POV will not be valid when the previous pointer points to the last
@@ -199,7 +194,7 @@ Element LINKEDLISTactors_get (LinkedList * list) {
  * @Return: true (!0) if this list contains no elements, false (0) otherwise
  *
  ****************************************************************************/
-int 	LINKEDLISTactors_isEmpty (LinkedList list) {
+int 	LINKEDLISTactors_isEmpty (LinkedList2 list) {
     // The list will be empty if there are no nodes after the phantom node.
     return NULL == list.head->next;
 }
@@ -212,7 +207,7 @@ int 	LINKEDLISTactors_isEmpty (LinkedList list) {
  * @Return: ---
  *
  ****************************************************************************/
-void 	LINKEDLISTactors_goToHead (LinkedList * list) {
+void 	LINKEDLISTactors_goToHead (LinkedList2 * list) {
     // To move the POV to the first element in the list, we need to point
     //  whoever is before the first element. That is the phantom node.
     list->previous = list->head;
@@ -229,7 +224,7 @@ void 	LINKEDLISTactors_goToHead (LinkedList * list) {
  * @Return: ---
  *
  ****************************************************************************/
-void 	LINKEDLISTactors_next (LinkedList * list) {
+void 	LINKEDLISTactors_next (LinkedList2 * list) {
     // We cannot move to the next element if the POV is not valid.
     // The POV will not be valid when the previous pointer points to the last
     //  node in the list (there is noone after PREVIOUS).
@@ -254,7 +249,7 @@ void 	LINKEDLISTactors_next (LinkedList * list) {
  * @Return: true (!0) if the POV is after the last element in the list
  *
  ****************************************************************************/
-int 	LINKEDLISTactors_isAtEnd (LinkedList list) {
+int 	LINKEDLISTactors_isAtEnd (LinkedList2 list) {
     // To check if the list is at the end (POV after the last element) we
     //  need to check if there is any Node after the previous pointer.
     return NULL == list.previous->next;
@@ -270,8 +265,8 @@ int 	LINKEDLISTactors_isAtEnd (LinkedList list) {
  * @Return: ---
  *
  ****************************************************************************/
-void 	LINKEDLISTactors_destroy (LinkedList * list) {
-    Node * aux;
+void 	LINKEDLISTactors_destroy (LinkedList2 * list) {
+    Node2 * aux;
     // While there are still NODEs in the list.
     while (NULL != list->head) {
         // Take the first node.
@@ -311,6 +306,6 @@ void LINKEDLIST_destroy (LinkedList * list) {
  * @Return: an error code from the list of constants defined.
  *
  ****************************************************************************/
-int		LINKEDLISTactors_getErrorCode (LinkedList list) {
+int		LINKEDLISTactors_getErrorCode (LinkedList2 list) {
     return list.error;
 }

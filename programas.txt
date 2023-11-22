@@ -1,10 +1,80 @@
-Canal al que pertenece el programa 2 
-Nombre del Programa: Ep1
-Cadena de Emision: Nose
-Categoria: Juegos
-Hombre Emision HH:MM: 12:00
-Duracion en Minutos: 120
-Actor 1: Juan
-Actor 2: Magan
-Actor 3: Hola
-
+Juan
+NombreJuan1
+Categoria
+12
+12
+0a
+0a
+0a
+Juan
+NombreJuan2
+Categoria
+12
+12
+0a
+0a
+0a
+Ramonete
+NombreRamonete1
+Categoria
+12
+12
+0a
+0a
+0a
+Ramonete
+NombreRamonete2
+Categoria
+12
+12
+0a
+0a
+0a
+Ramonete
+NombreRamonete3
+Categoria
+12
+12
+0a
+0a
+0a
+c
+Holaaaaaaaaaaaaaa
+a
+a
+a
+0a
+0a
+0a
+c
+Original
+Videos
+12:122
+12:22
+0a
+0a
+0a
+c
+Buenosdias
+Juego
+12:22
+12:22
+0a
+0a
+0a
+c
+Buenasnoches
+juegitos
+12:36
+13
+0a
+0a
+0a
+a
+Lombriz
+1
+1
+1
+0a
+0a
+0a
