@@ -7,12 +7,17 @@
 
 void mostrarActoresDisponibles (LinkedList2 list) {
 	Actor actor;
+	int i = 1;
 
 	LINKEDLISTactors_goToHead(&list);
 	while (!LINKEDLISTactors_isAtEnd(list)) {
 		actor = LINKEDLISTactors_get(&list);
 		if (!actor.contractat) {
-			// Mostrar actores disponibles	
+			printf ("--Actor numero %d--\n", i++);
+			printf ("  Identificador: %d%c\n", actor.dni.numeros, actor.dni.letra);
+			printf ("  Nombre y apellidos: %s %s %s\n", actor.nombre, actor.apellido1, actor.apellido2);
+			printf ("  Numero de telefono: %d\n", actor.telefono);
+			printf ("  Salario: %d€\n", actor.salari);
 		}
 		LINKEDLISTactors_next(&list);
 	}
