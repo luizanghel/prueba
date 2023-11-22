@@ -5,19 +5,20 @@
 
 #define MAX_CHAR_SIMPLE 100
 
-void mostrarActores (LinkedList2 list) {
+void mostrarActoresDisponibles (LinkedList2 list) {
 	Actor actor;
+	int i = 1;
 
 	LINKEDLISTactors_goToHead(&list);
 	while (!LINKEDLISTactors_isAtEnd(list)) {
 		actor = LINKEDLISTactors_get(&list);
-		printf ("Nombre: %s\n", actor.nombre);
-		printf ("Primer apellido: %s\n", actor.apellido1);
-		printf ("Segundo apellido: %s\n", actor.apellido2);
-		printf ("DNI: %d%c\n", actor.dni.numeros, actor.dni.letra);
-		printf ("Salario: %d€\n", actor.salari);
-		printf ("Contractat: %d\n", actor.contractat);
-		printf ("Telefono: %d\n", actor.telefono);
+		if (!actor.contractat) {
+			printf ("--Actor numero %d--\n", i++);
+			printf ("  Identificador: %d%c\n", actor.dni.numeros, actor.dni.letra);
+			printf ("  Nombre y apellidos: %s %s %s\n", actor.nombre, actor.apellido1, actor.apellido2);
+			printf ("  Numero de telefono: %d\n", actor.telefono);
+			printf ("  Salario: %d€\n", actor.salari);
+		}
 		LINKEDLISTactors_next(&list);
 	}
 
@@ -129,14 +130,7 @@ void addActor(LinkedList2 *lista){
     scanf("%d", &actor.salari);
     
     
-    do{
-        printf ("\nEnter your actor contract state (0 if not contracted, 1 if cotracted): ");
-        scanf("%d", &actor.contractat);
-        if (actor.contractat != 0 && actor.contractat != 1){
-            printf("\nERROR!");
-        }
-    } while(actor.contractat != 0 && actor.contractat != 1);
-    
+   	actor.contractat = 0; 
 
     LINKEDLISTactors_goToHead(lista);
 	while (!LINKEDLISTactors_isAtEnd(*lista) && !found) {
@@ -152,7 +146,7 @@ void addActor(LinkedList2 *lista){
 	
 	if (!found) {
     	LINKEDLISTactors_add (lista, actor);
-		printf ("S'ha afegit correctament el actor %s amb identificador %d%c.\n", actor.nombre, actor.dni.numeros, actor.dni.letra);
+		printf ("S'ha afegit correctament el actor %s amb identificador %d%c.\n\n", actor.nombre, actor.dni.numeros, actor.dni.letra);
 		actualizarFicheroActors(*lista);
 	}
 	else {
@@ -219,7 +213,7 @@ void opcionesActores(int opcion){
 			break;
 
 		case 4:
-			mostrarActores(actors);
+			mostrarActoresDisponibles(actors);
 			break;
 
 		case 5:
