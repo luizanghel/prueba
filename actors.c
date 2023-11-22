@@ -181,16 +181,16 @@ void contratarActor (LinkedList2 *actores) {
 		if (a.dni.numeros == numeros && a.dni.letra == letra) {
 			found = 1;
 			if (!a.contractat) {
-				//if (// Funcion assignar)) {
+				if (assignarAlPrograma(numeros, letra)) {
 					a.contractat = 1;
 					LINKEDLISTactors_remove(actores);
 					LINKEDLISTactors_add(actores, a);
 					actualizarFicheroActors(*actores);
 					printf ("\tEl actor se ha contratado correctamente\n");
-				//}
-				//else {
+				}
+				else {
 					printf ("El programa no existe\n");
-				//}
+				}
 			}
 			else {
 				printf ("\tERROR (El actor ya ha sido contratado)\n");

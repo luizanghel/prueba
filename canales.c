@@ -367,6 +367,68 @@ int nombreUnico (char nombre[100], Programa *p) {
 
 /***********************************************
 *
+* @Finalidad: Verificar si un programa puede contratar a mas actores.
+* @Parametros:  in: *p = Estructura programa a verificar.
+*				out: *posicion = Posicion libre para contratar.
+* @Retorno: Retorna si hay espacio o no.
+* 
+************************************************/
+int espacioDisponible(Programa *p, int *posicion) {
+	int found = 0, i;
+	
+	for (i = 0; i < MAX_ACTORES_PROGRAMA && !found; i++) {
+		if (p->actorID[i].num == 0) {
+			found = 1;
+			*posicion = i;
+		}
+	}
+
+	return found;
+
+}
+
+/***********************************************
+*
+* @Finalidad: Asignar, si el nombre existe, hay espacio (<3) y se introduce un identificador de actor valido, a un programa.
+* @Parametros: in: nombre[] = Nombre a verificar.ç+
+* @Retorno: Retorna un 1 en caso que el nombre sea unico y un 0 en caso que no.
+* 
+************************************************/
+int assignarAlPrograma(int numeros, char letra) {
+	char nombre[MAX_CHAR_SIMPLE];
+	Programa p;
+	int correcto = 0, posicion;
+	LinkedList4 programas;
+	
+	printf ("Introduce nombre de programa: ");
+	scanf ("%s", nombre);
+	programas = programaFileToList();
+	LINKEDLISTPROGRAMA_goToHead(&programas);
+	while (!LINKEDLISTPROGRAMA_isAtEnd(programas)) {
+		p = LINKEDLISTPROGRAMA_get(&programas);
+		if (!strcmp(p.nom, nombre)) {
+			if (espacioDisponible(&p, &posicion)) {
+				p.actorID[posicion].num = numeros;
+				p.actorID[posicion].letra = letra;
+				LINKEDLISTPROGRAMA_remove(&programas);
+				LINKEDLISTPROGRAMA_add(&programas, p);
+				actualizarFicheroPrograma(programas);
+				printf ("Se ha asignado correctamente\n");
+				correcto = 1;
+			}
+			else {
+				printf ("\tERROR (El programa tiene el maximo de actores contratados (%d))\n", MAX_ACTORES_PROGRAMA);
+			}
+		}
+		LINKEDLISTPROGRAMA_next(&programas);
+	}
+
+	return correcto;
+}
+
+
+/***********************************************
+*
 * @Finalidad: Añadir un programa a un canal.
 * @Parametros: in: canales = Lista que engloba todos los canales y programas registrados.
 * @Retorno: ----.

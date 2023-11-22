@@ -3,9 +3,9 @@ NombreJuan1
 Categoria
 12
 12
-49550728A
-123A
-123456A
+0a
+0a
+0a
 Juan
 NombreJuan2
 Categoria
@@ -19,7 +19,7 @@ NombreRamonete1
 Categoria
 12
 12
-49550725P
+0a
 0a
 0a
 Ramonete
