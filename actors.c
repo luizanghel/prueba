@@ -197,10 +197,33 @@ void contratarActor (LinkedList2 *actores) {
 	}
 } 
 
+void eliminar (LinkedList2 *list, int dniNumber, char dniLetter) {
+	int found = 0;
+	Actor currentActor;
 
-void removeActorByDNI() {
-    LinkedList lista;
-    lista = LINKEDLISTactors_create();
+    LINKEDLISTactors_goToHead(list);
+    while (!LINKEDLISTactors_isAtEnd(*list) && !found) {
+        currentActor = LINKEDLISTactors_get(list);
+        if (currentActor.dni.numeros == dniNumber && currentActor.dni.letra == dniLetter) {
+			found = 1;
+			if (!currentActor.contractat) {
+				LINKEDLISTactors_remove(list);
+    	        printf("Actor with DNI %d%c removed successfully.\n", dniNumber, dniLetter);
+				actualizarFicheroActors(*list);
+        	}
+			else {
+				printf ("ERROR (El actor que se esta intentando eliminar se encuentra contratado. Para borrarlo del sistema, es necesario darlo de baja previamente)\n");
+			}
+		}
+
+        LINKEDLISTactors_next(list);
+    }
+	if (!found) {
+    	printf("Actor with DNI %d%c not found.\n", dniNumber, dniLetter);
+	}
+}
+
+void removeActorByDNI(LinkedList2 *lista) {
 
     int numdni;
     char pedir_letra;
@@ -211,28 +234,8 @@ void removeActorByDNI() {
     printf("\nEnter the DNI letter to remove: ");
     scanf(" %c", &pedir_letra);
 
-    LINKEDLISTactors_removeByDNI(&lista, numdni, pedir_letra);
+    eliminar(lista, numdni, pedir_letra);
 }
-
-
-void LINKEDLISTactors_removeByDNI(LinkedList *list, int dniNumber, char dniLetter) {
-    LINKEDLISTactors_goToHead(list);
-
-    while (!LINKEDLISTactors_isAtEnd(*list)) {
-        FileActor currentActor = LINKEDLISTactors_get(list);
-
-        if (currentActor.dni.numeros == dniNumber && currentActor.dni.letra == dniLetter) {
-            LINKEDLISTactors_remove(list);
-            printf("Actor with DNI %d%c removed successfully.\n", dniNumber, dniLetter);
-            return;
-        }
-
-        LINKEDLISTactors_next(list);
-    }
-
-    printf("Actor with DNI %d%c not found.\n", dniNumber, dniLetter);
-}
-
 
 void opcionesActores(int opcion){
 	LinkedList2 actors;
