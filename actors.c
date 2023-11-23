@@ -2,6 +2,7 @@
 
 #include "actors.h"
 #include "canales.h"
+#include "linkedlistprograma.h"
 
 #define MAX_CHAR_SIMPLE 100
 
@@ -197,6 +198,40 @@ void contratarActor (LinkedList2 *actores) {
 	}
 }
 
+void dardebajaactor(LinkedList2 *actores){
+    int numeros, found = 0;
+    char letra;
+    int i=0;
+    Actor a;
+    Programa p;
+    LinkedList4 programas;
+
+    printf ("Numeros dni actor: ");
+    scanf ("%d", &numeros);
+    printf ("Letra dni actor: ");
+    scanf ("%c", &letra);
+    scanf ("%c", &letra);
+
+    programas=programaFileToList();
+    LINKEDLISTPROGRAMA_goToHead (&programas);
+    while (!LINKEDLISTPROGRAMA_isAtEnd (programas) && !found){
+        p= LINKEDLISTPROGRAMA_get(&programas);
+        i=0;
+        while (i<3 && !found){
+            if (p.actorID[i].num==numeros && p.actorID[i].letra==letra){
+                found=1;
+            }
+            i++;
+        }
+        LINKEDLISTPROGRAMA_next(&programas);
+
+    }
+    if (!found){
+        printf("Este actor no esta contratado en ningun programa!\n");
+    }
+
+}
+
 void opcionesActores(int opcion){
 	LinkedList2 actors;
 	actors = actorsALista();
@@ -209,7 +244,7 @@ void opcionesActores(int opcion){
 			contratarActor(&actors);
 			break;
 		case 3:
-			//DarDeBaja();
+			dardebajaactor(&actors);
 			break;
 
 		case 4:
