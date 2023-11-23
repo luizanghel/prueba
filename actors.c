@@ -197,27 +197,34 @@ void contratarActor (LinkedList2 *actores) {
 	}
 } 
 
+void eliminar (LinkedList2 *list, int dniNumber, char dniLetter) {
+	int found = 0;
+	Actor currentActor;
 
-void LINKEDLISTactors_removeByDNI(LinkedList2 *list, int dniNumber, char dniLetter) {
     LINKEDLISTactors_goToHead(list);
-
-    while (!LINKEDLISTactors_isAtEnd(*list)) {
-        FileActor currentActor = LINKEDLISTactors_get(list);
-
+    while (!LINKEDLISTactors_isAtEnd(*list) && !found) {
+        currentActor = LINKEDLISTactors_get(list);
         if (currentActor.dni.numeros == dniNumber && currentActor.dni.letra == dniLetter) {
-            LINKEDLISTactors_remove(list);
-            printf("Actor with DNI %d%c removed successfully.\n", dniNumber, dniLetter);
-            return;
-        }
+			found = 1;
+			if (!currentActor.contractat) {
+				LINKEDLISTactors_remove(list);
+    	        printf("Actor with DNI %d%c removed successfully.\n", dniNumber, dniLetter);
+				actualizarFicheroActors(*list);
+        	}
+			else {
+				printf ("ERROR (El actor que se esta intentando eliminar se encuentra contratado. Para borrarlo del sistema, es necesario darlo de baja previamente)\n");
+			}
+		}
 
         LINKEDLISTactors_next(list);
     }
-
-    printf("Actor with DNI %d%c not found.\n", dniNumber, dniLetter);
+	if (!found) {
+    	printf("Actor with DNI %d%c not found.\n", dniNumber, dniLetter);
+	}
 }
 
 void removeActorByDNI() {
-    LinkedList lista;
+    LinkedList2 lista;
     lista = LINKEDLISTactors_create();
 
     int numdni;
@@ -229,8 +236,9 @@ void removeActorByDNI() {
     printf("\nEnter the DNI letter to remove: ");
     scanf(" %c", &pedir_letra);
 
-    LINKEDLISTactors_removeByDNI(&lista, numdni, pedir_letra);
+    eliminar(&lista, numdni, pedir_letra);
 }
+
 
 
 void opcionesActores(int opcion){
