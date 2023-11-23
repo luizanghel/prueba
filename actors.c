@@ -223,7 +223,9 @@ void eliminar (LinkedList2 *list, int dniNumber, char dniLetter) {
 	}
 }
 
-void removeActorByDNI(LinkedList2 *lista) {
+void removeActorByDNI() {
+    LinkedList2 lista;
+    lista = LINKEDLISTactors_create();
 
     int numdni;
     char pedir_letra;
@@ -234,8 +236,10 @@ void removeActorByDNI(LinkedList2 *lista) {
     printf("\nEnter the DNI letter to remove: ");
     scanf(" %c", &pedir_letra);
 
-    eliminar(lista, numdni, pedir_letra);
+    eliminar(&lista, numdni, pedir_letra);
 }
+
+
 
 void opcionesActores(int opcion){
 	LinkedList2 actors;
