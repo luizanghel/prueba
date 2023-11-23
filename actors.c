@@ -195,7 +195,44 @@ void contratarActor (LinkedList2 *actores) {
 	if (!found) {
 		printf ("\tERROR (No se ha encontrado ningun actor con el identificador)\n");
 	}
+} 
+
+
+void removeActorByDNI() {
+    LinkedList lista;
+    lista = LINKEDLISTactors_create();
+
+    int numdni;
+    char pedir_letra;
+
+    printf("\nEnter the DNI number to remove: ");
+    scanf("%d", &numdni);
+
+    printf("\nEnter the DNI letter to remove: ");
+    scanf(" %c", &pedir_letra);
+
+    LINKEDLISTactors_removeByDNI(&lista, numdni, pedir_letra);
 }
+
+
+void LINKEDLISTactors_removeByDNI(LinkedList *list, int dniNumber, char dniLetter) {
+    LINKEDLISTactors_goToHead(list);
+
+    while (!LINKEDLISTactors_isAtEnd(*list)) {
+        FileActor currentActor = LINKEDLISTactors_get(list);
+
+        if (currentActor.dni.numeros == dniNumber && currentActor.dni.letra == dniLetter) {
+            LINKEDLISTactors_remove(list);
+            printf("Actor with DNI %d%c removed successfully.\n", dniNumber, dniLetter);
+            return;
+        }
+
+        LINKEDLISTactors_next(list);
+    }
+
+    printf("Actor with DNI %d%c not found.\n", dniNumber, dniLetter);
+}
+
 
 void opcionesActores(int opcion){
 	LinkedList2 actors;
@@ -221,7 +258,7 @@ void opcionesActores(int opcion){
 			break;
 			
 		case 6:
-			//EliminarActores();
+			removeActorByDNI(&actors);
 			break;
 
 		case 7:
