@@ -195,44 +195,145 @@ void contratarActor (LinkedList2 *actores) {
 	if (!found) {
 		printf ("\tERROR (No se ha encontrado ningun actor con el identificador)\n");
 	}
-}
+} 
 
-void ModificarActores(LinkedList2 *actors){
-	int option, found;
-	Actor p;
-	char id[MAX_CHAR_SIMPLE],tipo [5] [MAX_CHAR_SIMPLE]= {"nombre", "primer apellido", "segundo apellido", "numero de telefono", "salario"}
-		
-	do {
-		option = menuModificationActores();
-		if(option != 6){
-			solicitarDni("Introduce el id  del Actor a modificar: ", correo);
-			found=0
-			mostrarActoresDisponible(*actors);
-			LINKEDLISTactors_goToHead(actors);
-			while (!LINKEDLISTactors_isAtEnd(*actors) && !found){
-				p = LINKEDLISTactors_get(actors);
-				if(!strcmp(p.dni.numeros+p.dni.letr, id)) {
-					found=1;
-					runOption(option, &p);
-					LINKEDLISTactors_remove(actors);
-					LINKEDLISTactors_add(actors, p);
-				}else{
-					LINKEDLISTactors_next(actors);	
-				}
-			
-			}
-			if (!found){
-				printf("ERROR (No se ha encontrado ningun actor con este id).\n");
-			}else{
-				actualitzarFicheroActors(*actors);
-				printf ("El %s de %s ha sido modificado correctamente.\n", tipo[option-1, id]);
+void eliminar (LinkedList2 *list, int dniNumber, char dniLetter) {
+	int found = 0;
+	Actor currentActor;
+
+    LINKEDLISTactors_goToHead(list);
+    while (!LINKEDLISTactors_isAtEnd(*list) && !found) {
+        currentActor = LINKEDLISTactors_get(list);
+        if (currentActor.dni.numeros == dniNumber && currentActor.dni.letra == dniLetter) {
+			found = 1;
+			if (!currentActor.contractat) {
+				LINKEDLISTactors_remove(list);
+    	        printf("Actor with DNI %d%c removed successfully.\n", dniNumber, dniLetter);
+				actualizarFicheroActors(*list);
+        	}
+			else {
+				printf ("ERROR (El actor que se esta intentando eliminar se encuentra contratado. Para borrarlo del sistema, es necesario darlo de baja previamente)\n");
 			}
 		}
 
-	}while(option != 6);
-	
+        LINKEDLISTactors_next(list);
+    }
+	if (!found) {
+    	printf("Actor with DNI %d%c not found.\n", dniNumber, dniLetter);
+	}
+}
+			
+void removeActorByDNI() {
+    LinkedList2 lista;
+    lista = LINKEDLISTactors_create();
+
+    int numdni;
+    char pedir_letra;
+
+    printf("\nEnter the DNI number to remove: ");
+    scanf("%d", &numdni);
+
+    printf("\nEnter the DNI letter to remove: ");
+    scanf(" %c", &pedir_letra);
+
+    eliminar(&lista, numdni, pedir_letra);
 }
 
+//// MODIFICACIONES LUIS
+
+int menuModificacionActores() {
+	int option, error = 0;
+
+	do {
+		printf ("\tQue deseas modificar?\n");
+		printf ("\t  1- Nombre\n");
+		printf ("\t  2- Primer Apellido\n");
+		printf ("\t  3- Segundo Apellido\n");
+		printf ("\t  4- Numero de telefono\n");
+		printf ("\t  5- Salario\n");
+		printf ("\t  6- Salir\n");
+		printf ("\t  Enter option: ");
+		error = option2AsNumber(&option, 1, 6);
+	
+	} while (error);
+
+	return option;
+}
+
+void runOption
+ (int option, Actor *p) {
+	char cambio[MAX_CHAR_SIMPLE];
+	int numero;
+	
+	switch (option) {
+		case 1:
+			printf ("El nombre actual del Actor es %s.", p->nombre);
+			solicitarPalabra("Introduce nombre a modificar: ", cambio, option--);
+			strcpy(p->nombre, cambio);
+			break;
+		case 2:
+			printf ("El primer apellido del Actor actual es %s.", p->apellido1);
+			solicitarPalabra("Introduce primer apellido a modificar: ", cambio, option--);
+			strcpy(p->apellido1, cambio);
+			break;
+		case 3:
+			printf ("El segundo apellido actual del Actor es %s.", p->apellido2);
+			solicitarPalabra("Introduce segundo apellido a modificar: ", cambio, option--);
+			strcpy(p->apellido2, cambio);
+			break;
+		case 4:
+			printf ("Su salario actual es %s.", p->salari);
+			solicitarCorreo("Introduce primer apellido a modificar: ", cambio);
+			strcpy(p->salari, cambio);
+			break;
+		case 5:
+			printf ("Su numero de telefono actual es %d.", p->telefono);
+			numero = solicitarTelefono("Introduce telefono a modificar: ");
+			p->telefono = numero;
+			break;
+	}
+}
+
+void modificarActores (LinkedList2 *actors) {
+	int option, found;
+	Actor p;
+
+	char id[MAX_CHAR_SIMPLE], tipo[5][MAX_CHAR_SIMPLE] = {"nombre", "primer apellido", "segundo apellido", "numero de telefono", "salario"};
+	
+	do {
+		option = menuModificacionActores();
+		if (option != 6) {
+			printf("Introduce el id del Actor a modificar" );
+			scanf ("%s",id);
+			found = 0;
+			mostrarActoresDisponibles(*actors);
+			LINKEDLISTactors_goToHead(actors);
+			while (!LINKEDLISTactors_isAtEnd(*actors) && !found) {
+				p = LINKEDLISTactors_get(actors);
+				if (!strcmp(p.dni.numeros+p.dni.letra, id)) {
+					found = 1;
+					runOption(option, &p);
+					LINKEDLISTactors_remove(actors);
+					LINKEDLISTactors_add(actors, p);
+				}
+				else {
+					LINKEDLISTactors_next(actors);
+				}
+			}
+			if (!found) {
+				printf ("ERROR (No se ha encontrado ningun Actor con este ID).\n");
+			}
+			else {
+				actualizarFicheroActors(*actors);
+				printf ("El %s de %s ha sido modificado correctamente.\n", tipo[option-1], id);
+			
+			}
+		}
+	} while (option != 6);
+}
+
+
+//// MODIFICACIONES LUIS
 
 void opcionesActores(int opcion){
 	LinkedList2 actors;
@@ -258,7 +359,7 @@ void opcionesActores(int opcion){
 			break;
 			
 		case 6:
-			//EliminarActores();
+			removeActorByDNI(&actors);
 			break;
 
 		case 7:
