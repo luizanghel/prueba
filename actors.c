@@ -229,7 +229,7 @@ void ModificarActores(LinkedList2 *actors){
 			}
 		}
 
-	}while(option != 7);
+	}while(option != 6);
 	
 }
 
@@ -254,7 +254,7 @@ void opcionesActores(int opcion){
 			break;
 
 		case 5:
-			//EditarActores();
+			//ModificarActores();
 			break;
 			
 		case 6:
