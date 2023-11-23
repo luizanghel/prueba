@@ -197,6 +197,24 @@ void contratarActor (LinkedList2 *actores) {
 	}
 }
 
+
+void removeActorByDNI() {
+    LinkedList lista;
+    lista = LINKEDLISTactors_create();
+
+    int numdni;
+    char pedir_letra;
+
+    printf("\nEnter the DNI number to remove: ");
+    scanf("%d", &numdni);
+
+    printf("\nEnter the DNI letter to remove: ");
+    scanf(" %c", &pedir_letra);
+
+    LINKEDLISTactors_removeByDNI(&lista, numdni, pedir_letra);
+}
+
+
 void opcionesActores(int opcion){
 	LinkedList2 actors;
 	actors = actorsALista();
