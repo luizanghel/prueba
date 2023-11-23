@@ -199,11 +199,11 @@ void contratarActor (LinkedList2 *actores) {
 }
 
 void dardebajaactor(LinkedList2 *actores){
-    int numeros, found = 0;
+    int numeros, found = 0, trobat=0;
     char letra;
     int i=0;
-    Actor a;
     Programa p;
+    Actor a;
     LinkedList4 programas;
 
     printf ("Numeros dni actor: ");
@@ -220,14 +220,31 @@ void dardebajaactor(LinkedList2 *actores){
         while (i<3 && !found){
             if (p.actorID[i].num==numeros && p.actorID[i].letra==letra){
                 found=1;
+                p.actorID[i].num=0;
+                p.actorID[i].letra='a';
+                LINKEDLISTPROGRAMA_remove(&programas);
+                LINKEDLISTPROGRAMA_add(&programas, p);
+                actualizarFicheroPrograma(programas);
             }
             i++;
         }
         LINKEDLISTPROGRAMA_next(&programas);
-
     }
     if (!found){
         printf("Este actor no esta contratado en ningun programa!\n");
+    }else{
+        LINKEDLISTactors_goToHead(actores);
+        while (!LINKEDLISTactors_isAtEnd(*actores) && !trobat){
+            a = LINKEDLISTactors_get(actores);
+            if (a.dni.numeros == numeros && a.dni.letra == letra){
+                a.contractat = 0;
+                LINKEDLISTactors_remove(actores);
+                LINKEDLISTactors_add(actores, a);
+                actualizarFicheroActors(*actores);
+                printf ("\tEl actor se ha dado de baja correctamente\n\n");
+            }
+            LINKEDLISTactors_next(actores);
+        }
     }
 
 }
