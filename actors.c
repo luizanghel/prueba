@@ -197,6 +197,43 @@ void contratarActor (LinkedList2 *actores) {
 	}
 }
 
+void EditarActores(LinkedList2 *actors){
+	int option, found;
+	FilePersona p;
+	char correo[MAX_CHAR_SIMPLE],tipo [6] [MAX_CHAR_SIMPLE]= {"nombre", "primer apellido", "segundo apellido", "correo", "contraseña", "numero de telefono"}
+		
+	do {
+		option = menuModification();
+		if(option != 7){
+			solicitarCorreo("Introduce el correo del actor: ", correo);
+			found=0
+			mostrarLista(*actors);
+			LINKEDLIST_goToHead(actors);
+			while (!LINKEDLIST_isAtEnd(*actors) && !found){
+				p = LINKEDLIST_get(actors);
+				if(!strcmp(p.correo, correo) && p.tipus == 0){
+					found=1;
+					runOption(option, &p);
+					LINKEDLIST_remove(actors);
+					LINKEDLIST_add(actors, p);
+				}else{
+					LINKEDLIST_next(actors);	
+				}
+			
+			}
+			if (!found){
+				printf("ERROR (No se ha encontrado ningun actor con este correo).\n");
+			}else{
+				actualitzarFichero(*actors);
+				printf ("El %s de %s ha sido modificado correctamente.\n", tipo[option-1, correo]);
+			}
+		}
+
+	}while(option != 7);
+	
+}
+
+
 void opcionesActores(int opcion){
 	LinkedList2 actors;
 	actors = actorsALista();
@@ -217,7 +254,7 @@ void opcionesActores(int opcion){
 			break;
 
 		case 5:
-			//GestionarActores();
+			//EditarActores();
 			break;
 			
 		case 6:
@@ -246,7 +283,7 @@ void menuActors(){
 			printf("\t2- Contratar actor\n");	
 			printf("\t3- Dar de baja a un actor\n");	
 			printf("\t4- Listar actores\n");	
-			printf("\t5- Gestionar actores\n");	
+			printf("\t5- Editar actores\n");	
 			printf("\t6- Eliminar actores\n");
 			printf("\t7- Salir\n");
 			printf("\tEscoge una opción: ");
