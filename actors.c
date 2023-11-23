@@ -197,35 +197,35 @@ void contratarActor (LinkedList2 *actores) {
 	}
 }
 
-void EditarActores(LinkedList2 *actors){
+void ModificarActores(LinkedList2 *actors){
 	int option, found;
-	FilePersona p;
-	char correo[MAX_CHAR_SIMPLE],tipo [6] [MAX_CHAR_SIMPLE]= {"nombre", "primer apellido", "segundo apellido", "correo", "contraseña", "numero de telefono"}
+	Actor p;
+	char id[MAX_CHAR_SIMPLE],tipo [5] [MAX_CHAR_SIMPLE]= {"nombre", "primer apellido", "segundo apellido", "numero de telefono", "salario"}
 		
 	do {
-		option = menuModification();
-		if(option != 7){
-			solicitarCorreo("Introduce el correo del actor: ", correo);
+		option = menuModificationActores();
+		if(option != 6){
+			solicitarDni("Introduce el id  del Actor a modificar: ", correo);
 			found=0
-			mostrarLista(*actors);
-			LINKEDLIST_goToHead(actors);
-			while (!LINKEDLIST_isAtEnd(*actors) && !found){
-				p = LINKEDLIST_get(actors);
-				if(!strcmp(p.correo, correo) && p.tipus == 0){
+			mostrarActoresDisponible(*actors);
+			LINKEDLISTactors_goToHead(actors);
+			while (!LINKEDLISTactors_isAtEnd(*actors) && !found){
+				p = LINKEDLISTactors_get(actors);
+				if(!strcmp(p.dni.numeros+p.dni.letr, id)) {
 					found=1;
 					runOption(option, &p);
-					LINKEDLIST_remove(actors);
-					LINKEDLIST_add(actors, p);
+					LINKEDLISTactors_remove(actors);
+					LINKEDLISTactors_add(actors, p);
 				}else{
-					LINKEDLIST_next(actors);	
+					LINKEDLISTactors_next(actors);	
 				}
 			
 			}
 			if (!found){
-				printf("ERROR (No se ha encontrado ningun actor con este correo).\n");
+				printf("ERROR (No se ha encontrado ningun actor con este id).\n");
 			}else{
-				actualitzarFichero(*actors);
-				printf ("El %s de %s ha sido modificado correctamente.\n", tipo[option-1, correo]);
+				actualitzarFicheroActors(*actors);
+				printf ("El %s de %s ha sido modificado correctamente.\n", tipo[option-1, id]);
 			}
 		}
 
