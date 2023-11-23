@@ -2,6 +2,8 @@
 
 #include "actors.h"
 #include "canales.h"
+#include "user.h"
+
 
 #define MAX_CHAR_SIMPLE 100
 
@@ -21,7 +23,6 @@ void mostrarActoresDisponibles (LinkedList2 list) {
 		}
 		LINKEDLISTactors_next(&list);
 	}
-
 	
 }
 
@@ -180,7 +181,7 @@ void contratarActor (LinkedList2 *actores) {
 					LINKEDLISTactors_remove(actores);
 					LINKEDLISTactors_add(actores, a);
 					actualizarFicheroActors(*actores);
-					printf ("\tEl actor se ha contratado correctamente\n");
+				printf ("\tEl actor se ha contratado correctamente\n");
 				}
 				else {
 					printf ("El programa no existe\n");
@@ -241,6 +242,52 @@ void removeActorByDNI() {
 
 //// MODIFICACIONES LUIS
 
+
+int revisarParametrosTelefonoA (char telefono[MAX_CHAR_SIMPLE],int op) {
+	int error = 0, i;
+	if (op == 4 && (strlen(telefono) != 9 && strlen(telefono) != 0 )) {
+			error = 1;
+			printf ("\tERROR (El numero de telefono unicamente puede contener 9 digitos)");	
+		}
+
+	if (!error) {
+		for (i = 0; telefono[i] == '\0'; i++) {
+			if (telefono[i] < '0' || telefono[i] > '9') {
+				error = 1;
+			}
+		}
+				if (op == 4 && error == 1 && strlen(telefono)!= 0){
+				printf ("\tERROR (El telefono unicamente puede contener numeros).\n");
+				}
+				if (op == 5 && error == 1 && strlen(telefono)!= 0){
+				printf ("\t ERROR (El Salario unicamente puede contener numeros).\n");
+				}
+	}
+	return error;
+}
+
+
+int solicitarTelefonoA (char texto[MAX_CHAR_SIMPLE], int op) {
+	int error = 0, telefono, aux = 0;
+	char palabra[MAX_CHAR_SIMPLE];
+	do {
+		printf ("%s", texto);
+		fgets(palabra, MAX_CHAR_SIMPLE, stdin);
+		if( aux == 0){
+			fgets(palabra, MAX_CHAR_SIMPLE, stdin);
+		}
+		aux++;
+		palabra[strlen(palabra) - 1] = '\0';
+		error = revisarParametrosTelefonoA(palabra, op);
+	} while (error);
+	
+	if (!error) {
+		telefono = atoi(palabra);
+	}
+	//scanf("%c", &aux);
+	return telefono;
+}
+
 int menuModificacionActores() {
 	int option, error = 0;
 
@@ -260,8 +307,8 @@ int menuModificacionActores() {
 	return option;
 }
 
-void runOption
- (int option, Actor *p) {
+
+void runOptionA(int option, Actor *p) {
 	char cambio[MAX_CHAR_SIMPLE];
 	int numero;
 	
@@ -282,37 +329,47 @@ void runOption
 			strcpy(p->apellido2, cambio);
 			break;
 		case 4:
-			printf ("Su salario actual es %s.", p->salari);
-			solicitarCorreo("Introduce primer apellido a modificar: ", cambio);
-			strcpy(p->salari, cambio);
-			break;
-		case 5:
 			printf ("Su numero de telefono actual es %d.", p->telefono);
-			numero = solicitarTelefono("Introduce telefono a modificar: ");
+			numero = solicitarTelefonoA("Introduce telefono a modificar: ", option);
 			p->telefono = numero;
+			break;		
+		case 5:
+			printf ("Su salario actual es %d.", p->salari);
+			numero = solicitarTelefonoA("Introduce el salario: ", option);
+			p->salari = numero;
 			break;
 	}
 }
 
 void modificarActores (LinkedList2 *actors) {
 	int option, found;
+	long int idl;
 	Actor p;
-
-	char id[MAX_CHAR_SIMPLE], tipo[5][MAX_CHAR_SIMPLE] = {"nombre", "primer apellido", "segundo apellido", "numero de telefono", "salario"};
+	char  letid, tipo[5][MAX_CHAR_SIMPLE] = {"nombre", "primer apellido", "segundo apellido", "numero de telefono", "salario"};
 	
+
+	mostrarActoresDisponibles(*actors);
 	do {
+
 		option = menuModificacionActores();
 		if (option != 6) {
-			printf("Introduce el id del Actor a modificar" );
-			scanf ("%s",id);
+
+		printf("\n Introduce los numeros del DNI: ");
+		scanf("%ld", &idl);
+
+		printf("\n Introduce la letra del DNI: ");
+		scanf("%s", &letid);
+
 			found = 0;
-			mostrarActoresDisponibles(*actors);
 			LINKEDLISTactors_goToHead(actors);
+
 			while (!LINKEDLISTactors_isAtEnd(*actors) && !found) {
 				p = LINKEDLISTactors_get(actors);
-				if (!strcmp(p.dni.numeros+p.dni.letra, id)) {
+				// printf("Numero Ingresado: %ld || Numero en base: %d && Letra Ingresada %c || Letra en Base %c", idl, p.dni.numeros, letid, p.dni.letra);
+
+				if (p.dni.numeros == idl && p.dni.letra == letid) {
 					found = 1;
-					runOption(option, &p);
+					runOptionA(option, &p);
 					LINKEDLISTactors_remove(actors);
 					LINKEDLISTactors_add(actors, p);
 				}
@@ -325,7 +382,7 @@ void modificarActores (LinkedList2 *actors) {
 			}
 			else {
 				actualizarFicheroActors(*actors);
-				printf ("El %s de %s ha sido modificado correctamente.\n", tipo[option-1], id);
+				printf ("El %s de %ld%c ha sido modificado correctamente.\n", tipo[option-1], idl,letid);
 			
 			}
 		}
@@ -333,7 +390,7 @@ void modificarActores (LinkedList2 *actors) {
 }
 
 
-//// MODIFICACIONES LUIS
+//// FIN MODIFICACIONES LUIS
 
 void opcionesActores(int opcion){
 	LinkedList2 actors;
@@ -355,7 +412,7 @@ void opcionesActores(int opcion){
 			break;
 
 		case 5:
-			//ModificarActores();
+			modificarActores(&actors);
 			break;
 			
 		case 6:
