@@ -9,15 +9,15 @@ ruz
 jan
 taron
 ruz
-611487703
+511111111
 123456
 0
 123A
 Eneco
 Marques
 Lono
-611487703
-123
+123456711
+1245
 0
 43698751F
 Bernat
@@ -33,3 +33,4 @@ TestSegundoApellido
 369852147
 564
 0
+12345678
