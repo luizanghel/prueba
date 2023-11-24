@@ -6,5 +6,6 @@
 void menuCanales();
 int assignarAlPrograma(int numero, char letra);
 LinkedList4 programaFileToList ();
+void actualizarFicheroPrograma (LinkedList4 programas);
 #endif
 
