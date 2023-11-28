@@ -36,4 +36,12 @@ Persona iniciarSesion ();
 void modoProductor ();
 void leerPersona(Persona p);
 
+int revisarMedida (char palabra[MAX_CHAR_SIMPLE], int medida, int option);
+int esMinuscula (char letra);
+int esMajuscula (char letra);
+int revisarCaracteresCorrectos (char palabra[MAX_CHAR_SIMPLE], int option);
+int revisarParametrosPropias (char palabra[MAX_CHAR_SIMPLE], int tipo);
+void solicitarPalabra (char texto[MAX_CHAR_SIMPLE], char palabra[MAX_CHAR_SIMPLE], int tipo);
+int option2AsNumber (int *option, int min, int max);
+
 #endif
