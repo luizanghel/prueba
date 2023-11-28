@@ -20,12 +20,19 @@ typedef struct {
 } Dni;
 
 typedef struct {
+	char titular[MAX_CHAR_SIMPLE];
+	int numero;
+	int pin;
+} Tarjeta;
+
+typedef struct {
 	Dni dni;
 	char nombre[MAX_CHAR_SIMPLE];
 	char apellido1[MAX_CHAR_SIMPLE];
 	char apellido2[MAX_CHAR_SIMPLE];
 	char correo[MAX_CHAR_SIMPLE];
 	char password[MAX_CHAR_SIMPLE];
+	Tarjeta tarjeta;
 	int telefono;
 	int tipus;			// 0-Client | 1-Productor
 } Persona;
@@ -35,7 +42,8 @@ Persona registerUser ();
 Persona iniciarSesion ();
 void modoProductor ();
 void leerPersona(Persona p);
-
+LinkedList FicheroALista();
+void mostrarLista(LinkedList l);
 int revisarMedida (char palabra[MAX_CHAR_SIMPLE], int medida, int option);
 int esMinuscula (char letra);
 int esMajuscula (char letra);
