@@ -41,6 +41,9 @@ typedef struct {
 Persona registerUser ();
 Persona iniciarSesion ();
 void modoProductor ();
+void modoCliente();
+
+
 void leerPersona(Persona p);
 LinkedList FicheroALista();
 void mostrarLista(LinkedList l);
