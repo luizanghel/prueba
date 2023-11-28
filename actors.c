@@ -268,15 +268,16 @@ int revisarParametrosTelefonoA (char telefono[MAX_CHAR_SIMPLE],int op) {
 
 
 int solicitarTelefonoA (char texto[MAX_CHAR_SIMPLE], int op) {
-	int error = 0, telefono, aux = 0;
-	char palabra[MAX_CHAR_SIMPLE];
+	int error = 0, telefono;// aux = 0;
+	char palabra[MAX_CHAR_SIMPLE]; //aux2[MAX_CHAR_SIMPLE];
 	do {
 		printf ("%s", texto);
 		fgets(palabra, MAX_CHAR_SIMPLE, stdin);
-		if( aux == 0){
-			fgets(palabra, MAX_CHAR_SIMPLE, stdin);
-		}
-		aux++;
+	//	if( aux == 0){
+	//		fgets(aux2, MAX_CHAR_SIMPLE, stdin);
+	//		fgets(aux2, MAX_CHAR_SIMPLE, stdin);
+	//	}
+	//	aux++;
 		palabra[strlen(palabra) - 1] = '\0';
 		error = revisarParametrosTelefonoA(palabra, op);
 	} while (error);
@@ -343,9 +344,10 @@ void runOptionA(int option, Actor *p) {
 
 void modificarActores (LinkedList2 *actors) {
 	int option, found;
-	long int idl;
+	int idl;
+	
 	Actor p;
-	char  letid, tipo[5][MAX_CHAR_SIMPLE] = {"nombre", "primer apellido", "segundo apellido", "numero de telefono", "salario"};
+	char  letid, aux, tipo[5][MAX_CHAR_SIMPLE] = {"nombre", "primer apellido", "segundo apellido", "numero de telefono", "salario"};
 	
 
 	mostrarActoresDisponibles(*actors);
@@ -355,11 +357,12 @@ void modificarActores (LinkedList2 *actors) {
 		if (option != 6) {
 
 		printf("\n Introduce los numeros del DNI: ");
-		scanf("%ld", &idl);
+		scanf("%d", &idl);
 
 		printf("\n Introduce la letra del DNI: ");
-		scanf("%s", &letid);
-
+		scanf("%c", &letid);
+		scanf("%c", &letid);
+		scanf("%c", &aux);
 			found = 0;
 			LINKEDLISTactors_goToHead(actors);
 
@@ -382,7 +385,7 @@ void modificarActores (LinkedList2 *actors) {
 			}
 			else {
 				actualizarFicheroActors(*actors);
-				printf ("El %s de %ld%c ha sido modificado correctamente.\n", tipo[option-1], idl,letid);
+				printf ("El %s de %d%c ha sido modificado correctamente.\n", tipo[option-1], idl,letid);
 			
 			}
 		}

@@ -13,11 +13,11 @@ ruz
 123456
 0
 123A
-Eneco
+Angel
 Marques
-Lono
-123456711
-1245
+Lobo
+123456789
+4444
 0
 43698751F
 Bernat
@@ -32,5 +32,3 @@ TestApellido
 TestSegundoApellido
 369852147
 564
-0
-12345678
