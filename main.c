@@ -76,6 +76,7 @@ int main () {
 			switch(p.tipus) {
 				case 0:
 					// Modo cliente
+					modoCliente();
 					break;
 				case 1:
 					// Modo productor

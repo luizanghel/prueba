@@ -496,7 +496,6 @@ LinkedList ficheroALista () {
 			fscanf(users, "%d", &p.dni.numeros);
 		}
 		fclose(users);
-		mostrarLista(users_list);	
 	}
 	return users_list;
 }
@@ -948,3 +947,32 @@ void modoProductor () {
 		} 
 	} while (!quit);
 }
+
+int menuCliente () {
+	int error = 0, option;
+	
+	do {
+		printf ("Bienvenido al MENU CLIENTE. ¿Que desea realizar?\n");
+		printf ("1- Registrar tarjeta\n");
+		printf ("2- Salir\n");
+		printf ("Entra opcion: ");
+		error = option2AsNumber(&option, 1, 2);
+	} while (error);
+	
+	return option;
+}
+
+void modoCliente () {
+	int option;
+
+	do {
+		option = menuCliente();
+		switch (option) {
+			case 1:
+				// Registro tarjeta
+				break;
+		}
+	} while (option != 2);
+
+}
+
