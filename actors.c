@@ -2,8 +2,8 @@
 
 #include "actors.h"
 #include "canales.h"
+#include "linkedlistprograma.h"
 #include "user.h"
-
 
 #define MAX_CHAR_SIMPLE 100
 
@@ -240,8 +240,56 @@ void removeActorByDNI() {
     eliminar(&lista, numdni, pedir_letra);
 }
 
-//// MODIFICACIONES LUIS
+void dardebajaactor(LinkedList2 *actores){
+    int numeros, found = 0, trobat=0;
+    char letra;
+    int i=0;
+    Programa p;
+    Actor a;
+    LinkedList4 programas;
 
+    printf ("Numeros dni actor: ");
+    scanf ("%d", &numeros);
+    printf ("Letra dni actor: ");
+    scanf ("%c", &letra);
+    scanf ("%c", &letra);
+
+    programas=programaFileToList();
+    LINKEDLISTPROGRAMA_goToHead (&programas);
+    while (!LINKEDLISTPROGRAMA_isAtEnd (programas) && !found){
+        p= LINKEDLISTPROGRAMA_get(&programas);
+        i=0;
+        while (i<3 && !found){
+            if (p.actorID[i].num==numeros && p.actorID[i].letra==letra){
+                found=1;
+                p.actorID[i].num=0;
+                p.actorID[i].letra='a';
+                LINKEDLISTPROGRAMA_remove(&programas);
+                LINKEDLISTPROGRAMA_add(&programas, p);
+                actualizarFicheroPrograma(programas);
+            }
+            i++;
+        }
+        LINKEDLISTPROGRAMA_next(&programas);
+    }
+    if (!found){
+        printf("Este actor no esta contratado en ningun programa!\n");
+    }else{
+        LINKEDLISTactors_goToHead(actores);
+        while (!LINKEDLISTactors_isAtEnd(*actores) && !trobat){
+            a = LINKEDLISTactors_get(actores);
+            if (a.dni.numeros == numeros && a.dni.letra == letra){
+                a.contractat = 0;
+                LINKEDLISTactors_remove(actores);
+                LINKEDLISTactors_add(actores, a);
+                actualizarFicheroActors(*actores);
+                printf ("\tEl actor se ha dado de baja correctamente\n\n");
+            }
+            LINKEDLISTactors_next(actores);
+        }
+    }
+
+}
 
 int revisarParametrosTelefonoA (char telefono[MAX_CHAR_SIMPLE],int op) {
 	int error = 0, i;
@@ -393,8 +441,6 @@ void modificarActores (LinkedList2 *actors) {
 }
 
 
-//// FIN MODIFICACIONES LUIS
-
 void opcionesActores(int opcion){
 	LinkedList2 actors;
 	actors = actorsALista();
@@ -407,7 +453,7 @@ void opcionesActores(int opcion){
 			contratarActor(&actors);
 			break;
 		case 3:
-			//DarDeBaja();
+			dardebajaactor(&actors);
 			break;
 
 		case 4:
