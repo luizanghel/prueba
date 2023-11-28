@@ -962,7 +962,22 @@ int menuCliente () {
 	return option;
 }
 
-void modoCliente () {
+void registroTarjeta(Persona *p) {
+	char titular[MAX_CHAR_SIMPLE], aux;
+	int numero, pin;
+
+	printf ("\tInserta titular de la tarjeta: ");
+	fgets(titular, MAX_CHAR_SIMPLE, stdin);
+	titular[strlen(titular) - 1] = '\0';
+	printf ("\tNumero de tarjeta: ");
+	scanf ("%d", &numero);
+	scanf ("%c", &aux);
+	printf ("\tPIN de tarjeta: ");
+	scanf ("%d", &pin);
+	scanf ("%c", &aux);
+}
+
+void modoCliente (Persona p) {
 	int option;
 
 	do {
@@ -970,6 +985,7 @@ void modoCliente () {
 		switch (option) {
 			case 1:
 				// Registro tarjeta
+				registroTarjeta(&p);
 				break;
 		}
 	} while (option != 2);
