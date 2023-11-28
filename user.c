@@ -325,17 +325,17 @@ void solicitarContrasena (char texto[MAX_CHAR_SIMPLE], char palabra[MAX_CHAR_SIM
 * @Retorno: Retorna un 1 en caso que haya algun error y un 0 en caso que no exista error.
 * 
 ************************************************/
-int revisarParametrosTelefono (char telefono[MAX_CHAR_SIMPLE]) {
+int revisarParametrosTelefono (char telefono[MAX_CHAR_SIMPLE], int medida) {
 	int error = 0, i;
 
-	if (strlen(telefono) != 9) {
+	if (strlen(telefono) != medida) {
 		error = 1;
-		printf ("\tERROR (El numero de telefono unicamente puede contener 9 digitos).\n");
+		printf ("\tERROR (El numero de telefono unicamente puede contener %d digitos).\n", medida);
 	}
 
 	if (!error) {
 		for (i = 0; telefono[i] == '\0'; i++) {
-			if (telefono[i] < '0' || telefono[i] > '9') {
+			if (telefono[i] < '0' || telefono[i] > medida) {
 				error = 1;
 				printf ("\tERROR (El telefono unicamente puede contener numeros).\n");
 			}	
@@ -352,7 +352,7 @@ int revisarParametrosTelefono (char telefono[MAX_CHAR_SIMPLE]) {
 * @Retorno: Devuelve el telefono.
 * 
 ************************************************/
-int solicitarTelefono (char texto[MAX_CHAR_SIMPLE]) {
+int solicitarTelefono (char texto[MAX_CHAR_SIMPLE], int medida) {
 	int error = 0, telefono;
 	char palabra[MAX_CHAR_SIMPLE]; // aux;
 	
@@ -360,7 +360,7 @@ int solicitarTelefono (char texto[MAX_CHAR_SIMPLE]) {
 		printf ("%s", texto);
 		fgets(palabra, MAX_CHAR_SIMPLE, stdin);
 		palabra[strlen(palabra) - 1] = '\0';
-		error = revisarParametrosTelefono(palabra);
+		error = revisarParametrosTelefono(palabra, medida);
 	} while (error);
 	
 	if (!error) {
@@ -387,7 +387,7 @@ Persona requestData () {
 	p.dni = solicitarDni("DNI: ");
 	solicitarCorreo("Correo: ", p.correo);
 	solicitarContrasena("Contraseña: ", p.password);
-	p.telefono = solicitarTelefono("Numero de telefono: ");
+	p.telefono = solicitarTelefono("Numero de telefono: ", 9);
 	strcpy(p.tarjeta.titular, "-");
 	p.tarjeta.numero = 0;
 	p.tarjeta.pin = 0;
@@ -816,7 +816,7 @@ void runOption (int option, FilePersona *p) {
 			break;
 		case 6:
 			printf ("Su numero de telefono actual es %d.", p->telefono);
-			numero = solicitarTelefono("Introduce telefono a modificar: ");
+			numero = solicitarTelefono("Introduce telefono a modificar: ", 9);
 			p->telefono = numero;
 			break;
 	}
@@ -963,18 +963,16 @@ int menuCliente () {
 }
 
 void registroTarjeta(Persona *p) {
-	char titular[MAX_CHAR_SIMPLE], aux;
-	int numero, pin;
-
-	printf ("\tInserta titular de la tarjeta: ");
-	fgets(titular, MAX_CHAR_SIMPLE, stdin);
-	titular[strlen(titular) - 1] = '\0';
-	printf ("\tNumero de tarjeta: ");
-	scanf ("%d", &numero);
-	scanf ("%c", &aux);
-	printf ("\tPIN de tarjeta: ");
-	scanf ("%d", &pin);
-	scanf ("%c", &aux);
+	if (p->tarjeta.numero != 0) {
+		printf ("\tERROR (Ya tienes una tarjeta asignada\n\n");
+	}
+	else {
+		printf ("\tInserta titular de la tarjeta: ");
+		fgets(p->tarjeta.titular, MAX_CHAR_SIMPLE, stdin);
+		p->tarjeta.titular[strlen(p->tarjeta.titular) - 1] = '\0';
+		p->	tarjeta.numero = solicitarTelefono("\tIntroduce numero de tarjeta: ", 10);	
+		p->tarjeta.pin = solicitarTelefono("\tPIN: ", 4);
+	}
 }
 
 void modoCliente (Persona p) {
