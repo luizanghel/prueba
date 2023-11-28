@@ -963,8 +963,13 @@ int menuCliente () {
 }
 
 void registroTarjeta(Persona *p) {
+	LinkedList users;
+	FilePersona p2, estructura;
+	users = ficheroALista();
+	int found = 0;
+
 	if (p->tarjeta.numero != 0) {
-		printf ("\tERROR (Ya tienes una tarjeta asignada\n\n");
+		printf ("\tERROR (Ya tienes una tarjeta asignada)\n\n)");
 	}
 	else {
 		printf ("\tInserta titular de la tarjeta: ");
@@ -972,6 +977,19 @@ void registroTarjeta(Persona *p) {
 		p->tarjeta.titular[strlen(p->tarjeta.titular) - 1] = '\0';
 		p->	tarjeta.numero = solicitarTelefono("\tIntroduce numero de tarjeta: ", 10);	
 		p->tarjeta.pin = solicitarTelefono("\tPIN: ", 4);
+		p2 = userFileToList(*p);
+		LINKEDLIST_goToHead(&users);
+		while (!LINKEDLIST_isAtEnd(users) && !found) {
+			estructura = LINKEDLIST_get(&users);
+			if (p2.dni.numeros == estructura.dni.numeros && p2.dni.letra == estructura.dni.letra) {
+				found = 1;
+				LINKEDLIST_remove(&users);
+				LINKEDLIST_add(&users, p2);
+			}
+			LINKEDLIST_next(&users);
+		}
+		actualizarFichero(users);
+		printf ("La tarjeta se ha añadido correctamente!\n");
 	}
 }
 
