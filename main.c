@@ -57,7 +57,6 @@ int main () {
 	int option, quit = 0, completado = 0;
 	Persona p;
     //float presupuesto=10000;
-
 	do {
 		option = showMenu ();
 		switch (option) {

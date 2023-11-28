@@ -388,6 +388,10 @@ Persona requestData () {
 	solicitarCorreo("Correo: ", p.correo);
 	solicitarContrasena("Contraseña: ", p.password);
 	p.telefono = solicitarTelefono("Numero de telefono: ");
+	strcpy(p.tarjeta.titular, "-");
+	p.tarjeta.numero = 0;
+	p.tarjeta.pin = 0;
+
 	return p;
 }
 
@@ -400,12 +404,43 @@ Persona requestData () {
 ************************************************/
 void leerPersona (Persona p) {
 	printf("Nombre: %s.\n", p.nombre);
-	printf("Nombre: %s.\n", p.apellido1);
-	printf("Nombre: %s.\n", p.apellido2);
-	printf("Nombre: %s.\n", p.correo);
-	printf("Nombre: %s.\n", p.password);
-	printf("Nombre: %d.\n", p.telefono);
+	printf("Apellido: %s.\n", p.apellido1);
+	printf("Apellido 2: %s.\n", p.apellido2);
+	printf("Correo: %s.\n", p.correo);
+	printf("Contrasena: %s.\n", p.password);
+	printf("Telefon: %d.\n", p.telefono);
 	printf("DNI: %d%c.\n", p.dni.numeros, p.dni.letra);
+	printf ("Titular de tarjeta: %s.\n", p.tarjeta.titular);
+	printf ("Numero tarjeta: %d\n", p.tarjeta.numero);
+	printf ("PIN: %d\n", p.tarjeta.pin);
+}
+
+/***********************************************
+*
+* @Finalidad: Muestra el contenido de una lista.
+* @Parametros: in: usuarios = Lista a mostrar.
+* @Retorno: ----.
+* 
+************************************************/
+void mostrarLista(LinkedList usuarios) {
+	FilePersona p;
+	int n_clients = 0;
+	LINKEDLIST_goToHead(&usuarios);
+	while (!LINKEDLIST_isAtEnd(usuarios)) {
+		p =	LINKEDLIST_get(&usuarios);
+		if (p.tipus == 0) {
+			n_clients++;
+			printf ("-CLIENTE %d-\n", n_clients);
+			printf ("\tNombre: %s\n", p.nombre);
+			printf ("\tPrimer apellido: %s\n", p.apellido1);
+			printf ("\tSegundo apellido: %s\n", p.apellido2);
+			printf ("\tCorreo: %s\n", p.correo);
+			printf ("\tContraseña: %s\n", p.password);
+		}
+		
+		LINKEDLIST_next(&usuarios);
+	}
+	printf ("Hay %d clientes registrados.\n", n_clients);
 }
 
 /***********************************************
@@ -440,43 +475,30 @@ LinkedList ficheroALista () {
 			fgets(p.correo, MAX_CHAR_SIMPLE, users);
 			p.correo[strlen(p.correo) - 1] = '\0';
 			fscanf(users, "%s", p.password);
+			fscanf (users, "%c", &aux);
+			fgets(p.tarjeta.titular, MAX_CHAR_SIMPLE, users);
+			p.tarjeta.titular[strlen(p.tarjeta.titular) - 1] = '\0';
+			fscanf(users, "%d", &p.tarjeta.numero);
+			fscanf(users, "%d", &p.tarjeta.pin);
 			fscanf(users, "%d", &p.telefono);
 			fscanf(users, "%d", &p.tipus);
+			/*printf ("DNI: %d%c\n", p.dni.numeros, p.dni.letra);
+			printf ("Nombre: %s\n", p.nombre);
+			printf ("Primer apellido: %s\n", p.apellido1);
+			printf ("Segundo apellido: %s\n", p.apellido2);
+			printf ("Correo: %s\n", p.correo);
+			printf ("Contraseña: %s\n", p.password);
+			printf ("Titular tarjeta: %s\n", p.tarjeta.titular);
+			printf ("Numero tarjeta: %d\n", p.tarjeta.numero);
+			printf ("PIN tarjeta: %d\n", p.tarjeta.pin);
+			*/
 			LINKEDLIST_add(&users_list, p);
 			fscanf(users, "%d", &p.dni.numeros);
 		}
 		fclose(users);
-		
+		mostrarLista(users_list);	
 	}
 	return users_list;
-}
-
-/***********************************************
-*
-* @Finalidad: Muestra el contenido de una lista.
-* @Parametros: in: usuarios = Lista a mostrar.
-* @Retorno: ----.
-* 
-************************************************/
-void mostrarLista(LinkedList usuarios) {
-	FilePersona p;
-	int n_clients = 0;
-	LINKEDLIST_goToHead(&usuarios);
-	while (!LINKEDLIST_isAtEnd(usuarios)) {
-		p =	LINKEDLIST_get(&usuarios);
-		if (p.tipus == 0) {
-			n_clients++;
-			printf ("-CLIENTE %d-\n", n_clients);
-			printf ("\tNombre: %s\n", p.nombre);
-			printf ("\tPrimer apellido: %s\n", p.apellido1);
-			printf ("\tSegundo apellido: %s\n", p.apellido2);
-			printf ("\tCorreo: %s\n", p.correo);
-			printf ("\tContraseña: %s\n", p.password);
-		}
-		
-		LINKEDLIST_next(&usuarios);
-	}
-	printf ("Hay %d clientes registrados.\n", n_clients);
 }
 
 /***********************************************
@@ -550,6 +572,9 @@ FilePersona userFileToList (Persona p) {
 	strcpy(p2.apellido2, p.apellido2);
 	strcpy(p2.correo, p.correo);
 	strcpy(p2.password, p.password);
+	strcpy(p2.tarjeta.titular, p.tarjeta.titular);
+	p2.tarjeta.numero = p.tarjeta.numero;
+	p2.tarjeta.pin = p.tarjeta.pin;
 	p2.telefono = p.telefono;
 	p2.dni.numeros = p.dni.numeros;
 	p2.dni.letra = p.dni.letra;
@@ -584,7 +609,10 @@ void actualizarFichero (LinkedList usuarios) {
 	   	 	fprintf(actualizado, "%s\n", p.apellido2);
 	    	fprintf(actualizado, "%s\n", p.correo);
 	    	fprintf(actualizado, "%s\n", p.password);
-		    fprintf(actualizado, "%d\n", p.telefono);
+		    fprintf(actualizado, "%s\n", p.tarjeta.titular);
+			fprintf(actualizado, "%d\n", p.tarjeta.numero);
+			fprintf(actualizado, "%d\n", p.tarjeta.pin);
+			fprintf(actualizado, "%d\n", p.telefono);
 		    fprintf(actualizado, "%d\n", p.tipus);
 			LINKEDLIST_next(&usuarios);
 		}
@@ -668,6 +696,9 @@ Persona desdeListaAFile (FilePersona p) {
 	strcpy(p2.apellido2, p.apellido2);
 	strcpy(p2.correo, p.correo);
 	strcpy(p2.password, p.password);
+	strcpy(p2.tarjeta.titular, p.tarjeta.titular);
+	p2.tarjeta.numero = p.tarjeta.numero;
+	p2.tarjeta.pin = p.tarjeta.pin;
 	p2.telefono = p.telefono;
 	p2.dni.numeros = p.dni.numeros;
 	p2.dni.letra = p.dni.letra;
