@@ -4,6 +4,7 @@
 #include "actors.h"
 #include "linkedlistcanales.h"
 #include "linkedlistprograma.h"
+#include "dato.h"
 
 #define MAX_CHAR_SIMPLE 	  100
 #define MAX_ACTORES_PROGRAMA	3

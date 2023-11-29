@@ -8,6 +8,7 @@
 
 #include "linkedlist.h"
 #include "canales.h"
+#include "dato.h"
 #include "actors.h"
 
 // Constantes 
