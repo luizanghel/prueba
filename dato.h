@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAX_CHAR_SIMPLE 100
+#define MAX_CHAR_SIMPLE 200
 
 /***********************************************
 *
@@ -136,5 +136,14 @@ int revisarParametrosTelefono (char telefono[MAX_CHAR_SIMPLE], int medida);
 * 
 ************************************************/
 int solicitarTelefono (char texto[MAX_CHAR_SIMPLE], int medida);
+
+/***********************************************
+*
+* @Finalidad: Solicitar un numero decimal.
+* @Parametros:	in: texto[] = Texto que se quiere mostrar al usuario para que introduzca los datos..
+* @Retorno: Devuelve el numero decimal, cuando se ha comprobado que es correcto.
+* 
+************************************************/
+float solicitarFloat (char texto[MAX_CHAR_SIMPLE]);
 
 #endif

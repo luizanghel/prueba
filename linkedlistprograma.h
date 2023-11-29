@@ -1,6 +1,7 @@
 #ifndef _LINKEDLISTPROGRAMA_H_
 #define _LINKEDLISTPROGRAMA_H_
 
+
 // Libraries
 #include <stdlib.h>					// To use dynamic memory.
 
@@ -20,8 +21,8 @@ typedef struct {
 	char nom[100];
 	char cadena[100];
 	char categoria[100];
-	char emisio[50];
-	char duracio[50];
+	char emisio[100];
+	int duracio;
 	ActorID actorID[3];
 } Programa;
 

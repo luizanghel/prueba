@@ -12,7 +12,6 @@
 #include "actors.h"
 
 // Constantes 
-#define MAX_CHAR_SIMPLE 100
 
 // Tipo
 typedef struct {

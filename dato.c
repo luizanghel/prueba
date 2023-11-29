@@ -342,3 +342,37 @@ int solicitarTelefono (char texto[MAX_CHAR_SIMPLE], int medida) {
 	//scanf("%c", &aux);
 	return telefono;
 }
+
+/***********************************************
+*
+* @Finalidad: Solicitar un numero decimal.
+* @Parametros:	in: texto[] = Texto que se quiere mostrar al usuario para que introduzca los datos..
+* @Retorno: Devuelve el numero decimal, cuando se ha comprobado que es correcto.
+* 
+************************************************/
+float solicitarFloat (char texto[MAX_CHAR_SIMPLE]) {
+	int i, error;
+	char palabra[MAX_CHAR_SIMPLE];
+	float numero;
+
+	do {
+		printf ("%s", texto);
+		fgets(palabra, MAX_CHAR_SIMPLE, stdin);
+		palabra[strlen(palabra) - 1] = '\0';
+		error = 0;
+
+		for (i = 0; palabra[i] != '\0' && !error; i++) {
+			if (palabra[i] < '0' || palabra[i] > '9') {
+				printf ("\tERROR (Debes introducir un numero que indique los minutos)\n");
+				error = 1;
+			}
+		}
+
+	} while (error);
+	
+	if (!error) {
+		numero = atoi(palabra);
+	}
+	
+	return numero;
+}
