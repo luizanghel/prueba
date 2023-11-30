@@ -478,6 +478,13 @@ void crearCanal (LinkedList3 *canales) {
 
 }
 
+
+void eliminarCanal(){
+	
+	
+	
+}
+
 /***********************************************
 *
 * @Finalidad: Ejecutar las opciones del menu.
