@@ -16,3 +16,5 @@ Buenas
 2.785000
 Rosario
 12.500000
+Juanan
+12.000000

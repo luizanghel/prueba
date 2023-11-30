@@ -1,11 +1,5 @@
-#include <stdio.h>
-
 #include "actors.h"
-#include "canales.h"
-#include "linkedlistprograma.h"
-#include "user.h"
 
-#define MAX_CHAR_SIMPLE 100
 
 void mostrarActoresDisponibles (LinkedList2 list) {
 	Actor actor;

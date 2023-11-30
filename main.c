@@ -4,7 +4,6 @@
 
 #include "user.h"
 
-#define MAX_CHAR_SIMPLE 100
 
 /***********************************************
 *
@@ -57,7 +56,6 @@ int main () {
 	int option, quit = 0, completado = 0;
 	Persona p;
     //float presupuesto=10000;
-
 	do {
 		option = showMenu ();
 		switch (option) {
@@ -77,6 +75,7 @@ int main () {
 			switch(p.tipus) {
 				case 0:
 					// Modo cliente
+					modoCliente(p);
 					break;
 				case 1:
 					// Modo productor
