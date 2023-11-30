@@ -2,10 +2,7 @@
 #include <stdio.h>
 
 
-#include "actors.h"
-#include "linkedlistcanales.h"
-#include "linkedlistprograma.h"
-#include "dato.h"
+#include "canales.h"
 
 #define MAX_CHAR_SIMPLE 	  200
 #define MAX_ACTORES_PROGRAMA	3
@@ -499,8 +496,7 @@ void runOptionCanales (int option, int *quit) {
 			// eliminarCanal();
 			break;
 		case 4:
-			mostrarCanales(canales);
-			
+			mostrarCanales(canales);			
 			break;
 		case 5: 
 			anadirProgramaACanal(&canales);

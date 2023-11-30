@@ -609,9 +609,11 @@ int menuCliente () {
 	do {
 		printf ("Bienvenido al MENU CLIENTE. ¿Que desea realizar?\n");
 		printf ("1- Registrar tarjeta\n");
-		printf ("2- Salir\n");
+		printf ("2- Visualizar canales por audiencia\n");
+		printf ("3- Salir\n");
 		printf ("Entra opcion: ");
-		error = option2AsNumber(&option, 1, 2);
+		error = option2AsNumber(&option, 1, 3);
+
 	} while (error);
 	
 	return option;
@@ -648,6 +650,10 @@ void registroTarjeta(Persona *p) {
 	}
 }
 
+void visualizarCanales () {
+	// Añadir logica de ordenacion.
+}
+
 void modoCliente (Persona p) {
 	int option;
 
@@ -658,8 +664,14 @@ void modoCliente (Persona p) {
 				// Registro tarjeta
 				registroTarjeta(&p);
 				break;
+			case 2:
+				visualizarCanales();
+				break;
+			case 3:
+				printf ("¡Hasta pronto!\n");
+				break;
 		}
-	} while (option != 2);
+	} while (option != 3);
 
 }
 
