@@ -477,10 +477,43 @@ void crearCanal (LinkedList3 *canales) {
 	}
 
 }
+void eliminar(linkedlist2 *list, int dniNumber){
+	int found=0;
+	Actor currentActor;
 
+	LINKEDLISTcanals_goToHead(list);
+	while(!LINKEDLIST_canals_isAtEnd(*list)&& !found){
+		currentCanal = LINKEDLISTcanals_get(list);
+		if(currentCanal.dni.numeros == dniNumber){
+			found=1;
+			if(!currentCanal.contract){
+				LINKEDLISTcanals_remove(list);
+				printf("Canal with dni %d removed succesfully.\n", dniNumber);
+				actualizarFicheroCanal(*list);
+			}else{
+				printf("ERROR (El canal que se ha intentado eiminar se encuentra contratado...)");
+			}
+		}
+		
+		LINKEDLISTcanals_next(list);
+
+	}
+	if(!found){
+		printf("CAnal with DNI %d not found.\n", dninumber);
+	}
+	
+}
 
 void eliminarCanal(){
+	//linkedlist lsita;
+	lista = LINKEDLISTcanales_create();
+
+	//int c.nombre; 
 	
+	printf("\nEnter the canal name to remove: ");
+	scanf("%d", &c.nombre);
+
+	eliminar(&lista, numdni);//ns cual es la variable que hemos de eliminar para que los canales se eliminen
 	
 	
 }
