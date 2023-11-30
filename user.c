@@ -325,17 +325,17 @@ void solicitarContrasena (char texto[MAX_CHAR_SIMPLE], char palabra[MAX_CHAR_SIM
 * @Retorno: Retorna un 1 en caso que haya algun error y un 0 en caso que no exista error.
 * 
 ************************************************/
-int revisarParametrosTelefono (char telefono[MAX_CHAR_SIMPLE]) {
+int revisarParametrosTelefono (char telefono[MAX_CHAR_SIMPLE], int medida) {
 	int error = 0, i;
 
-	if (strlen(telefono) != 9) {
+	if (strlen(telefono) != medida) {
 		error = 1;
-		printf ("\tERROR (El numero de telefono unicamente puede contener 9 digitos).\n");
+		printf ("\tERROR (El numero de telefono unicamente puede contener %d digitos).\n", medida);
 	}
 
 	if (!error) {
 		for (i = 0; telefono[i] == '\0'; i++) {
-			if (telefono[i] < '0' || telefono[i] > '9') {
+			if (telefono[i] < '0' || telefono[i] > medida) {
 				error = 1;
 				printf ("\tERROR (El telefono unicamente puede contener numeros).\n");
 			}	
@@ -352,7 +352,7 @@ int revisarParametrosTelefono (char telefono[MAX_CHAR_SIMPLE]) {
 * @Retorno: Devuelve el telefono.
 * 
 ************************************************/
-int solicitarTelefono (char texto[MAX_CHAR_SIMPLE]) {
+int solicitarTelefono (char texto[MAX_CHAR_SIMPLE], int medida) {
 	int error = 0, telefono;
 	char palabra[MAX_CHAR_SIMPLE]; // aux;
 	
@@ -360,7 +360,7 @@ int solicitarTelefono (char texto[MAX_CHAR_SIMPLE]) {
 		printf ("%s", texto);
 		fgets(palabra, MAX_CHAR_SIMPLE, stdin);
 		palabra[strlen(palabra) - 1] = '\0';
-		error = revisarParametrosTelefono(palabra);
+		error = revisarParametrosTelefono(palabra, medida);
 	} while (error);
 	
 	if (!error) {
@@ -387,7 +387,11 @@ Persona requestData () {
 	p.dni = solicitarDni("DNI: ");
 	solicitarCorreo("Correo: ", p.correo);
 	solicitarContrasena("Contraseña: ", p.password);
-	p.telefono = solicitarTelefono("Numero de telefono: ");
+	p.telefono = solicitarTelefono("Numero de telefono: ", 9);
+	strcpy(p.tarjeta.titular, "-");
+	p.tarjeta.numero = 0;
+	p.tarjeta.pin = 0;
+
 	return p;
 }
 
@@ -400,12 +404,43 @@ Persona requestData () {
 ************************************************/
 void leerPersona (Persona p) {
 	printf("Nombre: %s.\n", p.nombre);
-	printf("Nombre: %s.\n", p.apellido1);
-	printf("Nombre: %s.\n", p.apellido2);
-	printf("Nombre: %s.\n", p.correo);
-	printf("Nombre: %s.\n", p.password);
-	printf("Nombre: %d.\n", p.telefono);
+	printf("Apellido: %s.\n", p.apellido1);
+	printf("Apellido 2: %s.\n", p.apellido2);
+	printf("Correo: %s.\n", p.correo);
+	printf("Contrasena: %s.\n", p.password);
+	printf("Telefon: %d.\n", p.telefono);
 	printf("DNI: %d%c.\n", p.dni.numeros, p.dni.letra);
+	printf ("Titular de tarjeta: %s.\n", p.tarjeta.titular);
+	printf ("Numero tarjeta: %d\n", p.tarjeta.numero);
+	printf ("PIN: %d\n", p.tarjeta.pin);
+}
+
+/***********************************************
+*
+* @Finalidad: Muestra el contenido de una lista.
+* @Parametros: in: usuarios = Lista a mostrar.
+* @Retorno: ----.
+* 
+************************************************/
+void mostrarLista(LinkedList usuarios) {
+	FilePersona p;
+	int n_clients = 0;
+	LINKEDLIST_goToHead(&usuarios);
+	while (!LINKEDLIST_isAtEnd(usuarios)) {
+		p =	LINKEDLIST_get(&usuarios);
+		if (p.tipus == 0) {
+			n_clients++;
+			printf ("-CLIENTE %d-\n", n_clients);
+			printf ("\tNombre: %s\n", p.nombre);
+			printf ("\tPrimer apellido: %s\n", p.apellido1);
+			printf ("\tSegundo apellido: %s\n", p.apellido2);
+			printf ("\tCorreo: %s\n", p.correo);
+			printf ("\tContraseña: %s\n", p.password);
+		}
+		
+		LINKEDLIST_next(&usuarios);
+	}
+	printf ("Hay %d clientes registrados.\n", n_clients);
 }
 
 /***********************************************
@@ -440,43 +475,29 @@ LinkedList ficheroALista () {
 			fgets(p.correo, MAX_CHAR_SIMPLE, users);
 			p.correo[strlen(p.correo) - 1] = '\0';
 			fscanf(users, "%s", p.password);
+			fscanf (users, "%c", &aux);
+			fgets(p.tarjeta.titular, MAX_CHAR_SIMPLE, users);
+			p.tarjeta.titular[strlen(p.tarjeta.titular) - 1] = '\0';
+			fscanf(users, "%d", &p.tarjeta.numero);
+			fscanf(users, "%d", &p.tarjeta.pin);
 			fscanf(users, "%d", &p.telefono);
 			fscanf(users, "%d", &p.tipus);
+			/*printf ("DNI: %d%c\n", p.dni.numeros, p.dni.letra);
+			printf ("Nombre: %s\n", p.nombre);
+			printf ("Primer apellido: %s\n", p.apellido1);
+			printf ("Segundo apellido: %s\n", p.apellido2);
+			printf ("Correo: %s\n", p.correo);
+			printf ("Contraseña: %s\n", p.password);
+			printf ("Titular tarjeta: %s\n", p.tarjeta.titular);
+			printf ("Numero tarjeta: %d\n", p.tarjeta.numero);
+			printf ("PIN tarjeta: %d\n", p.tarjeta.pin);
+			*/
 			LINKEDLIST_add(&users_list, p);
 			fscanf(users, "%d", &p.dni.numeros);
 		}
 		fclose(users);
-		
 	}
 	return users_list;
-}
-
-/***********************************************
-*
-* @Finalidad: Muestra el contenido de una lista.
-* @Parametros: in: usuarios = Lista a mostrar.
-* @Retorno: ----.
-* 
-************************************************/
-void mostrarLista(LinkedList usuarios) {
-	FilePersona p;
-	int n_clients = 0;
-	LINKEDLIST_goToHead(&usuarios);
-	while (!LINKEDLIST_isAtEnd(usuarios)) {
-		p =	LINKEDLIST_get(&usuarios);
-		if (p.tipus == 0) {
-			n_clients++;
-			printf ("-CLIENTE %d-\n", n_clients);
-			printf ("\tNombre: %s\n", p.nombre);
-			printf ("\tPrimer apellido: %s\n", p.apellido1);
-			printf ("\tSegundo apellido: %s\n", p.apellido2);
-			printf ("\tCorreo: %s\n", p.correo);
-			printf ("\tContraseña: %s\n", p.password);
-		}
-		
-		LINKEDLIST_next(&usuarios);
-	}
-	printf ("Hay %d clientes registrados.\n", n_clients);
 }
 
 /***********************************************
@@ -550,6 +571,9 @@ FilePersona userFileToList (Persona p) {
 	strcpy(p2.apellido2, p.apellido2);
 	strcpy(p2.correo, p.correo);
 	strcpy(p2.password, p.password);
+	strcpy(p2.tarjeta.titular, p.tarjeta.titular);
+	p2.tarjeta.numero = p.tarjeta.numero;
+	p2.tarjeta.pin = p.tarjeta.pin;
 	p2.telefono = p.telefono;
 	p2.dni.numeros = p.dni.numeros;
 	p2.dni.letra = p.dni.letra;
@@ -584,7 +608,10 @@ void actualizarFichero (LinkedList usuarios) {
 	   	 	fprintf(actualizado, "%s\n", p.apellido2);
 	    	fprintf(actualizado, "%s\n", p.correo);
 	    	fprintf(actualizado, "%s\n", p.password);
-		    fprintf(actualizado, "%d\n", p.telefono);
+		    fprintf(actualizado, "%s\n", p.tarjeta.titular);
+			fprintf(actualizado, "%d\n", p.tarjeta.numero);
+			fprintf(actualizado, "%d\n", p.tarjeta.pin);
+			fprintf(actualizado, "%d\n", p.telefono);
 		    fprintf(actualizado, "%d\n", p.tipus);
 			LINKEDLIST_next(&usuarios);
 		}
@@ -668,6 +695,9 @@ Persona desdeListaAFile (FilePersona p) {
 	strcpy(p2.apellido2, p.apellido2);
 	strcpy(p2.correo, p.correo);
 	strcpy(p2.password, p.password);
+	strcpy(p2.tarjeta.titular, p.tarjeta.titular);
+	p2.tarjeta.numero = p.tarjeta.numero;
+	p2.tarjeta.pin = p.tarjeta.pin;
 	p2.telefono = p.telefono;
 	p2.dni.numeros = p.dni.numeros;
 	p2.dni.letra = p.dni.letra;
@@ -786,7 +816,7 @@ void runOption (int option, FilePersona *p) {
 			break;
 		case 6:
 			printf ("Su numero de telefono actual es %d.", p->telefono);
-			numero = solicitarTelefono("Introduce telefono a modificar: ");
+			numero = solicitarTelefono("Introduce telefono a modificar: ", 9);
 			p->telefono = numero;
 			break;
 	}
@@ -917,3 +947,64 @@ void modoProductor () {
 		} 
 	} while (!quit);
 }
+
+int menuCliente () {
+	int error = 0, option;
+	
+	do {
+		printf ("Bienvenido al MENU CLIENTE. ¿Que desea realizar?\n");
+		printf ("1- Registrar tarjeta\n");
+		printf ("2- Salir\n");
+		printf ("Entra opcion: ");
+		error = option2AsNumber(&option, 1, 2);
+	} while (error);
+	
+	return option;
+}
+
+void registroTarjeta(Persona *p) {
+	LinkedList users;
+	FilePersona p2, estructura;
+	users = ficheroALista();
+	int found = 0;
+
+	if (p->tarjeta.numero != 0) {
+		printf ("\tERROR (Ya tienes una tarjeta asignada)\n\n)");
+	}
+	else {
+		printf ("\tInserta titular de la tarjeta: ");
+		fgets(p->tarjeta.titular, MAX_CHAR_SIMPLE, stdin);
+		p->tarjeta.titular[strlen(p->tarjeta.titular) - 1] = '\0';
+		p->	tarjeta.numero = solicitarTelefono("\tIntroduce numero de tarjeta: ", 10);	
+		p->tarjeta.pin = solicitarTelefono("\tPIN: ", 4);
+		p2 = userFileToList(*p);
+		LINKEDLIST_goToHead(&users);
+		while (!LINKEDLIST_isAtEnd(users) && !found) {
+			estructura = LINKEDLIST_get(&users);
+			if (p2.dni.numeros == estructura.dni.numeros && p2.dni.letra == estructura.dni.letra) {
+				found = 1;
+				LINKEDLIST_remove(&users);
+				LINKEDLIST_add(&users, p2);
+			}
+			LINKEDLIST_next(&users);
+		}
+		actualizarFichero(users);
+		printf ("La tarjeta se ha añadido correctamente!\n");
+	}
+}
+
+void modoCliente (Persona p) {
+	int option;
+
+	do {
+		option = menuCliente();
+		switch (option) {
+			case 1:
+				// Registro tarjeta
+				registroTarjeta(&p);
+				break;
+		}
+	} while (option != 2);
+
+}
+

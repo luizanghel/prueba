@@ -11,11 +11,18 @@
 #define LIST_ERROR_MALLOC 3			// Error, a malloc failed.
 #define LIST_ERROR_END 4			// Error, the POV is at the end.
 
+#define MAX_CHAR 100
 
 typedef struct {
 	int numeros;
 	char letra;
 } FileDni;
+
+typedef struct {
+	char titular[MAX_CHAR];
+	int numero;
+	int pin;
+} FileTarjeta;
 
 typedef struct {
 	FileDni dni;
@@ -24,6 +31,7 @@ typedef struct {
 	char apellido2[100];
 	char correo[100];
 	char password[100];
+	FileTarjeta tarjeta;
 	int telefono;
 	int tipus;			// 0-Client | 1-Productor
 } FilePersona;
