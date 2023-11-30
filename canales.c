@@ -159,13 +159,15 @@ void leerCanalesYProgramas (LinkedList3 canales) {
 * @Retorno: Retorna una lista con todos los canales y programas.
 * 
 ************************************************/
-LinkedList3 canalesFileToList () {
+LinkedList3 canalesFileToList (int *num_canales) {
 	FILE *f = NULL;
 	Canal c;
 	LinkedList3 canales;
 	char aux;
 	LinkedList4 programas;
 	Programa p;
+	
+	*num_canales = 0;
 
 	f = fopen ("canales.txt", "r");
 	if (f == NULL) {
@@ -183,6 +185,7 @@ LinkedList3 canalesFileToList () {
 			
 			LINKEDLISTPROGRAMA_goToHead(&programas);
 			while (!LINKEDLISTPROGRAMA_isAtEnd(programas)) {
+				(*num_canales)++;
 				p = LINKEDLISTPROGRAMA_get(&programas);
 				if (!strcmp(p.cadena, c.nombre)) {
 					LINKEDLISTPROGRAMA_add(&c.programas, p);
@@ -313,9 +316,10 @@ void mostrarCanales (LinkedList3 canales) {
 ************************************************/
 int canalUnico (char nombre[100], Canal *c) {
 	LinkedList3 canales;
-	int found = 0;
+	int found;
 
-	canales = canalesFileToList();
+	canales = canalesFileToList(&found);
+	found = 0;
 	LINKEDLISTCANALES_goToHead(&canales);
 	while (!LINKEDLISTCANALES_isAtEnd(canales) && !found) {
 		*c = LINKEDLISTCANALES_get(&canales);
@@ -340,7 +344,8 @@ int nombreUnico (char nombre[100], Programa *p) {
 	LinkedList3 canales;
 	Canal c;
 
-	canales = canalesFileToList();
+	canales = canalesFileToList(&found);
+	found = 0;
 	LINKEDLISTCANALES_goToHead(&canales);
 	while (!LINKEDLISTCANALES_isAtEnd(canales)) {
 		c = LINKEDLISTCANALES_get(&canales);	
@@ -483,8 +488,9 @@ void crearCanal (LinkedList3 *canales) {
 ************************************************/
 void runOptionCanales (int option, int *quit) {
 	LinkedList3 canales;
-	
-	canales = canalesFileToList();
+	int num_canales;
+
+	canales = canalesFileToList(&num_canales);
 	switch (option) {
 		case 1:
 			crearCanal(&canales);
@@ -513,7 +519,37 @@ void runOptionCanales (int option, int *quit) {
 
 /***********************************************
 *
-* @Finalidad: Conjunto de interacciones de los canales..
+* @Finalidad: Generar una estructura dinamica con todos los canales.
+* @Parametros: out: *array = Estructura dinamica con los datos rellenados.
+* @Retorno: ----.
+* 
+************************************************/
+void listaAArrayDinamico (Canal *array) {
+	LinkedList3 canales;
+	int num_canales;	
+	Canal c;
+	int i = 0;
+
+	canales = canalesFileToList(&num_canales);
+	LINKEDLISTCANALES_goToHead(&canales);
+	if (LINKEDLISTCANALES_isAtEnd(canales)) {
+		printf ("\tERROR (No hay canales en el sistema)\n");
+	}
+	else {
+		array = (Canal *)malloc(sizeof(Canal) * num_canales);
+		while (!LINKEDLISTCANALES_isAtEnd(canales)) {
+			c = LINKEDLISTCANALES_get(&canales);
+			strcpy (array[i].nombre, c.nombre);
+			array[i].coste_suscripcion = c.coste_suscripcion;
+			i++;
+			LINKEDLISTCANALES_next(&canales);
+		}
+	}
+}
+
+/***********************************************
+*
+* @Finalidad: Conjunto de interacciones de los canales.
 * @Parametros: ----.
 * @Retorno: ----.
 * 
