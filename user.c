@@ -659,6 +659,11 @@ void registroTarjeta(Persona *p) {
 ************************************************/
 void visualizarCanales () {
 	// Añadir logica de ordenacion.
+	int num_canales;
+	Canal *c;
+	
+	c = listaAArrayDinamico(&num_canales);
+	selectionSort(c, num_canales);
 }
 
 /***********************************************

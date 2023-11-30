@@ -182,10 +182,9 @@ LinkedList3 canalesFileToList (int *num_canales) {
 			fscanf(f, "%f", &c.coste_suscripcion);
 			fscanf(f, "%c", &aux);
 			c.programas = LINKEDLISTPROGRAMA_create();
-			
+			(*num_canales)++;
 			LINKEDLISTPROGRAMA_goToHead(&programas);
 			while (!LINKEDLISTPROGRAMA_isAtEnd(programas)) {
-				(*num_canales)++;
 				p = LINKEDLISTPROGRAMA_get(&programas);
 				if (!strcmp(p.cadena, c.nombre)) {
 					LINKEDLISTPROGRAMA_add(&c.programas, p);
@@ -519,32 +518,63 @@ void runOptionCanales (int option, int *quit) {
 
 /***********************************************
 *
-* @Finalidad: Generar una estructura dinamica con todos los canales.
-* @Parametros: out: *array = Estructura dinamica con los datos rellenados.
+* @Finalidad: Ordenar alfabeticamente un array.
+* @Parametros: 	in: *c = Array de canales a ordenar.
+*				in: num_canales = Numero de canales a ordenar.
 * @Retorno: ----.
 * 
 ************************************************/
-void listaAArrayDinamico (Canal *array) {
+void selectionSort (Canal *c, int num_canales) {
+	Canal minim;
+	int i, j, posminim;
+		for (j = 0; j < (num_canales - 1); j++) {
+			minim = c[j];
+			posminim = j;
+			for (i = j+1; i < num_canales; i++) {
+				if (strcmp(c[i].nombre, minim.nombre) < 0) {
+					minim = c[i];
+					posminim = i;
+				}
+			}
+			c[posminim] = c[j];
+			c[j] = minim;
+		}
+
+	for (i = 0; i < num_canales; i++) {
+		printf ("Nombre canal: %s\n", c[i].nombre);
+		printf ("Coste suscripcion%f\n", c[i].coste_suscripcion);
+	}
+}
+
+/***********************************************
+*
+* @Finalidad: Generar una estructura dinamica con todos los canales.
+* @Parametros: in/out = *num_canales = Numero de canales existentes en el sistema.
+* @Retorno: Retorna un array dinamico de todos los canales.
+* 
+************************************************/
+Canal * listaAArrayDinamico (int *num_canales) {
 	LinkedList3 canales;
-	int num_canales;	
-	Canal c;
+	Canal c, *array;;
 	int i = 0;
 
-	canales = canalesFileToList(&num_canales);
+	canales = canalesFileToList(num_canales);
 	LINKEDLISTCANALES_goToHead(&canales);
 	if (LINKEDLISTCANALES_isAtEnd(canales)) {
 		printf ("\tERROR (No hay canales en el sistema)\n");
 	}
 	else {
-		array = (Canal *)malloc(sizeof(Canal) * num_canales);
+		array = (Canal *)malloc(sizeof(Canal) * (*num_canales));
 		while (!LINKEDLISTCANALES_isAtEnd(canales)) {
 			c = LINKEDLISTCANALES_get(&canales);
+			todoAMinusculas(c.nombre);
 			strcpy (array[i].nombre, c.nombre);
 			array[i].coste_suscripcion = c.coste_suscripcion;
 			i++;
 			LINKEDLISTCANALES_next(&canales);
 		}
 	}
+	return array;
 }
 
 /***********************************************

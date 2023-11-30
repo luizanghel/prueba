@@ -9,6 +9,15 @@
 
 /***********************************************
 *
+* @Finalidad: Convertir un conjunto de caracteres todo a minusculas.
+* @Parametros:	in/out: palabra = Palabra a verificar y donde finalmente estara la correcta.
+* @Retorno: ----.
+* 
+************************************************/
+void todoAMinusculas (char palabra[MAX_CHAR_SIMPLE]);
+
+/***********************************************
+*
 * @Finalidad: Verificar si una palabra empieza por una mayuscula y el resto son minusculas.
 * @Parametros: 	in: palabra[] = Conjunto de caracteres a verificar.
 *				in: option = Tipo de palabra que esta recibiendo.

@@ -376,3 +376,20 @@ float solicitarFloat (char texto[MAX_CHAR_SIMPLE]) {
 	
 	return numero;
 }
+
+/***********************************************
+*
+* @Finalidad: Convertir un conjunto de caracteres todo a minusculas.
+* @Parametros:	in/out: palabra = Palabra a verificar y donde finalmente estara la correcta.
+* @Retorno: ----.
+* 
+************************************************/
+void todoAMinusculas (char palabra[MAX_CHAR_SIMPLE]) {
+	int i = 0;
+
+	for (i = 0; palabra[i] != '\0'; i++) {
+		if (palabra[i] >= 'A' && palabra[i] <= 'Z') {
+            palabra[i] = palabra[i] + ('a' - 'A');
+        }
+	}
+}
