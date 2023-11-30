@@ -650,10 +650,24 @@ void registroTarjeta(Persona *p) {
 	}
 }
 
+/***********************************************
+*
+* @Finalidad: 
+* @Parametros: 	// Se llena en la siguiente TT
+* @Retorno:
+* 
+************************************************/
 void visualizarCanales () {
 	// Añadir logica de ordenacion.
 }
 
+/***********************************************
+*
+* @Finalidad: Mostrar un menu y ejecutar la opcion introducida por el usuario.
+* @Parametros: in/out: p = Perfil de persona que se ha registrado/iniciado sesion.
+* @Retorno: ----.
+* 
+************************************************/
 void modoCliente (Persona p) {
 	int option;
 
