@@ -477,45 +477,68 @@ void crearCanal (LinkedList3 *canales) {
 	}
 
 }
-void eliminar(linkedlist2 *list, int dniNumber){
-	int found=0;
-	Actor currentActor;
 
-	LINKEDLISTcanals_goToHead(list);
-	while(!LINKEDLIST_canals_isAtEnd(*list)&& !found){
-		currentCanal = LINKEDLISTcanals_get(list);
-		if(currentCanal.dni.numeros == dniNumber){
-			found=1;
-			if(!currentCanal.contract){
-				LINKEDLISTcanals_remove(list);
-				printf("Canal with dni %d removed succesfully.\n", dniNumber);
-				actualizarFicheroCanal(*list);
-			}else{
-				printf("ERROR (El canal que se ha intentado eiminar se encuentra contratado...)");
+/***********************************************
+*
+* @Finalidad: Eliminar el canal si este te lo permitw
+* @Parametros: in/out: *list = Lista que engloba todos los canales registrados.
+			   in/out: char nombreCanal = El nombre del canal que el productor quiere eliminar.
+* @Retorno: ----.
+* 
+************************************************/
+
+void eliminarC(LinkedList3 *list, char  nombreCanal[]){
+	int found = 0;
+	Canal currentCanal;
+	int programas = 0;
+
+	LINKEDLISTCANALES_goToHead(list);
+	while(!LINKEDLISTCANALES_isAtEnd(*list) && !found){
+		currentCanal = LINKEDLISTCANALES_get(list);
+		if(!strcmp(nombreCanal, currentCanal.nombre)){
+			found = 1;
+			LINKEDLISTPROGRAMA_goToHead(&currentCanal.programas);
+			if (LINKEDLISTPROGRAMA_isAtEnd(currentCanal.programas)) {
+				LINKEDLISTCANALES_remove(list);
+				actualizarFicheroCanales(*list);
+				printf("Canal with name %s removed succesfully.\n", nombreCanal);
+			}
+			else {
+				programas = 1;
 			}
 		}
+		else {
+			LINKEDLISTCANALES_next(list);
+		}
+	}
 		
-		LINKEDLISTcanals_next(list);
-
+	if (programas) {
+		printf ("El canal que esta intentndo eliminar contiene programas.\n");
 	}
 	if(!found){
-		printf("CAnal with DNI %d not found.\n", dninumber);
+		printf("Canal with name %s not found.\n", nombreCanal);
 	}
 	
 }
 
+/***********************************************
+*
+* @Finalidad: Nombrar el canal que se desea eliminar.
+* @Parametros: ----.
+* @Retorno: ----.
+* 
+************************************************/
 void eliminarCanal(){
-	//linkedlist lsita;
-	lista = LINKEDLISTcanales_create();
-
-	//int c.nombre; 
+	LinkedList3 lista;
+	int num_canales;
+	char nombre[MAX_CHAR_SIMPLE]; 
 	
+	lista = canalesFileToList(&num_canales);
 	printf("\nEnter the canal name to remove: ");
-	scanf("%d", &c.nombre);
-
-	eliminar(&lista, numdni);//ns cual es la variable que hemos de eliminar para que los canales se eliminen
-	
-	
+	scanf("%s", nombre);
+	printf ("%s\n", nombre);
+	eliminarC(&lista, nombre);
+		
 }
 
 /***********************************************
@@ -538,7 +561,7 @@ void runOptionCanales (int option, int *quit) {
 			// modificarCanal();
 			break;
 		case 3: 
-			// eliminarCanal();
+			 eliminarCanal();
 			break;
 		case 4:
 			mostrarCanales(canales);
