@@ -1,6 +1,8 @@
 #include <stdio.h>
 
 #include "user.h"
+#include "linkedlistcanales.h"
+#include "linkedlistprograma.h"
 
 /***********************************************
 *
@@ -954,9 +956,10 @@ int menuCliente () {
 	do {
 		printf ("Bienvenido al MENU CLIENTE. ¿Que desea realizar?\n");
 		printf ("1- Registrar tarjeta\n");
-		printf ("2- Salir\n");
+        printf("2- Listar programas canal\n");
+		printf ("3- Salir\n");
 		printf ("Entra opcion: ");
-		error = option2AsNumber(&option, 1, 2);
+		error = option2AsNumber(&option, 1, 3);
 	} while (error);
 	
 	return option;
@@ -992,7 +995,68 @@ void registroTarjeta(Persona *p) {
 		printf ("La tarjeta se ha añadido correctamente!\n");
 	}
 }
+void listarprogramas(char canal[50]){
+    FILE *f;
+    LinkedList4 programa;
+    Programa p;
+    int i=0;
 
+    f=fopen("programas.txt", "r");
+    if (f==NULL){
+        printf("ERROR, no existe este archivo\n");
+    }else{
+        programa=programaFileToList();
+        LINKEDLISTPROGRAMA_goToHead(&programa);
+        while (!LINKEDLISTPROGRAMA_isAtEnd(programa)){
+            p=LINKEDLISTPROGRAMA_get(&programa);
+            if (strcmp(p.cadena, canal)==0){
+                if (i==0){
+                    printf("Los programas de este canal son:\n");
+                }
+                i=1;
+                printf("Nom: %s Categoria: %s Hora: %s\n", p.nom, p.categoria, p.emisio);
+            }
+            LINKEDLISTPROGRAMA_next(&programa);
+        }
+        if (i==0){
+            printf("No hay programas registrados en este canal\n");
+        }
+        fclose(f);
+    }
+}
+void mostrarprog(){
+    char canal[50];
+    int trobat=0;
+    FILE *f;
+    LinkedList3 canales;
+    Canal c;
+
+
+    printf("Que canal quieres mostrar? ");
+    scanf("%s", canal);
+
+    f= fopen("canales.txt", "r");
+    if (f==NULL){
+        printf("ERROR, no existe este archivo\n");
+    }else{
+      canales= canalesFileToList();
+        LINKEDLISTCANALES_goToHead(&canales);
+        while (!LINKEDLISTCANALES_isAtEnd(canales) && !trobat){
+            c= LINKEDLISTCANALES_get(&canales);
+            if (strcmp(c.nombre, canal)==0){
+                trobat=1;
+                //listarprogramas(canal);
+            }else{
+                LINKEDLISTCANALES_next(&canales);
+            }
+        }
+        if (!trobat){
+            printf("Este canal no existe\n");
+        }
+        fclose(f);
+    }
+
+}
 void modoCliente (Persona p) {
 	int option;
 
@@ -1002,7 +1066,11 @@ void modoCliente (Persona p) {
 			case 1:
 				// Registro tarjeta
 				registroTarjeta(&p);
-				break;
+            break;
+            case 2:
+                //Listar programas canal
+                mostrarprog();
+            break;
 		}
 	} while (option != 2);
 
