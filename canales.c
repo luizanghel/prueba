@@ -479,6 +479,69 @@ void crearCanal (LinkedList3 *canales) {
 
 /***********************************************
 *
+* @Finalidad: Eliminar el canal si este te lo permitw
+* @Parametros: in/out: *list = Lista que engloba todos los canales registrados.
+			   in/out: char nombreCanal = El nombre del canal que el productor quiere eliminar.
+* @Retorno: ----.
+* 
+************************************************/
+
+void eliminarC(LinkedList3 *list, char  nombreCanal[]){
+	int found = 0;
+	Canal currentCanal;
+	int programas = 0;
+
+	LINKEDLISTCANALES_goToHead(list);
+	while(!LINKEDLISTCANALES_isAtEnd(*list) && !found){
+		currentCanal = LINKEDLISTCANALES_get(list);
+		if(!strcmp(nombreCanal, currentCanal.nombre)){
+			found = 1;
+			LINKEDLISTPROGRAMA_goToHead(&currentCanal.programas);
+			if (LINKEDLISTPROGRAMA_isAtEnd(currentCanal.programas)) {
+				LINKEDLISTCANALES_remove(list);
+				actualizarFicheroCanales(*list);
+				printf("Canal with name %s removed succesfully.\n", nombreCanal);
+			}
+			else {
+				programas = 1;
+			}
+		}
+		else {
+			LINKEDLISTCANALES_next(list);
+		}
+	}
+		
+	if (programas) {
+		printf ("El canal que esta intentndo eliminar contiene programas.\n");
+	}
+	if(!found){
+		printf("Canal with name %s not found.\n", nombreCanal);
+	}
+	
+}
+
+/***********************************************
+*
+* @Finalidad: Nombrar el canal que se desea eliminar.
+* @Parametros: ----.
+* @Retorno: ----.
+* 
+************************************************/
+void eliminarCanal(){
+	LinkedList3 lista;
+	int num_canales;
+	char nombre[MAX_CHAR_SIMPLE]; 
+	
+	lista = canalesFileToList(&num_canales);
+	printf("\nEnter the canal name to remove: ");
+	scanf("%s", nombre);
+	printf ("%s\n", nombre);
+	eliminarC(&lista, nombre);
+		
+}
+
+/***********************************************
+*
 * @Finalidad: Ejecutar las opciones del menu.
 * @Parametros: 	in: option = Opcion a ejecutar.
 *				out: *quit = Flag que indica la salida del menu.
@@ -498,7 +561,7 @@ void runOptionCanales (int option, int *quit) {
 			// modificarCanal();
 			break;
 		case 3: 
-			// eliminarCanal();
+			 eliminarCanal();
 			break;
 		case 4:
 			mostrarCanales(canales);			
