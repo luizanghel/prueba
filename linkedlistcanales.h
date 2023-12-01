@@ -17,6 +17,8 @@ typedef struct {
 	char nombre[100];
 	float coste_suscripcion;
 	LinkedList4 programas;
+	char **suscriptores;
+	int num_suscriptores;
 } Canal;
 
 // Data types
