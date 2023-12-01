@@ -2,10 +2,7 @@
 #include <stdio.h>
 
 
-#include "actors.h"
-#include "linkedlistcanales.h"
-#include "linkedlistprograma.h"
-#include "dato.h"
+#include "canales.h"
 
 #define MAX_CHAR_SIMPLE 	  200
 #define MAX_ACTORES_PROGRAMA	3
@@ -162,13 +159,15 @@ void leerCanalesYProgramas (LinkedList3 canales) {
 * @Retorno: Retorna una lista con todos los canales y programas.
 * 
 ************************************************/
-LinkedList3 canalesFileToList () {
+LinkedList3 canalesFileToList (int *num_canales) {
 	FILE *f = NULL;
 	Canal c;
 	LinkedList3 canales;
 	char aux;
 	LinkedList4 programas;
 	Programa p;
+	
+	*num_canales = 0;
 
 	f = fopen ("canales.txt", "r");
 	if (f == NULL) {
@@ -183,7 +182,7 @@ LinkedList3 canalesFileToList () {
 			fscanf(f, "%f", &c.coste_suscripcion);
 			fscanf(f, "%c", &aux);
 			c.programas = LINKEDLISTPROGRAMA_create();
-			
+			(*num_canales)++;
 			LINKEDLISTPROGRAMA_goToHead(&programas);
 			while (!LINKEDLISTPROGRAMA_isAtEnd(programas)) {
 				p = LINKEDLISTPROGRAMA_get(&programas);
@@ -316,9 +315,10 @@ void mostrarCanales (LinkedList3 canales) {
 ************************************************/
 int canalUnico (char nombre[100], Canal *c) {
 	LinkedList3 canales;
-	int found = 0;
+	int found;
 
-	canales = canalesFileToList();
+	canales = canalesFileToList(&found);
+	found = 0;
 	LINKEDLISTCANALES_goToHead(&canales);
 	while (!LINKEDLISTCANALES_isAtEnd(canales) && !found) {
 		*c = LINKEDLISTCANALES_get(&canales);
@@ -343,7 +343,8 @@ int nombreUnico (char nombre[100], Programa *p) {
 	LinkedList3 canales;
 	Canal c;
 
-	canales = canalesFileToList();
+	canales = canalesFileToList(&found);
+	found = 0;
 	LINKEDLISTCANALES_goToHead(&canales);
 	while (!LINKEDLISTCANALES_isAtEnd(canales)) {
 		c = LINKEDLISTCANALES_get(&canales);	
@@ -486,8 +487,9 @@ void crearCanal (LinkedList3 *canales) {
 ************************************************/
 void runOptionCanales (int option, int *quit) {
 	LinkedList3 canales;
-	
-	canales = canalesFileToList();
+	int num_canales;
+
+	canales = canalesFileToList(&num_canales);
 	switch (option) {
 		case 1:
 			crearCanal(&canales);
@@ -499,8 +501,7 @@ void runOptionCanales (int option, int *quit) {
 			// eliminarCanal();
 			break;
 		case 4:
-			mostrarCanales(canales);
-			
+			mostrarCanales(canales);			
 			break;
 		case 5: 
 			anadirProgramaACanal(&canales);
@@ -517,7 +518,68 @@ void runOptionCanales (int option, int *quit) {
 
 /***********************************************
 *
-* @Finalidad: Conjunto de interacciones de los canales..
+* @Finalidad: Ordenar alfabeticamente un array.
+* @Parametros: 	in: *c = Array de canales a ordenar.
+*				in: num_canales = Numero de canales a ordenar.
+* @Retorno: ----.
+* 
+************************************************/
+void selectionSort (Canal *c, int num_canales) {
+	Canal minim;
+	int i, j, posminim;
+		for (j = 0; j < (num_canales - 1); j++) {
+			minim = c[j];
+			posminim = j;
+			for (i = j+1; i < num_canales; i++) {
+				if (strcmp(c[i].nombre, minim.nombre) < 0) {
+					minim = c[i];
+					posminim = i;
+				}
+			}
+			c[posminim] = c[j];
+			c[j] = minim;
+		}
+
+	for (i = 0; i < num_canales; i++) {
+		printf ("Nombre canal: %s\n", c[i].nombre);
+		printf ("Coste suscripcion%f\n", c[i].coste_suscripcion);
+	}
+}
+
+/***********************************************
+*
+* @Finalidad: Generar una estructura dinamica con todos los canales.
+* @Parametros: in/out = *num_canales = Numero de canales existentes en el sistema.
+* @Retorno: Retorna un array dinamico de todos los canales.
+* 
+************************************************/
+Canal * listaAArrayDinamico (int *num_canales) {
+	LinkedList3 canales;
+	Canal c, *array;;
+	int i = 0;
+
+	canales = canalesFileToList(num_canales);
+	LINKEDLISTCANALES_goToHead(&canales);
+	if (LINKEDLISTCANALES_isAtEnd(canales)) {
+		printf ("\tERROR (No hay canales en el sistema)\n");
+	}
+	else {
+		array = (Canal *)malloc(sizeof(Canal) * (*num_canales));
+		while (!LINKEDLISTCANALES_isAtEnd(canales)) {
+			c = LINKEDLISTCANALES_get(&canales);
+			todoAMinusculas(c.nombre);
+			strcpy (array[i].nombre, c.nombre);
+			array[i].coste_suscripcion = c.coste_suscripcion;
+			i++;
+			LINKEDLISTCANALES_next(&canales);
+		}
+	}
+	return array;
+}
+
+/***********************************************
+*
+* @Finalidad: Conjunto de interacciones de los canales.
 * @Parametros: ----.
 * @Retorno: ----.
 * 
