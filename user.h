@@ -10,6 +10,7 @@
 #include "canales.h"
 #include "dato.h"
 #include "actors.h"
+#include "linkedlistcanales.h"
 
 // Constantes 
 

@@ -611,10 +611,11 @@ int menuCliente () {
 	do {
 		printf ("Bienvenido al MENU CLIENTE. ¿Que desea realizar?\n");
 		printf ("1- Registrar tarjeta\n");
-        printf("2- Listar programas canal\n");
-		printf ("3- Salir\n");
+        printf ("2- Listar programas canal\n");
+		printf ("3- Visualizar canales por audiencia\n");
+		printf ("4- Salir\n");
 		printf ("Entra opcion: ");
-		error = option2AsNumber(&option, 1, 3);
+		error = option2AsNumber(&option, 1, 4);
 	} while (error);
 	
 	return option;
@@ -679,32 +680,35 @@ void listarprogramas(char canal[50]){
         fclose(f);
     }
 }
+
 void mostrarprog(){
-    char canal[50];
+    char canal[50], aux;
     int trobat=0;
     FILE *f;
     LinkedList3 canales;
     Canal c;
 
-
     printf("Que canal quieres mostrar? ");
     scanf("%s", canal);
+   	scanf ("%c", &aux);
 
-    f= fopen("canales.txt", "r");
+	f= fopen("canales.txt", "r");
     if (f==NULL){
         printf("ERROR, no existe este archivo\n");
     }else{
-      canales= canalesFileToList();
+      canales = canalesFileToList(&trobat);
+	  trobat = 0;
         LINKEDLISTCANALES_goToHead(&canales);
         while (!LINKEDLISTCANALES_isAtEnd(canales) && !trobat){
-            c= LINKEDLISTCANALES_get(&canales);
+            c = LINKEDLISTCANALES_get(&canales);
             if (strcmp(c.nombre, canal)==0){
                 trobat=1;
-                //listarprogramas(canal);
-            }else{
-                LINKEDLISTCANALES_next(&canales);
+                listarprogramas(canal);
             }
-        }
+			else {
+				LINKEDLISTCANALES_next(&canales);
+        	}
+		}
         if (!trobat){
             printf("Este canal no existe\n");
         }
@@ -712,6 +716,30 @@ void mostrarprog(){
     }
 
 }
+
+/***********************************************
+*
+* @Finalidad: 
+* @Parametros: 	// Se llena en la siguiente TT
+* @Retorno:
+* 
+************************************************/
+void visualizarCanales () {
+	// Añadir logica de ordenacion.
+	int num_canales;
+	Canal *c;
+	
+	c = listaAArrayDinamico(&num_canales);
+	selectionSort(c, num_canales);
+}
+
+/***********************************************
+*
+* @Finalidad: Mostrar un menu y ejecutar la opcion introducida por el usuario.
+* @Parametros: in/out: p = Perfil de persona que se ha registrado/iniciado sesion.
+* @Retorno: ----.
+* 
+************************************************/
 void modoCliente (Persona p) {
 	int option;
 
@@ -721,13 +749,19 @@ void modoCliente (Persona p) {
 			case 1:
 				// Registro tarjeta
 				registroTarjeta(&p);
-            break;
+            	break;
             case 2:
                 //Listar programas canal
                 mostrarprog();
-            break;
+				break;
+			case 3:
+				visualizarCanales();
+				break;
+			case 4:
+				printf ("¡Hasta pronto!\n");
+				break;
 		}
-	} while (option != 2);
+	} while (option != 4);
 
 }
 

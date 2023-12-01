@@ -18,7 +18,7 @@ linkedlistprograma.o: linkedlistprograma.c linkedlistprograma.h
 canales.o: canales.c linkedlistcanales.h linkedlistprograma.h dato.h canales.h
 	gcc canales.c -g -c
 
-user.o: user.c linkedlist.h dato.h canales.h dato.h user.h
+user.o: user.c linkedlist.h dato.h canales.h dato.h linkedlistcanales.h user.h
 	gcc user.c -g -c
 
 linkedlistactores.o: linkedlistactores.c linkedlistactores.h
