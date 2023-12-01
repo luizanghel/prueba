@@ -8,10 +8,11 @@
 
 #include "linkedlist.h"
 #include "canales.h"
+#include "dato.h"
 #include "actors.h"
+#include "linkedlistcanales.h"
 
 // Constantes 
-#define MAX_CHAR_SIMPLE 100
 
 // Tipo
 typedef struct {

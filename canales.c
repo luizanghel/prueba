@@ -1,11 +1,10 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "actors.h"
-#include "linkedlistcanales.h"
-#include "linkedlistprograma.h"
 
-#define MAX_CHAR_SIMPLE 	  100
+#include "canales.h"
+
+#define MAX_CHAR_SIMPLE 	  200
 #define MAX_ACTORES_PROGRAMA	3
 
 /***********************************************
@@ -74,7 +73,6 @@ void mostraProgramas (LinkedList4 programa) {
 		printf ("Canal: %s\n", p.cadena);
 		printf ("Categoria: %s\n", p.categoria);
 		printf ("Emision: %s\n", p.emisio);
-		printf ("Duracio: %s\n", p.duracio);
 		for (int i = 0; i <3; i++) {
 			printf ("Actor -> [Numero: %d.] | [Letra: %c.]\n", p.actorID[i].num, p.actorID[i].letra);
 		}
@@ -110,9 +108,9 @@ LinkedList4 programaFileToList () {
 			p.categoria[strlen(p.categoria) - 1] = '\0';
 			fgets(p.emisio, MAX_CHAR_SIMPLE, f);
 			p.emisio[strlen(p.emisio) - 1] = '\0';
-			fgets(p.duracio, MAX_CHAR_SIMPLE, f);
-			p.duracio[strlen(p.duracio) - 1] = '\0';
-			
+			fscanf(f, "%d", &p.duracio);
+			fscanf (f, "%c", &aux);
+				
 			// Actores asignados
 			for (int i = 0; i < 3; i++) {
 				fscanf(f, "%d", &p.actorID[i].num);
@@ -213,17 +211,12 @@ LinkedList3 canalesFileToList () {
 Programa solicitarDatosPrograma () {
 	Programa p;
 
-	printf ("Introduce nombre del programa: ");
-	scanf ("%s", p.nom);
-	printf ("Introduce cadena del programa: ");
-	scanf ("%s", p.cadena);
-	printf ("Introduce categoria del programa: ");
-	scanf ("%s", p.categoria);
-	printf ("Introduce hora de emision(formato HH:MM): ");
-	scanf ("%s", p.emisio);
-	printf ("Introduce duracion del programa (formato HH:MM): ");
-	scanf ("%s", p.duracio);
-
+	solicitarPalabra("\tIntroduce nombre del programa: ", p.nom, 0);
+	solicitarPalabra("\tIntroduce cadena del programa: ", p.cadena, 0);
+	solicitarPalabra("\tIntroduce categoria del programa: ", p.categoria, 0);
+	solicitarPalabra("\tIntroduce hora emision del programa: ", p.emisio, 0);
+	p.duracio = solicitarFloat("\tIntroduce duracion del programa: ");
+	
 	return p;
 }
 
@@ -235,31 +228,33 @@ Programa solicitarDatosPrograma () {
 * 
 ************************************************/
 void actualizarFicheroPrograma (LinkedList4 programas) {
-	FILE *actualizado = NULL;
+	FILE *cambio = NULL;
 	Programa p;
 
-	actualizado = fopen("nuevo.txt", "w");
-	if (actualizado == NULL) {
+	cambio = fopen("nuevo.txt", "a");
+	if (cambio == NULL) {
 		printf ("\tERROR DE SISTEMA (El sistema ha caído. Pongase en contacto con un administrador en la mayor brevedad posible).\n");
 	}
 	else {
 		LINKEDLISTPROGRAMA_goToHead(&programas);
 		while (!LINKEDLISTPROGRAMA_isAtEnd(programas)) {
 			p = LINKEDLISTPROGRAMA_get(&programas);
-			fprintf(actualizado, "%s\n", p.cadena);
-	   		fprintf(actualizado, "%s\n", p.nom);
-	   		fprintf(actualizado, "%s\n", p.categoria);
-		 	fprintf(actualizado, "%s\n", p.emisio);
-	   		fprintf(actualizado, "%s\n", p.duracio);
-	    	for (int i = 0; i < 3; i++) {
-				fprintf(actualizado, "%d%c\n", p.actorID[i].num, p.actorID[i].letra);
+			fprintf(cambio, "%s\n", p.cadena);
+	   		fprintf(cambio, "%s\n", p.nom);
+	   		fprintf(cambio, "%s\n", p.categoria);
+		 	fprintf(cambio, "%s\n", p.emisio);
+	   		fprintf(cambio, "%d\n", p.duracio);
+			
+			for (int i = 0; i < 3; i++) {
+				fprintf(cambio, "%d%c\n", p.actorID[i].num, p.actorID[i].letra);
 			}
 			LINKEDLISTPROGRAMA_next(&programas);
 		}
-		fclose(actualizado);
+		fclose(cambio);
 		remove("programas.txt");
-		rename("nuevo.txt", "programas.txt");
+		rename("nuevo.txt", "programas.txt");	
 	}
+
 }
 
 /***********************************************
@@ -501,8 +496,7 @@ void runOptionCanales (int option, int *quit) {
 			// eliminarCanal();
 			break;
 		case 4:
-			mostrarCanales(canales);
-			
+			mostrarCanales(canales);			
 			break;
 		case 5: 
 			anadirProgramaACanal(&canales);
