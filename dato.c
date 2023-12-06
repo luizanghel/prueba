@@ -345,6 +345,35 @@ int solicitarTelefono (char texto[MAX_CHAR_SIMPLE], int medida) {
 
 /***********************************************
 *
+* @Finalidad: Solicitar un numero caracter.
+* @Parametros:	in: texto[] = Texto que se quiere mostrar al usuario para que introduzca los datos..
+* @Retorno: Devuelve el caracter, cuando se ha comprobado que es correcto.
+* 
+************************************************/
+char solicitarCaracter (char texto[MAX_CHAR_SIMPLE]) {
+	int error = 0;
+	char palabra[MAX_CHAR_SIMPLE];
+	
+	do {
+		printf ("%s", texto);
+		fgets(palabra, MAX_CHAR_SIMPLE, stdin);
+		palabra[strlen(palabra) - 1] = '\0';
+		
+		if (palabra[1] != '\0' &&  (palabra[0] == 'S' || palabra[0] == 'N')) {
+			error = 1;
+			printf ("\tERROR (Debes introducir un caracter valido)\n");
+		}
+		else {
+			error = 0;
+		}
+
+	} while (error);
+	
+	return palabra[0];
+}
+
+/***********************************************
+*
 * @Finalidad: Solicitar un numero decimal.
 * @Parametros:	in: texto[] = Texto que se quiere mostrar al usuario para que introduzca los datos..
 * @Retorno: Devuelve el numero decimal, cuando se ha comprobado que es correcto.

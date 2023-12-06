@@ -744,16 +744,35 @@ void visualizarCanales () {
 * 
 ************************************************/
 void suscribirseACanal (Persona p) {
-	char canal[MAX_CHAR_SIMPLE];
+	char canal[MAX_CHAR_SIMPLE], opcion;
 	Canal c;
+	int pin;
 
 	printf ("--Canales disponibles--\n");
 	mostrarCanales();
 	solicitarPalabra("\nIntroduce canal a suscribirte: ", canal, 0);
 	if (canalUnico(canal, &c)) {
 		printf ("El coste de suscripcion del canal '%s' es de %.2f\n", c.nombre, c.coste_suscripcion);
+		
+		if (p.tarjeta.numero != 0) {
 
-		//asignarClienteACanal(c.nombre, p.correo);		
+			do {
+				pin = solicitarTelefono("Introduce pin de la tarjeta: ", 4);
+			} while (pin != p.tarjeta.pin);
+
+			printf ("Esta seguro que quiere suscribirse al canal '%s' con un coste de %.2f? La transaccion se efectuara en la tarjeta %d.\n", c.nombre, c.coste_suscripcion, p.tarjeta.numero);
+			opcion = solicitarCaracter("Introduce una de las posibles opciones (S/N): ");	
+			
+			if (opcion == 'S' || opcion == 's') {
+				//asignarClienteACanal(c.nombre, p.correo);		
+			}
+			else {
+				printf ("Se ha cancelado la transaccion.\n");
+			}
+		}
+		else {
+			printf ("\tERROR (Antes de suscribirte a un canal, debes tener una tarjeta registrada)\n");
+		}
 	}
 	else {
 		printf ("\tERROR (El canal que ha introducido no existe)\n");
@@ -794,4 +813,3 @@ void modoCliente (Persona p) {
 	} while (option != 5);
 
 }
-

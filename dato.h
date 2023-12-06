@@ -9,6 +9,15 @@
 
 /***********************************************
 *
+* @Finalidad: Solicitar un numero caracter.
+* @Parametros:	in: texto[] = Texto que se quiere mostrar al usuario para que introduzca los datos..
+* @Retorno: Devuelve el caracter, cuando se ha comprobado que es correcto.
+* 
+************************************************/
+char solicitarCaracter (char texto[MAX_CHAR_SIMPLE]);
+
+/***********************************************
+*
 * @Finalidad: Convertir un conjunto de caracteres todo a minusculas.
 * @Parametros:	in/out: palabra = Palabra a verificar y donde finalmente estara la correcta.
 * @Retorno: ----.
