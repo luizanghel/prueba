@@ -359,7 +359,7 @@ char solicitarCaracter (char texto[MAX_CHAR_SIMPLE]) {
 		fgets(palabra, MAX_CHAR_SIMPLE, stdin);
 		palabra[strlen(palabra) - 1] = '\0';
 		
-		if (palabra[1] != '\0' &&  (palabra[0] == 'S' || palabra[0] == 'N')) {
+		if (palabra[1] != '\0' && palabra[0] != 'S' && palabra[0] != 'N') {
 			error = 1;
 			printf ("\tERROR (Debes introducir un caracter valido)\n");
 		}

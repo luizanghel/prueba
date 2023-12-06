@@ -763,7 +763,8 @@ void suscribirseACanal (Persona p) {
 			printf ("Esta seguro que quiere suscribirse al canal '%s' con un coste de %.2f? La transaccion se efectuara en la tarjeta %d.\n", c.nombre, c.coste_suscripcion, p.tarjeta.numero);
 			opcion = solicitarCaracter("Introduce una de las posibles opciones (S/N): ");	
 			
-			if (opcion == 'S' || opcion == 's') {
+			if (opcion == 'S') {
+
 				asignarUsuarioACanal(c.nombre, p.correo);		
 			}
 			else {

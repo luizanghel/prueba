@@ -702,6 +702,8 @@ void asignarUsuarioACanal(char canal[MAX_CHAR_SIMPLE], char usuario[MAX_CHAR_SIM
 				strcpy(c.suscriptores[c.num_suscriptores - 1], usuario);
 				LINKEDLISTCANALES_remove(&canales);
 				LINKEDLISTCANALES_add(&canales, c);
+				actualizarFicheroCanales(canales);
+				printf ("La suscripcion se ha efectuado correctamente. Ya tiene acceso a todos los programas de %s.\n", c.nombre);
 			}
 			else {
 				printf ("\tERROR (Ya hay una suscripcion activa a este canal con esta cuenta)\n");
