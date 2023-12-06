@@ -744,6 +744,20 @@ void visualizarCanales () {
 * 
 ************************************************/
 void suscribirseACanal (Persona p) {
+	char canal[MAX_CHAR_SIMPLE];
+	Canal c;
+
+	printf ("--Canales disponibles--\n");
+	mostrarCanales();
+	solicitarPalabra("\nIntroduce canal a suscribirte: ", canal, 0);
+	if (canalUnico(canal, &c)) {
+		printf ("El coste de suscripcion del canal '%s' es de %.2f\n", c.nombre, c.coste_suscripcion);
+
+		//asignarClienteACanal(c.nombre, p.correo);		
+	}
+	else {
+		printf ("\tERROR (El canal que ha introducido no existe)\n");
+	}
 }
 
 /***********************************************
