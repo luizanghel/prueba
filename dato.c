@@ -2,6 +2,30 @@
 
 /***********************************************
 *
+* @Finalidad: Comprobar que los parametros introducudidos por el usuario sean correctos y se encuentren dentro del rango..
+* @Parametros:	out: option = Valor de la opcion del menú a interaccionar.
+*				in: min = Valor minimo permitido en el menú.
+*				in: max = Valor máximo permitido en el menú.
+* @Retorno: Devuelve si el numero introducido se encuentra dentro del rango o no.
+* 
+************************************************/
+int optionAsNumber (int *option, int min, int max) {
+	char option_char[MAX_CHAR_SIMPLE];
+	int error = 0;
+
+	fgets (option_char, MAX_CHAR_SIMPLE, stdin);
+	option_char[strlen(option_char) - 1] = '\0';	
+	*option = atoi(option_char);				
+	
+	if (*option < min || *option > max) {
+		printf ("\n\tERROR: Debes introducir una de las opciones posibles.\n\n");
+		error = 1;
+	}
+	return error;
+}
+
+/***********************************************
+*
 * @Finalidad: Verificar si una caracter es minuscula.
 * @Parametros: in: letra = Caracter a verificar.
 * @Retorno: Retorna un 1 en caso que sea minuscula y un 0 en caso que no sea..

@@ -81,7 +81,7 @@ void leerPersona (Persona p) {
 * 
 ************************************************/
 void mostrarLista(LinkedList usuarios) {
-	FilePersona p;
+	Persona p;
 	int n_clients = 0;
 	LINKEDLIST_goToHead(&usuarios);
 	while (!LINKEDLIST_isAtEnd(usuarios)) {
@@ -112,7 +112,7 @@ LinkedList ficheroALista () {
 	LinkedList users_list;
 	FILE *users = NULL;
 	char aux;
-	FilePersona p;
+	Persona p;
 
 	users = fopen("clients.txt", "r");
 	if (users == NULL) {
@@ -167,7 +167,7 @@ LinkedList ficheroALista () {
 * 
 ************************************************/
 int esPersonaUnica (char correo[MAX_CHAR_SIMPLE], LinkedList *usuarios) {
-	FilePersona p;
+	Persona p;
 	int error = 0;
 
 	LINKEDLIST_goToHead(usuarios);
@@ -216,33 +216,6 @@ int tipoUsuario (Dni dni) {
 
 /***********************************************
 *
-* @Finalidad: Convertir el tipo de los datos al tipo de la lista.
-* @Parametros: in: p = Tipo persona del dato.c/dato.h.
-* @Retorno: Retorna el tipo convertido asociado a la linkedlist.
-* 
-************************************************/
-FilePersona userFileToList (Persona p) {
-	FilePersona p2;
-
-	strcpy(p2.nombre, p.nombre);
-	strcpy(p2.apellido1, p.apellido1);
-	strcpy(p2.apellido2, p.apellido2);
-	strcpy(p2.correo, p.correo);
-	strcpy(p2.password, p.password);
-	strcpy(p2.tarjeta.titular, p.tarjeta.titular);
-	p2.tarjeta.numero = p.tarjeta.numero;
-	p2.tarjeta.pin = p.tarjeta.pin;
-	p2.telefono = p.telefono;
-	p2.dni.numeros = p.dni.numeros;
-	p2.dni.letra = p.dni.letra;
-	p2.tipus = p.tipus;
-
-	return p2;
-
-}
-
-/***********************************************
-*
 * @Finalidad: Escribir el contenido de una lista en un fichero.
 * @Parametros: in: usuarios = Lista de donde saca la informacion.
 * @Retorno: ----.
@@ -250,7 +223,7 @@ FilePersona userFileToList (Persona p) {
 ************************************************/
 void actualizarFichero (LinkedList usuarios) {
 	FILE *actualizado = NULL;
-	FilePersona p;
+	Persona p;
 
 	actualizado = fopen("nuevo.txt", "w");
 	if (actualizado == NULL) {
@@ -287,9 +260,8 @@ void actualizarFichero (LinkedList usuarios) {
 * @Retorno: ----.
 * 
 ************************************************/
-Persona registerUser () {
+Persona registerUser (int *completado) {
 	Persona p;
-	FilePersona registrada;
 	int error = 0;
 	LinkedList usuarios;
 
@@ -298,10 +270,10 @@ Persona registerUser () {
 	error = esPersonaUnica(p.correo, &usuarios);
 	if (!error) {
 		p.tipus = tipoUsuario(p.dni);
-		registrada = userFileToList(p);
-		LINKEDLIST_add(&usuarios, registrada);
+		LINKEDLIST_add(&usuarios, p);
 		actualizarFichero(usuarios);
-		printf ("\n¡Registro completado!. Bienvenido/a %s.\n", registrada.nombre);
+		*completado = 1;
+		printf ("\n¡Registro completado!. Bienvenido/a %s.\n", p.nombre);
 	}
 	else {
 		printf ("\nEl correo ya esta en uso. Vuelva a intentarlo o inicie sesión.\n");
@@ -319,8 +291,8 @@ Persona registerUser () {
 * @Retorno: Retorna los datos completos en caso que el usuario exista. Sino, se ignoran.
 * 
 ************************************************/
-FilePersona existeUsuario(char correo[MAX_CHAR_SIMPLE], char password[MAX_CHAR_SIMPLE], int *existe) {
-	FilePersona p;
+Persona existeUsuario(char correo[MAX_CHAR_SIMPLE], char password[MAX_CHAR_SIMPLE], int *existe) {
+	Persona p;
 	LinkedList usuarios;
 
 	*existe = 0;
@@ -340,41 +312,13 @@ FilePersona existeUsuario(char correo[MAX_CHAR_SIMPLE], char password[MAX_CHAR_S
 
 /***********************************************
 *
-* @Finalidad: Convierte una estructura FilePersona a una Persona..
-* @Parametros:	in: p = Tipo a convertir.
-* @Retorno: Retorna el tipo convertido.
-* 
-************************************************/
-Persona desdeListaAFile (FilePersona p) {
-	Persona p2;
-
-	strcpy(p2.nombre, p.nombre);
-	strcpy(p2.apellido1, p.apellido1);
-	strcpy(p2.apellido2, p.apellido2);
-	strcpy(p2.correo, p.correo);
-	strcpy(p2.password, p.password);
-	strcpy(p2.tarjeta.titular, p.tarjeta.titular);
-	p2.tarjeta.numero = p.tarjeta.numero;
-	p2.tarjeta.pin = p.tarjeta.pin;
-	p2.telefono = p.telefono;
-	p2.dni.numeros = p.dni.numeros;
-	p2.dni.letra = p.dni.letra;
-	p2.tipus = p.tipus;
-
-	return p2;
-}
-
-
-/***********************************************
-*
 * @Finalidad: Iniciar sesion en el sistema.
 * @Parametros: ----.
 * @Retorno: Los datos de la persona.
 * 
 ************************************************/
 Persona iniciarSesion(int *existe) {
-	
-	FilePersona p, usuario;
+	Persona p, usuario;
 	
 	*existe = 0;
 
@@ -389,22 +333,7 @@ Persona iniciarSesion(int *existe) {
 		printf ("\nEl correo electronico o la contraseña son incorrectos. Vuelva a intentarlo o registrese.\n");
 	}
 
-	return desdeListaAFile(usuario);
-}
-
-int option2AsNumber (int *option, int min, int max) {
-	char option_char[MAX_CHAR_SIMPLE];
-	int error = 0;
-
-	fgets (option_char, MAX_CHAR_SIMPLE, stdin);
-	option_char[strlen(option_char) - 1] = '\0';	
-	*option = atoi(option_char);				
-	
-	if (*option < min || *option > max) {
-		printf ("\n\tERROR: Debes introducir una de las opciones posibles.\n\n");
-		error = 1;
-	}
-	return error;
+	return usuario;
 }
 
 int menuProductorClientes () {
@@ -416,7 +345,7 @@ int menuProductorClientes () {
 		printf ("\t3- Eliminar clientes\n");
 		printf ("\t4- Salir\n");
 		printf ("\tEnter option: ");
-		error = option2AsNumber(&option, 1, 4);
+		error = optionAsNumber(&option, 1, 4);
 	} while (error);
 
 	return option;
@@ -436,14 +365,14 @@ int menuModificacion() {
 		printf ("\t  6- Numero de telefono\n");
 		printf ("\t  7- Salir\n");
 		printf ("\t  Enter option: ");
-		error = option2AsNumber(&option, 1, 7);
+		error = optionAsNumber(&option, 1, 7);
 	
 	} while (error);
 
 	return option;
 }
 
-void runOption (int option, FilePersona *p) {
+void runOption (int option, Persona *p) {
 	char cambio[MAX_CHAR_SIMPLE];
 	int numero;
 	
@@ -483,7 +412,7 @@ void runOption (int option, FilePersona *p) {
 
 void modificarClientes (LinkedList *users) {
 	int option, found;
-	FilePersona p;
+	Persona p;
 	char correo[MAX_CHAR_SIMPLE], tipo[6][MAX_CHAR_SIMPLE] = {"nombre", "primer apellido", "segundo apellido", "correo", "contraseña", "numero de telefono"};
 	
 	do {
@@ -520,7 +449,7 @@ void modificarClientes (LinkedList *users) {
 void eliminarClientes () {
 	LinkedList users;
 	int found = 0;
-	FilePersona p;
+	Persona p;
 	char correo[MAX_CHAR_SIMPLE];
 
 	solicitarCorreo("Introduce el correo del usuario a eliminar: ", correo);
@@ -579,7 +508,7 @@ int menuProductorGeneral() {
 		printf ("3- Gestionar actores\n");
 		printf ("4- Salir\n");
 		printf ("Entra opcion: ");
-		error = option2AsNumber(&option, 1, 4);
+		error = optionAsNumber(&option, 1, 4);
 	} while (error);
 
 	return option;
@@ -618,7 +547,7 @@ int menuCliente () {
 		printf ("4- Suscribirse a un canal\n");
 		printf ("5- Salir\n");
 		printf ("Entra opcion: ");
-		error = option2AsNumber(&option, 1, 5);
+		error = optionAsNumber(&option, 1, 5);
 	} while (error);
 	
 	return option;
@@ -626,7 +555,7 @@ int menuCliente () {
 
 void registroTarjeta(Persona *p) {
 	LinkedList users;
-	FilePersona p2, estructura;
+	Persona estructura;
 	users = ficheroALista();
 	int found = 0;
 
@@ -639,14 +568,13 @@ void registroTarjeta(Persona *p) {
 		p->tarjeta.titular[strlen(p->tarjeta.titular) - 1] = '\0';
 		p->	tarjeta.numero = solicitarTelefono("\tIntroduce numero de tarjeta: ", 10);	
 		p->tarjeta.pin = solicitarTelefono("\tPIN: ", 4);
-		p2 = userFileToList(*p);
 		LINKEDLIST_goToHead(&users);
 		while (!LINKEDLIST_isAtEnd(users) && !found) {
 			estructura = LINKEDLIST_get(&users);
-			if (p2.dni.numeros == estructura.dni.numeros && p2.dni.letra == estructura.dni.letra) {
+			if (p->dni.numeros == estructura.dni.numeros && p->dni.letra == estructura.dni.letra) {
 				found = 1;
 				LINKEDLIST_remove(&users);
-				LINKEDLIST_add(&users, p2);
+				LINKEDLIST_add(&users, *p);
 			}
 			LINKEDLIST_next(&users);
 		}

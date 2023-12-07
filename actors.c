@@ -343,7 +343,7 @@ int menuModificacionActores() {
 		printf ("\t  5- Salario\n");
 		printf ("\t  6- Salir\n");
 		printf ("\t  Enter option: ");
-		error = option2AsNumber(&option, 1, 6);
+		error = optionAsNumber(&option, 1, 6);
 	
 	} while (error);
 
