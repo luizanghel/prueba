@@ -5,8 +5,13 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAX_CHAR_SIMPLE 200
+#define MAX_CHAR_SIMPLE 	200
 
+#define NOMBRE 				0
+#define PRIMER_APELLIDO  	1
+#define SEGUNDO_APELLIDO 	2
+#define NOMBRE_CANAL 		0
+#define NOMBRE_PROGRAMA		0
 /***********************************************
 *
 * @Finalidad: Comprobar que los parametros introducudidos por el usuario sean correctos y se encuentren dentro del rango..

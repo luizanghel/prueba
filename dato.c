@@ -446,3 +446,4 @@ void todoAMinusculas (char palabra[MAX_CHAR_SIMPLE]) {
         }
 	}
 }
+

@@ -1,15 +1,10 @@
-#include <stdio.h>
-#include <string.h>
-
 #include "user.h"
-#include "linkedlistcanales.h"
-#include "linkedlistprograma.h"
 
 /***********************************************
 *
-* @Finalidad: Solicitar un DNI.
-* @Parametros:	in: texto[] = Tipo de palabra que se quiere solicitar.
-* @Retorno: Devuelve el conjunto del DNI.
+* @Finalidad: Solicitar un DNI para un usuario.
+* @Parametros:	in: texto[] = Texto que se mostrara para la solicitud.
+* @Retorno: Devuelve el conjunto del DNI del usuario.
 * 
 ************************************************/
 Dni solicitarDni (char texto[MAX_CHAR_SIMPLE]) {
@@ -27,7 +22,6 @@ Dni solicitarDni (char texto[MAX_CHAR_SIMPLE]) {
 	return dni;
 }
 
-	
 /***********************************************
 *
 * @Finalidad: Solicitar los campos para poder iniciar el registro de un usuario.
@@ -613,16 +607,14 @@ void listarprogramas(char canal[50]){
 }
 
 void mostrarprog(){
-    char canal[50], aux;
+    char canal[50];
     int trobat=0;
     FILE *f;
     LinkedList3 canales;
     Canal c;
 
-    printf("Que canal quieres mostrar? ");
-    scanf("%s", canal);
-   	scanf ("%c", &aux);
-
+	solicitarPalabra("Que canal quieres mostrar? ", canal, NOMBRE_CANAL);
+	
 	f= fopen("canales.txt", "r");
     if (f==NULL){
         printf("ERROR, no existe este archivo\n");
@@ -650,13 +642,12 @@ void mostrarprog(){
 
 /***********************************************
 *
-* @Finalidad: 
-* @Parametros: 	// Se llena en la siguiente TT
-* @Retorno:
+* @Finalidad: Listar el nombre de canales por orden alfabetico.
+* @Parametros: ----.
+* @Retorno: ----.
 * 
 ************************************************/
 void visualizarCanales () {
-	// Añadir logica de ordenacion.
 	int num_canales;
 	Canal *c;
 	

@@ -1,10 +1,16 @@
 #ifndef CANALES_H
 #define CANALES_H
 
+#include <stdio.h>
+#include <string.h>
+
 #include "actors.h"
 #include "linkedlistcanales.h"
 #include "linkedlistprograma.h"
 #include "dato.h"
+
+#define MAX_CHAR_SIMPLE 	  200
+#define MAX_ACTORES_PROGRAMA	3
 
 void menuCanales();
 int assignarAlPrograma(int numero, char letra);

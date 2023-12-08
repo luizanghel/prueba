@@ -1,11 +1,4 @@
-#include <string.h>
-#include <stdio.h>
-
-
 #include "canales.h"
-
-#define MAX_CHAR_SIMPLE 	  200
-#define MAX_ACTORES_PROGRAMA	3
 
 /***********************************************
 *
@@ -49,13 +42,9 @@ void actualizarFicheroCanales (LinkedList3 canal) {
 ************************************************/
 Canal solicitarDatosCanal () {
 	Canal c;
-
-	printf ("Entra nombre canal: ");
-	scanf ("%s", c.nombre);
-
-	printf ("Entra coste suscripcion: ");
-	scanf ("%f", &c.coste_suscripcion);
 	
+	solicitarPalabra("Introduce nombre del canal: ", c.nombre, NOMBRE_CANAL);
+	c.coste_suscripcion = solicitarFloat("Introduce coste de suscripcion: ");
 	c.num_suscriptores = 0;
 
 	return c;
@@ -422,9 +411,8 @@ int assignarAlPrograma(int numeros, char letra) {
 	Programa p;
 	int correcto = 0, posicion;
 	LinkedList4 programas;
-	
-	printf ("Introduce nombre de programa: ");
-	scanf ("%s", nombre);
+
+	solicitarPalabra("Introduce nombre del programa: ", nombre, NOMBRE_PROGRAMA);
 	programas = programaFileToList();
 	LINKEDLISTPROGRAMA_goToHead(&programas);
 	while (!LINKEDLISTPROGRAMA_isAtEnd(programas)) {
