@@ -1,6 +1,8 @@
 Juan
 150.000000
-1
+3
+josejuan@gmail.com
+josejuan@gmail.com
 josejuan@gmail.com
 Ramonete
 125.000000
@@ -23,10 +25,12 @@ c
 0
 Buenas
 2.785000
-0
+1
+josejuan@gmail.com
 Rosario
 12.500000
 0
 Juanan
 12.000000
-0
+1
+josejuan@gmail.com

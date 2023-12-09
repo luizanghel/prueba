@@ -764,7 +764,7 @@ void suscribirseACanal (Persona p) {
 			opcion = solicitarCaracter("Introduce una de las posibles opciones (S/N): ");	
 			
 			if (opcion == 'S' || opcion == 's') {
-				//asignarClienteACanal(c.nombre, p.correo);		
+				asignarUsuarioACanal(c.nombre, p.correo);		
 			}
 			else {
 				printf ("Se ha cancelado la transaccion.\n");

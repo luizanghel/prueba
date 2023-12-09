@@ -664,6 +664,55 @@ Canal * listaAArrayDinamico (int *num_canales) {
 	return array;
 }
 
+int usuarioAsignado (Canal c, char usuario[MAX_CHAR_SIMPLE]) {
+    int i, found = 0;
+
+    for (i = 0; i < c.num_suscriptores && !found; i++) {
+        if (!strcmp(c.suscriptores[i], usuario)) {
+            found = 1;
+        }
+    }
+
+    return found;
+}
+
+/***********************************************
+*
+* @Finalidad: Asignar el correo de un usuario como suscriptor de un canal.
+* @Parametros:	in: canal[] = Nombre del canal a asignar el usuario.
+*				in: usuario[] = Correo del usuario a asignar.
+* @Retorno: ----.
+* 
+************************************************/
+void asignarUsuarioACanal(char canal[MAX_CHAR_SIMPLE], char usuario[MAX_CHAR_SIMPLE]) {
+    LinkedList3 canales;
+    int num_canales, found = 0;
+    Canal c;
+
+	canales = canalesFileToList(&num_canales);
+    LINKEDLISTCANALES_goToHead(&canales);
+    while (!LINKEDLISTCANALES_isAtEnd(canales) && !found) {
+        c = LINKEDLISTCANALES_get(&canales);
+        if (!strcmp(c.nombre, canal)) {
+			found = 1;
+			if (!usuarioAsignado(c, usuario)) {
+				c.num_suscriptores++;
+				c.suscriptores = realloc(c.suscriptores, sizeof(char *) * c.num_suscriptores);
+				c.suscriptores[c.num_suscriptores - 1] = (char *)malloc(sizeof(char) * (strlen(usuario) + 1));	
+				strcpy(c.suscriptores[c.num_suscriptores - 1], usuario);
+				LINKEDLISTCANALES_remove(&canales);
+				LINKEDLISTCANALES_add(&canales, c);
+			}
+			else {
+				printf ("\tERROR (Ya hay una suscripcion activa a este canal con esta cuenta)\n");
+			}
+		}
+		else {
+			LINKEDLISTCANALES_next(&canales);
+		}
+    }
+
+}
 
 /***********************************************
 *
