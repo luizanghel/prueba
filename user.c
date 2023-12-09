@@ -500,12 +500,49 @@ int menuProductorGeneral() {
 		printf ("1- Gestionar clientes\n");
 		printf ("2- Gestionar canales\n");
 		printf ("3- Gestionar actores\n");
-		printf ("4- Salir\n");
+		printf ("4- Gestionar peliculas\n");
+		printf ("5- Salir\n");
 		printf ("Entra opcion: ");
-		error = optionAsNumber(&option, 1, 4);
+		error = optionAsNumber(&option, 1, 5);
 	} while (error);
 
 	return option;
+}
+
+int menuPeliculas () {
+	int option, error = 0;
+
+	do {
+		printf ("\t1- Añadir peliculas\n");
+		printf ("\t2- Eliminar peliculas\n");
+		printf ("\t3- Visualizar peliculas\n");
+		printf ("\t4- Salir\n");
+		printf ("\tEntra opcion: ");
+		error = optionAsNumber(&option, 1, 4);
+	} while (error);
+	
+	return option;
+}
+
+void modoProductorPeliculas () {
+	int option;
+
+	do {
+		
+		option = menuPeliculas();
+		switch (option) {
+			case 1:
+				//anadirPelicula();
+				break;
+			case 2:
+				// eliminarPelicula();
+				break;
+			case 3:
+				// listarPelicula();
+				break;
+		}
+
+	} while (option != 4);
 }
 
 void modoProductor () {
@@ -524,6 +561,9 @@ void modoProductor () {
 				menuActors();
 				break;
 			case 4:
+				modoProductorPeliculas();
+				break;
+			case 5:
 				quit = 1;
 				break;
 		} 
@@ -578,6 +618,7 @@ void registroTarjeta(Persona *p) {
 		printf ("La tarjeta se ha añadido correctamente!\n");
 	}
 }
+
 void listarprogramas(char canal[50]){
     FILE *f;
     LinkedList4 programa;
