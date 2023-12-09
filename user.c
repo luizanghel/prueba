@@ -700,6 +700,19 @@ void suscribirseACanal (Persona p) {
 	}
 }
 
+void eliminarSuscripcion (Persona p) {
+	char canal[MAX_CHAR_SIMPLE];
+	Canal c;
+
+	solicitarPalabra("Introduzca el nombre del canal donde quiere cancelar la suscripcion: ", canal, NOMBRE_CANAL);
+	if (canalUnico(canal, &c)) {
+		// Cancelar la suscripcion.
+	}
+	else {
+		printf ("\tERROR (El nombre del canal que ha introducido no existe)\n");
+	}
+}
+
 /***********************************************
 *
 * @Finalidad: Mostrar un menu y ejecutar la opcion introducida por el usuario.
@@ -728,7 +741,7 @@ void modoCliente (Persona p) {
 				suscribirseACanal(p);
 				break;
 			case 5:
-				// elimiarSuscripcion
+				eliminarSuscripcion(p);
 				break;
 			case 6:
 				printf ("¡Hasta pronto!\n");
