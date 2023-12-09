@@ -660,11 +660,11 @@ Canal * listaAArrayDinamico (int *num_canales) {
 * @Retorno: Retorna un 1 si el usuario se encuentra suscrito al canal y un 0 si no lo esta.
 * 
 ************************************************/
-int usuarioAsignado (Canal c, char usuario[MAX_CHAR_SIMPLE]) {
-    int i, found = 0;
+int usuarioAsignado (Canal c, char usuario[MAX_CHAR_SIMPLE], int *i) {
+   	int found = 0;
 
-    for (i = 0; i < c.num_suscriptores && !found; i++) {
-        if (!strcmp(c.suscriptores[i], usuario)) {
+    for (*i = 0; *i < c.num_suscriptores && !found; (*i)++) {
+        if (!strcmp(c.suscriptores[*i], usuario)) {
             found = 1;
         }
     }
@@ -682,7 +682,7 @@ int usuarioAsignado (Canal c, char usuario[MAX_CHAR_SIMPLE]) {
 ************************************************/
 void asignarUsuarioACanal(char canal[MAX_CHAR_SIMPLE], char usuario[MAX_CHAR_SIMPLE]) {
     LinkedList3 canales;
-    int num_canales, found = 0;
+    int num_canales, found = 0, i;
     Canal c;
 
 	canales = canalesFileToList(&num_canales);
@@ -691,7 +691,7 @@ void asignarUsuarioACanal(char canal[MAX_CHAR_SIMPLE], char usuario[MAX_CHAR_SIM
         c = LINKEDLISTCANALES_get(&canales);
         if (!strcmp(c.nombre, canal)) {
 			found = 1;
-			if (!usuarioAsignado(c, usuario)) {
+			if (!usuarioAsignado(c, usuario, &i)) {
 				c.num_suscriptores++;
 				c.suscriptores = realloc(c.suscriptores, sizeof(char *) * c.num_suscriptores);
 				c.suscriptores[c.num_suscriptores - 1] = (char *)malloc(sizeof(char) * (strlen(usuario) + 1));	
@@ -710,6 +710,37 @@ void asignarUsuarioACanal(char canal[MAX_CHAR_SIMPLE], char usuario[MAX_CHAR_SIM
 		}
     }
 
+}
+
+/***********************************************
+*
+* @Finalidad: Eliminar el correo de un usuario como suscriptor de un canal.
+* @Parametros:	in: canal[] = Nombre del canal a eliminar el usuario.
+*				in: usuario[] = Correo del usuario a eliminar.
+* @Retorno: ----.
+* 
+************************************************/
+void retirarUsuarioDeCanal (char canal[MAX_CHAR_SIMPLE], char usuario[MAX_CHAR_SIMPLE]) {
+	LinkedList3 canales;
+	int num_canales, found = 0, i;
+	Canal c;
+
+	canales = canalesFileToList(&num_canales);
+	LINKEDLISTCANALES_goToHead(&canales);
+	while (!LINKEDLISTCANALES_isAtEnd(canales) && !found) {
+		c = LINKEDLISTCANALES_get(&canales);
+		if (!strcmp(c.nombre, canal)) {
+			found = 1;
+			if (usuarioAsignado(c, usuario, &i)) {
+				free(c.suscriptores[i]);
+				c.num_suscriptores--;
+				actualizarFicheroCanales(canales);
+			}
+			else {
+				printf ("\tERROR (No hay una suscripcion activa a '%s' con esta cuenta)\n", canal);
+			}
+		}
+	}
 }
 
 /***********************************************

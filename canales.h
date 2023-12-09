@@ -20,13 +20,13 @@ LinkedList3 canalesFileToList (int *numero);
 
 /***********************************************
 *
-* @Finalidad: Verificar si un usuario se encuentra suscrito a un canal.
-* @Parametros:	in: c = Canal a verificar la suscripcion.
-*				in: usuario[] = Correo del usuario a verificar.
-* @Retorno: Retorna un 1 si el usuario se encuentra suscrito al canal y un 0 si no lo esta.
+* @Finalidad: Eliminar el correo de un usuario como suscriptor de un canal.
+* @Parametros:	in: canal[] = Nombre del canal a eliminar el usuario.
+*				in: usuario[] = Correo del usuario a eliminar.
+* @Retorno: ----.
 * 
 ************************************************/
-int usuarioAsignado (Canal c, char usuario[MAX_CHAR_SIMPLE]);
+void retirarUsuarioDeCanal (char canal[MAX_CHAR_SIMPLE], char usuario[MAX_CHAR_SIMPLE]);
 
 /***********************************************
 *
