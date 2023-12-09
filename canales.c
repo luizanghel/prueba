@@ -661,15 +661,14 @@ Canal * listaAArrayDinamico (int *num_canales) {
 * 
 ************************************************/
 int usuarioAsignado (Canal c, char usuario[MAX_CHAR_SIMPLE], int *i) {
-   	int found = 0;
 
-    for (*i = 0; *i < c.num_suscriptores && !found; (*i)++) {
-        if (!strcmp(c.suscriptores[*i], usuario)) {
-            found = 1;
+    for (*i = 0; *i < c.num_suscriptores; (*i)++) {
+		if (!strcmp(c.suscriptores[*i], usuario)) {
+			return 1;
         }
     }
-
-    return found;
+    
+	return 0;
 }
 
 /***********************************************
@@ -734,6 +733,8 @@ void retirarUsuarioDeCanal (char canal[MAX_CHAR_SIMPLE], char usuario[MAX_CHAR_S
 			if (usuarioAsignado(c, usuario, &i)) {
 				free(c.suscriptores[i]);
 				c.num_suscriptores--;
+				LINKEDLISTCANALES_remove(&canales);
+				LINKEDLISTCANALES_add(&canales, c);
 				actualizarFicheroCanales(canales);
 			}
 			else {
