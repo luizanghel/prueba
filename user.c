@@ -706,7 +706,12 @@ void eliminarSuscripcion (Persona p) {
 
 	solicitarPalabra("Introduzca el nombre del canal donde quiere cancelar la suscripcion: ", canal, NOMBRE_CANAL);
 	if (canalUnico(canal, &c)) {
-		// Cancelar la suscripcion.
+		if (usuarioAsignado(c, p.correo)) {
+			// Des-suscribir.
+		}
+		else {
+			printf ("\tERROR (No se encuentra una suscripcion activa al canal %s con esta cuenta)\n", canal);
+		}
 	}
 	else {
 		printf ("\tERROR (El nombre del canal que ha introducido no existe)\n");
