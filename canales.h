@@ -20,6 +20,15 @@ LinkedList3 canalesFileToList (int *numero);
 
 /***********************************************
 *
+* @Finalidad: Genera la programacion de un canal.
+* @Parametros:	in: c = Estructura canal de donde extraer la programacion.
+* @Retorno: ----.
+* 
+************************************************/
+void generarProgramacion (Canal c);
+
+/***********************************************
+*
 * @Finalidad: Verificar si un usuario se encuentra suscrito a un canal.
 * @Parametros:	in: c = Canal a verificar la suscripcion.
 *				in: usuario[] = Correo del usuario a verificar.

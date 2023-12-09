@@ -721,7 +721,13 @@ void descargarProgramacion (Persona p) {
 	solicitarPalabra("Introduce canal: ", canal, NOMBRE_CANAL);
 	if (canalUnico(canal, &c)) {
 		if (usuarioAsignado(c, p.correo, &i)) {
-			// Generar .txt
+			LINKEDLISTPROGRAMA_goToHead(&c.programas);
+			if (!LINKEDLISTPROGRAMA_isAtEnd(c.programas)) {
+				generarProgramacion(c);
+			}
+			else {
+				printf ("\tERROR (El canal seleccionado no dispone de programas actualmente)\n");
+			}
 		}
 		else {
 			printf ("\tERROR (Para descargar la programacion de un canal, debes estar suscrito)\n");	
