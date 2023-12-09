@@ -312,9 +312,12 @@ int mostrarMenuCanales () {
 * @Retorno: ----.
 * 
 ************************************************/
-void mostrarCanales (LinkedList3 canales) {
+void mostrarCanales () {
 	Canal c;
+	LinkedList3 canales;
+	int num_canales;
 
+	canales = canalesFileToList(&num_canales);
 	LINKEDLISTCANALES_goToHead(&canales);
 	while (!LINKEDLISTCANALES_isAtEnd(canales)) {
 		c = LINKEDLISTCANALES_get(&canales);	
@@ -585,7 +588,7 @@ void runOptionCanales (int option, int *quit) {
 			 eliminarCanal();
 			break;
 		case 4:
-			mostrarCanales(canales);			
+			mostrarCanales();			
 			break;
 		case 5: 
 			anadirProgramaACanal(&canales);
@@ -660,6 +663,7 @@ Canal * listaAArrayDinamico (int *num_canales) {
 	}
 	return array;
 }
+
 
 /***********************************************
 *

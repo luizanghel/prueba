@@ -14,6 +14,15 @@ LinkedList3 canalesFileToList (int *numero);
 
 /***********************************************
 *
+* @Finalidad: Mostrar los canales registrados.
+* @Parametros: in: canales = Lista de canales.
+* @Retorno: ----.
+* 
+************************************************/
+void mostrarCanales ();
+
+/***********************************************
+*
 * @Finalidad: Generar una estructura dinamica con todos los canales.
 * @Parametros: in/out = *num_canales = Numero de canales existentes en el sistema.
 * @Retorno: Retorna un array dinamico de todos los canales.
