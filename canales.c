@@ -652,6 +652,14 @@ Canal * listaAArrayDinamico (int *num_canales) {
 	return array;
 }
 
+/***********************************************
+*
+* @Finalidad: Verificar si un usuario se encuentra suscrito a un canal.
+* @Parametros:	in: c = Canal a verificar la suscripcion.
+*				in: usuario[] = Correo del usuario a verificar.
+* @Retorno: Retorna un 1 si el usuario se encuentra suscrito al canal y un 0 si no lo esta.
+* 
+************************************************/
 int usuarioAsignado (Canal c, char usuario[MAX_CHAR_SIMPLE]) {
     int i, found = 0;
 
