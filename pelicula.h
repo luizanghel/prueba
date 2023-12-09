@@ -1,14 +1,23 @@
 #ifndef _PELICULA_H_
 #define _PELICULA_H_
 
-#define MAX_CHAR_SIMPLE 100
+#include "dato.h"
 
 typedef struct {
 	char titulo[MAX_CHAR_SIMPLE];
 	char director[MAX_CHAR_SIMPLE];
-	int ano;
+	float ano;
 	char categoria[MAX_CHAR_SIMPLE];
 	float precio;
 } Pelicula;
+
+/***********************************************
+*
+* @Finalidad: Anadir una pelicula a la base de datos..
+* @Parametros: ----.
+* @Retorno: ---.
+* 
+************************************************/
+void anadirPelicula();
 
 #endif 

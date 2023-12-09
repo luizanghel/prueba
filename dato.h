@@ -12,6 +12,8 @@
 #define SEGUNDO_APELLIDO 	2
 #define NOMBRE_CANAL 		0
 #define NOMBRE_PROGRAMA		0
+#define CATEGORIA			0
+
 /***********************************************
 *
 * @Finalidad: Comprobar que los parametros introducudidos por el usuario sean correctos y se encuentren dentro del rango..

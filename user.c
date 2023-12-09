@@ -532,7 +532,7 @@ void modoProductorPeliculas () {
 		option = menuPeliculas();
 		switch (option) {
 			case 1:
-				//anadirPelicula();
+				anadirPelicula();
 				break;
 			case 2:
 				// eliminarPelicula();
