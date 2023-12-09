@@ -759,8 +759,8 @@ void generarProgramacion (Canal c) {
 		
 	strcat(nombre, c.nombre);
 	strcat(nombre, ".txt");
-	f = fopen (nombre, "w");
-	
+
+	f = fopen (nombre, "w");	
 	if (f == NULL) {
 		printf ("\tERROR (La programacion no se ha podido descargar correctamente)\n");
 	}

@@ -11,6 +11,8 @@ typedef struct {
 	float precio;
 } Pelicula;
 
+void listarPeliculas ();
+
 /***********************************************
 *
 * @Finalidad: Anadir una pelicula a la base de datos..
