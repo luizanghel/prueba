@@ -16,10 +16,10 @@
 typedef struct {
     int numeros;
     char letra;
-} DniActors;
+} DniActor;
 
 typedef struct {
-    DniActors dni;
+    DniActor dni;
 	char nombre[100];
     char apellido1[100];
     char apellido2[100];
