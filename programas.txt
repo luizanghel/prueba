@@ -30,3 +30,11 @@ Si
 0a
 0a
 0a
+Rosario
+Titulo
+Catgeoria
+emision
+123
+0a
+0a
+0a
