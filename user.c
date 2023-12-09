@@ -714,8 +714,22 @@ void eliminarSuscripcion (Persona p) {
 	}
 }
 
-void descargarProgramacion () {
-	
+void descargarProgramacion (Persona p) {
+	char canal[MAX_CHAR_SIMPLE];
+	Canal c;
+	int i;
+	solicitarPalabra("Introduce canal: ", canal, NOMBRE_CANAL);
+	if (canalUnico(canal, &c)) {
+		if (usuarioAsignado(c, p.correo, &i)) {
+			// Generar .txt
+		}
+		else {
+			printf ("\tERROR (Para descargar la programacion de un canal, debes estar suscrito)\n");	
+		}
+	}
+	else {
+		printf ("\tERROR (El canal que ha introducido no existe)\n");
+	}
 }
 /***********************************************
 *
@@ -748,7 +762,7 @@ void modoCliente (Persona p) {
 				eliminarSuscripcion(p);
 				break;
 			case 6:
-				descargarProgramacion();
+				descargarProgramacion(p);
 				break;
 			case 7:
 				printf ("¡Hasta pronto!\n");
