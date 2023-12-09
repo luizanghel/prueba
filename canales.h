@@ -31,5 +31,15 @@ Canal * listaAArrayDinamico (int *num_canales);
 ************************************************/
 void selectionSort (Canal *c, int num_canales);
 
+/***********************************************
+*
+* @Finalidad: Verifica si el nombre de un canal es unico.
+* @Parametros:  in: nombre[] = Nombre de canal a verificar si es unico.
+*				out: *c = En caso que se detecte un canal con el nombre, lo devuelve en esta variable.
+* @Retorno: ----.
+* 
+************************************************/
+int canalUnico (char nombre[100], Canal *c);
+
 #endif
 

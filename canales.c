@@ -28,6 +28,10 @@ void actualizarFicheroCanales (LinkedList3 canal) {
 			c = LINKEDLISTCANALES_get(&canal);
 			fprintf(actualizado, "%s\n", c.nombre);
 	   		fprintf(actualizado, "%f\n", c.coste_suscripcion);
+			fprintf(actualizado, "%d\n", c.num_suscriptores);
+			for (int i = 0; i < c.num_suscriptores; i++) {
+				fprintf(actualizado, "%s\n", c.suscriptores[i]);
+			}
 			LINKEDLISTCANALES_next(&canal);
 		}
 		fclose(actualizado);
@@ -51,7 +55,9 @@ Canal solicitarDatosCanal () {
 
 	printf ("Entra coste suscripcion: ");
 	scanf ("%f", &c.coste_suscripcion);
-		
+	
+	c.num_suscriptores = 0;
+
 	return c;
 }
 
@@ -166,7 +172,8 @@ LinkedList3 canalesFileToList (int *num_canales) {
 	char aux;
 	LinkedList4 programas;
 	Programa p;
-	
+	char suscriptor[MAX_CHAR_SIMPLE];
+
 	*num_canales = 0;
 
 	f = fopen ("canales.txt", "r");
@@ -181,6 +188,20 @@ LinkedList3 canalesFileToList (int *num_canales) {
 			c.nombre[strlen(c.nombre) - 1] = '\0';
 			fscanf(f, "%f", &c.coste_suscripcion);
 			fscanf(f, "%c", &aux);
+			fscanf(f, "%d", &c.num_suscriptores);
+			fscanf(f, "%c", &aux);
+				c.suscriptores = (char **)malloc(sizeof(char *) * c.num_suscriptores);
+			if (c.suscriptores == NULL) {
+				printf ("\tERROR (El sistema ha caído. Contacte con un administrador en la mayor brevedad posible)\n");
+			}
+			else {
+				for (int i = 0; i < c.num_suscriptores; i++) {
+					fscanf(f, "%s", suscriptor);
+					fscanf(f, "%c", &aux);
+					c.suscriptores[i] = (char *)malloc((strlen(suscriptor) + 1) * sizeof(char));
+					strcpy(c.suscriptores[i], suscriptor);
+				}
+			}
 			c.programas = LINKEDLISTPROGRAMA_create();
 			(*num_canales)++;
 			LINKEDLISTPROGRAMA_goToHead(&programas);

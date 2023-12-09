@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "user.h"
 #include "linkedlistcanales.h"
@@ -372,6 +373,7 @@ Persona desdeListaAFile (FilePersona p) {
 * 
 ************************************************/
 Persona iniciarSesion(int *existe) {
+	
 	FilePersona p, usuario;
 	
 	*existe = 0;
@@ -613,9 +615,10 @@ int menuCliente () {
 		printf ("1- Registrar tarjeta\n");
         printf ("2- Listar programas canal\n");
 		printf ("3- Visualizar canales por audiencia\n");
-		printf ("4- Salir\n");
+		printf ("4- Suscribirse a un canal\n");
+		printf ("5- Salir\n");
 		printf ("Entra opcion: ");
-		error = option2AsNumber(&option, 1, 4);
+		error = option2AsNumber(&option, 1, 5);
 	} while (error);
 	
 	return option;
@@ -735,6 +738,16 @@ void visualizarCanales () {
 
 /***********************************************
 *
+* @Finalidad: Suscribir un nombre a un canal.
+* @Parametros: in: p = Persona a suscribir.
+* @Retorno: ----.
+* 
+************************************************/
+void suscribirseACanal (Persona p) {
+}
+
+/***********************************************
+*
 * @Finalidad: Mostrar un menu y ejecutar la opcion introducida por el usuario.
 * @Parametros: in/out: p = Perfil de persona que se ha registrado/iniciado sesion.
 * @Retorno: ----.
@@ -757,11 +770,14 @@ void modoCliente (Persona p) {
 			case 3:
 				visualizarCanales();
 				break;
-			case 4:
+			case 4:		
+				suscribirseACanal(p);
+				break;
+			case 5:
 				printf ("¡Hasta pronto!\n");
 				break;
 		}
-	} while (option != 4);
+	} while (option != 5);
 
 }
 
