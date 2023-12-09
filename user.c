@@ -540,9 +540,10 @@ int menuCliente () {
 		printf ("3- Visualizar canales por audiencia\n");
 		printf ("4- Suscribirse a un canal\n");
 		printf ("5- Cancelar suscripcion a un canal\n");
-		printf ("6- Salir\n");
+		printf ("6- Descargar programacion de un canal\n");
+		printf ("7- Salir\n");
 		printf ("Entra opcion: ");
-		error = optionAsNumber(&option, 1, 6);
+		error = optionAsNumber(&option, 1, 7);
 	} while (error);
 	
 	return option;
@@ -713,6 +714,9 @@ void eliminarSuscripcion (Persona p) {
 	}
 }
 
+void descargarProgramacion () {
+	
+}
 /***********************************************
 *
 * @Finalidad: Mostrar un menu y ejecutar la opcion introducida por el usuario.
@@ -744,9 +748,12 @@ void modoCliente (Persona p) {
 				eliminarSuscripcion(p);
 				break;
 			case 6:
+				descargarProgramacion();
+				break;
+			case 7:
 				printf ("¡Hasta pronto!\n");
 				break;
 		}
-	} while (option != 6);
+	} while (option != 7);
 
 }
