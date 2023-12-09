@@ -114,3 +114,14 @@ void listarPeliculas () {
 		i++;
 	}
 }
+
+void eliminarPelicula () {
+	Pelicula *pelis = NULL;
+	int num_peliculas;
+	char nombre[MAX_CHAR_SIMPLE];
+
+	pelis = leerPeliculas(&num_peliculas);
+	solicitarPalabra("Introduce pelicula a eliminar: ", nombre, NOMBRE);
+	
+	printf ("%s\n", pelis->titulo);
+}
