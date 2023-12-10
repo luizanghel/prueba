@@ -1,5 +1,45 @@
 #include "pelicula.h"
 
+/***********************************************
+*
+* @Finalidad: Ordenar alfabeticamente un array.
+* @Parametros: 	in: *c = Array de canales a ordenar.
+*				in: num_peliculas = Numero de canales a ordenar.
+* @Retorno: ----.
+* 
+************************************************/
+void selectionSortPelicula (Pelicula *c, int num_peliculas) {
+	Pelicula minim;
+	int i, j, posminim;
+		for (j = 0; j < (num_peliculas - 1); j++) {
+			minim = c[j];
+			posminim = j;
+			for (i = j+1; i < num_peliculas; i++) {
+				if (c[i].ano <= minim.ano) {
+					minim = c[i];
+					posminim = i;
+				}
+			}
+			c[posminim] = c[j];
+			c[j] = minim;
+		}
+
+	for (i = 0; i < num_peliculas; i++) {
+		printf ("Título: %s\n", c[i].titulo);
+		printf ("Director: %s\n", c[i].director);
+		printf ("Categoria: %s\n", c[i].categoria);
+		printf ("Año: %f\n", c[i].ano);
+		printf ("Precio: %f\n", c[i].precio);
+	}
+}
+
+/***********************************************
+*
+* @Finalidad: Leer el fichero que contiene todas las peliculas.
+* @Parametros: 	in/out: *num_peliculas = Numero de peliculas.
+* @Retorno: Retorna un array dinamico con todas las peliculas..
+* 
+************************************************/
 Pelicula * leerPeliculas (int *num_peliculas) {
 	FILE *f = NULL;
 	Pelicula *p = NULL;

@@ -581,9 +581,10 @@ int menuCliente () {
 		printf ("4- Suscribirse a un canal\n");
 		printf ("5- Cancelar suscripcion a un canal\n");
 		printf ("6- Descargar programacion de un canal\n");
-		printf ("7- Salir\n");
+		printf ("7- Visualizar peliculas\n");
+		printf ("8- Salir\n");
 		printf ("Entra opcion: ");
-		error = optionAsNumber(&option, 1, 7);
+		error = optionAsNumber(&option, 1, 8);
 	} while (error);
 	
 	return option;
@@ -787,6 +788,8 @@ void descargarProgramacion (Persona p) {
 ************************************************/
 void modoCliente (Persona p) {
 	int option;
+	Pelicula *peli = NULL;
+	int num_peliculas;
 
 	do {
 		option = menuCliente();
@@ -812,6 +815,10 @@ void modoCliente (Persona p) {
 				descargarProgramacion(p);
 				break;
 			case 7:
+				peli = leerPeliculas(&num_peliculas);
+				selectionSortPelicula(peli, num_peliculas);
+				break;
+			case 8:
 				printf ("¡Hasta pronto!\n");
 				break;
 		}
