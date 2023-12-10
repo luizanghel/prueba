@@ -1,5 +1,62 @@
 #include "pelicula.h"
 
+void actualizacionFicheroPeliculas (Pelicula *p, int num_peliculas) {
+	FILE *f = NULL;
+	int i = 0, j;
+
+	f = fopen ("peliculas.txt", "w");
+	if (f == NULL) {
+		printf ("ERROR!\n");
+	}
+	else {
+		fprintf (f, "%d\n", num_peliculas);
+		while (i < num_peliculas) {
+			fprintf (f, "%s\n", p[i].titulo);
+			fprintf (f, "%s\n", p[i].categoria);
+			fprintf (f, "%s\n", p[i].titulo);
+			fprintf (f, "%f\n", p[i].ano);
+			fprintf (f, "%f\n", p[i].precio);
+			fprintf (f, "%d\n", p[i].num_usuarios);
+			for (j = 0; j < p[i].num_usuarios; j++) {
+				fprintf (f, "%s\n", p[i].usuarios[j]);
+			}
+			i++;
+		}
+		fclose(f);
+	}
+}
+
+/***********************************************
+*
+* @Finalidad: Asignar un usuario como comprador de una pelicula.
+* @Parametros: 	in: posicion = Posicion, en el array de peliculas, donde se asignara el usuario.
+*				in: correo[] = Correo del usuario (identificador unico), que sera el dato asignado a la pelicula.
+* @Retorno: ----.
+* 
+************************************************/
+void asignarUsuarioAPelicula (int posicion, char correo[MAX_CHAR_SIMPLE]) {
+	int num_peliculas, j, found = 0;
+	Pelicula *p = leerPeliculas(&num_peliculas);
+	
+	for (j = 0; j < p[posicion].num_usuarios && !found; j++) {
+		if (!strcmp(p[posicion].usuarios[j], correo)) {
+			found = 1;
+		}
+	}
+
+	if (!found) {
+		p[posicion].num_usuarios++;
+		p[posicion].usuarios = realloc(p[posicion].usuarios, sizeof(char *) * p[posicion].num_usuarios);
+		p[posicion].usuarios[p[posicion].num_usuarios - 1] = (char *)malloc(sizeof(char) * (strlen(correo) + 1));	
+		strcpy (p[posicion].usuarios[p[posicion].num_usuarios - 1], correo);	
+		actualizacionFicheroPeliculas(p, num_peliculas);
+		printf ("La suscripcion se ha completado correctamente.\n");
+	}
+	else {
+		printf ("\tERROR (Ya hay una suscripcion activa con esta cuenta)\n");
+	}
+}
+
 /***********************************************
 *
 * @Finalidad: Ordenar alfabeticamente un array.
@@ -88,6 +145,16 @@ Pelicula * leerPeliculas (int *num_peliculas) {
 	return p;
 }
 
+/***********************************************
+*
+* @Finalidad: Dado un nombre de pelicula, verifica si esta se encuentra registrada.
+* @Parametros: 	in: *p = Array dinamico de peliculas a verificar.
+*				in: num_peliculas = Numero de peliculas que se encuentran en el array *p.
+*				in: nombre[] = Nombre de la pelicula a comprobar si ya se encuentra en la base de datos.
+*				in/out: Posicion de la pelicula dentro del array, en caso que se encuentre.
+* @Retorno: Retorna un array dinamico con todas las peliculas..
+* 
+************************************************/
 int peliculaExiste (Pelicula *p, int num_peliculas, char nombre[MAX_CHAR_SIMPLE], int *i) {
 	
 	*i = 0;
@@ -102,31 +169,6 @@ int peliculaExiste (Pelicula *p, int num_peliculas, char nombre[MAX_CHAR_SIMPLE]
 	return 0;
 }
 
-void actualizacionFicheroPeliculas (Pelicula *p, int num_peliculas) {
-	FILE *f = NULL;
-	int i = 0, j;
-
-	f = fopen ("peliculas.txt", "w");
-	if (f == NULL) {
-		printf ("ERROR!\n");
-	}
-	else {
-		fprintf (f, "%d\n", num_peliculas);
-		while (i < num_peliculas) {
-			fprintf (f, "%s\n", p[i].titulo);
-			fprintf (f, "%s\n", p[i].categoria);
-			fprintf (f, "%s\n", p[i].titulo);
-			fprintf (f, "%f\n", p[i].ano);
-			fprintf (f, "%f\n", p[i].precio);
-			fprintf (f, "%d\n", p[i].num_usuarios);
-			for (j = 0; j < p[i].num_usuarios; j++) {
-				fprintf (f, "%s\n", p[i].usuarios[j]);
-			}
-			i++;
-		}
-		fclose(f);
-	}
-}
 
 /***********************************************
 *

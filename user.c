@@ -582,9 +582,10 @@ int menuCliente () {
 		printf ("5- Cancelar suscripcion a un canal\n");
 		printf ("6- Descargar programacion de un canal\n");
 		printf ("7- Visualizar peliculas\n");
-		printf ("8- Salir\n");
+		printf ("8- Comprar pelicula\n");
+		printf ("9- Salir\n");
 		printf ("Entra opcion: ");
-		error = optionAsNumber(&option, 1, 8);
+		error = optionAsNumber(&option, 1, 9);
 	} while (error);
 	
 	return option;
@@ -792,6 +793,21 @@ void ordenacionPeliculas () {
 		printf ("\tERROR (No hay peliculas disponible actualmente)\n");
 	}
 }
+
+void comprarPelicula (Persona p) {
+	char peli[MAX_CHAR_SIMPLE];
+	int num_peliculas, posicion;
+	Pelicula *peliculas = leerPeliculas(&num_peliculas);
+	
+	solicitarPalabra("\nIntroduce pelicula que desea adquirir: ", peli, NOMBRE);
+	if (peliculaExiste(peliculas, num_peliculas, peli, &posicion)) {
+		asignarUsuarioAPelicula(posicion, p.correo);
+	}
+	else {	
+		printf ("\tERROR (La pelicula introducida no existe)\n");
+	}
+}
+
 /***********************************************
 *
 * @Finalidad: Mostrar un menu y ejecutar la opcion introducida por el usuario.
@@ -829,9 +845,12 @@ void modoCliente (Persona p) {
 				ordenacionPeliculas();
 				break;
 			case 8:
+				comprarPelicula(p);
+				break;
+			case 9:
 				printf ("¡Hasta pronto!\n");
 				break;
 		}
-	} while (option != 8);
+	} while (option != 9);
 
 }
