@@ -9,6 +9,8 @@ typedef struct {
 	float ano;
 	char categoria[MAX_CHAR_SIMPLE];
 	float precio;
+	int num_usuarios;
+	char **usuarios;
 } Pelicula;
 
 void listarPeliculas ();

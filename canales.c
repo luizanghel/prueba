@@ -179,7 +179,7 @@ LinkedList3 canalesFileToList (int *num_canales) {
 			fscanf(f, "%c", &aux);
 			fscanf(f, "%d", &c.num_suscriptores);
 			fscanf(f, "%c", &aux);
-				c.suscriptores = (char **)malloc(sizeof(char *) * c.num_suscriptores);
+			c.suscriptores = (char **)malloc(sizeof(char *) * c.num_suscriptores);
 			if (c.suscriptores == NULL) {
 				printf ("\tERROR (El sistema ha caído. Contacte con un administrador en la mayor brevedad posible)\n");
 			}
@@ -759,7 +759,6 @@ void generarProgramacion (Canal c) {
 		
 	strcat(nombre, c.nombre);
 	strcat(nombre, ".txt");
-
 	f = fopen (nombre, "w");	
 	if (f == NULL) {
 		printf ("\tERROR (La programacion no se ha podido descargar correctamente)\n");
