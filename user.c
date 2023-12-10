@@ -779,6 +779,19 @@ void descargarProgramacion (Persona p) {
 		printf ("\tERROR (El canal que ha introducido no existe)\n");
 	}
 }
+
+void ordenacionPeliculas () {
+	Pelicula *peli = NULL;
+	int num_peliculas;
+	
+	peli = leerPeliculas(&num_peliculas);
+	if (num_peliculas != 0) {
+		selectionSortPelicula(peli, num_peliculas);
+	}
+	else {
+		printf ("\tERROR (No hay peliculas disponible actualmente)\n");
+	}
+}
 /***********************************************
 *
 * @Finalidad: Mostrar un menu y ejecutar la opcion introducida por el usuario.
@@ -788,8 +801,6 @@ void descargarProgramacion (Persona p) {
 ************************************************/
 void modoCliente (Persona p) {
 	int option;
-	Pelicula *peli = NULL;
-	int num_peliculas;
 
 	do {
 		option = menuCliente();
@@ -815,13 +826,12 @@ void modoCliente (Persona p) {
 				descargarProgramacion(p);
 				break;
 			case 7:
-				peli = leerPeliculas(&num_peliculas);
-				selectionSortPelicula(peli, num_peliculas);
+				ordenacionPeliculas();
 				break;
 			case 8:
 				printf ("¡Hasta pronto!\n");
 				break;
 		}
-	} while (option != 7);
+	} while (option != 8);
 
 }
