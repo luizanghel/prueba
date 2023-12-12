@@ -16,28 +16,28 @@
 typedef struct {
 	int numeros;
 	char letra;
-} FileDni;
+} Dni;
 
 typedef struct {
 	char titular[MAX_CHAR];
 	int numero;
 	int pin;
-} FileTarjeta;
+} Tarjeta;
 
 typedef struct {
-	FileDni dni;
+	Dni dni;
 	char nombre[100];
 	char apellido1[100];
 	char apellido2[100];
 	char correo[100];
 	char password[100];
-	FileTarjeta tarjeta;
+	Tarjeta tarjeta;
 	int telefono;
 	int tipus;			// 0-Client | 1-Productor
-} FilePersona;
+} Persona;
 
 // Data types
-typedef FilePersona Element;
+typedef Persona Element;
 
 /*
  * Node is a recursive structure that will contain each one of the elements.
