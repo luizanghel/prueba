@@ -1,11 +1,4 @@
-#include <string.h>
-#include <stdio.h>
-
-
 #include "canales.h"
-
-#define MAX_CHAR_SIMPLE 	  200
-#define MAX_ACTORES_PROGRAMA	3
 
 /***********************************************
 *
@@ -28,6 +21,10 @@ void actualizarFicheroCanales (LinkedList3 canal) {
 			c = LINKEDLISTCANALES_get(&canal);
 			fprintf(actualizado, "%s\n", c.nombre);
 	   		fprintf(actualizado, "%f\n", c.coste_suscripcion);
+			fprintf(actualizado, "%d\n", c.num_suscriptores);
+			for (int i = 0; i < c.num_suscriptores; i++) {
+				fprintf(actualizado, "%s\n", c.suscriptores[i]);
+			}
 			LINKEDLISTCANALES_next(&canal);
 		}
 		fclose(actualizado);
@@ -45,13 +42,11 @@ void actualizarFicheroCanales (LinkedList3 canal) {
 ************************************************/
 Canal solicitarDatosCanal () {
 	Canal c;
+	
+	solicitarPalabra("Introduce nombre del canal: ", c.nombre, NOMBRE_CANAL);
+	c.coste_suscripcion = solicitarFloat("Introduce coste de suscripcion: ");
+	c.num_suscriptores = 0;
 
-	printf ("Entra nombre canal: ");
-	scanf ("%s", c.nombre);
-
-	printf ("Entra coste suscripcion: ");
-	scanf ("%f", &c.coste_suscripcion);
-		
 	return c;
 }
 
@@ -166,7 +161,8 @@ LinkedList3 canalesFileToList (int *num_canales) {
 	char aux;
 	LinkedList4 programas;
 	Programa p;
-	
+	char suscriptor[MAX_CHAR_SIMPLE];
+
 	*num_canales = 0;
 
 	f = fopen ("canales.txt", "r");
@@ -181,6 +177,20 @@ LinkedList3 canalesFileToList (int *num_canales) {
 			c.nombre[strlen(c.nombre) - 1] = '\0';
 			fscanf(f, "%f", &c.coste_suscripcion);
 			fscanf(f, "%c", &aux);
+			fscanf(f, "%d", &c.num_suscriptores);
+			fscanf(f, "%c", &aux);
+			c.suscriptores = (char **)malloc(sizeof(char *) * c.num_suscriptores);
+			if (c.suscriptores == NULL) {
+				printf ("\tERROR (El sistema ha caído. Contacte con un administrador en la mayor brevedad posible)\n");
+			}
+			else {
+				for (int i = 0; i < c.num_suscriptores; i++) {
+					fscanf(f, "%s", suscriptor);
+					fscanf(f, "%c", &aux);
+					c.suscriptores[i] = (char *)malloc((strlen(suscriptor) + 1) * sizeof(char));
+					strcpy(c.suscriptores[i], suscriptor);
+				}
+			}
 			c.programas = LINKEDLISTPROGRAMA_create();
 			(*num_canales)++;
 			LINKEDLISTPROGRAMA_goToHead(&programas);
@@ -291,9 +301,12 @@ int mostrarMenuCanales () {
 * @Retorno: ----.
 * 
 ************************************************/
-void mostrarCanales (LinkedList3 canales) {
+void mostrarCanales () {
 	Canal c;
+	LinkedList3 canales;
+	int num_canales;
 
+	canales = canalesFileToList(&num_canales);
 	LINKEDLISTCANALES_goToHead(&canales);
 	while (!LINKEDLISTCANALES_isAtEnd(canales)) {
 		c = LINKEDLISTCANALES_get(&canales);	
@@ -398,9 +411,8 @@ int assignarAlPrograma(int numeros, char letra) {
 	Programa p;
 	int correcto = 0, posicion;
 	LinkedList4 programas;
-	
-	printf ("Introduce nombre de programa: ");
-	scanf ("%s", nombre);
+
+	solicitarPalabra("Introduce nombre del programa: ", nombre, NOMBRE_PROGRAMA);
 	programas = programaFileToList();
 	LINKEDLISTPROGRAMA_goToHead(&programas);
 	while (!LINKEDLISTPROGRAMA_isAtEnd(programas)) {
@@ -564,7 +576,7 @@ void runOptionCanales (int option, int *quit) {
 			 eliminarCanal();
 			break;
 		case 4:
-			mostrarCanales(canales);			
+			mostrarCanales();			
 			break;
 		case 5: 
 			anadirProgramaACanal(&canales);
@@ -638,6 +650,136 @@ Canal * listaAArrayDinamico (int *num_canales) {
 		}
 	}
 	return array;
+}
+
+/***********************************************
+*
+* @Finalidad: Verificar si un usuario se encuentra suscrito a un canal.
+* @Parametros:	in: c = Canal a verificar la suscripcion.
+*				in: usuario[] = Correo del usuario a verificar.
+* @Retorno: Retorna un 1 si el usuario se encuentra suscrito al canal y un 0 si no lo esta.
+* 
+************************************************/
+int usuarioAsignado (Canal c, char usuario[MAX_CHAR_SIMPLE], int *i) {
+
+    for (*i = 0; *i < c.num_suscriptores; (*i)++) {
+		if (!strcmp(c.suscriptores[*i], usuario)) {
+			return 1;
+        }
+    }
+    
+	return 0;
+}
+
+/***********************************************
+*
+* @Finalidad: Asignar el correo de un usuario como suscriptor de un canal.
+* @Parametros:	in: canal[] = Nombre del canal a asignar el usuario.
+*				in: usuario[] = Correo del usuario a asignar.
+* @Retorno: ----.
+* 
+************************************************/
+void asignarUsuarioACanal(char canal[MAX_CHAR_SIMPLE], char usuario[MAX_CHAR_SIMPLE]) {
+    LinkedList3 canales;
+    int num_canales, found = 0, i;
+    Canal c;
+
+	canales = canalesFileToList(&num_canales);
+    LINKEDLISTCANALES_goToHead(&canales);
+    while (!LINKEDLISTCANALES_isAtEnd(canales) && !found) {
+        c = LINKEDLISTCANALES_get(&canales);
+        if (!strcmp(c.nombre, canal)) {
+			found = 1;
+			if (!usuarioAsignado(c, usuario, &i)) {
+				c.num_suscriptores++;
+				c.suscriptores = realloc(c.suscriptores, sizeof(char *) * c.num_suscriptores);
+				c.suscriptores[c.num_suscriptores - 1] = (char *)malloc(sizeof(char) * (strlen(usuario) + 1));	
+				strcpy(c.suscriptores[c.num_suscriptores - 1], usuario);
+				LINKEDLISTCANALES_remove(&canales);
+				LINKEDLISTCANALES_add(&canales, c);
+				actualizarFicheroCanales(canales);
+				printf ("La suscripcion se ha efectuado correctamente. Ya tiene acceso a todos los programas de %s.\n", c.nombre);
+			}
+			else {
+				printf ("\tERROR (Ya hay una suscripcion activa a este canal con esta cuenta)\n");
+			}
+		}
+		else {
+			LINKEDLISTCANALES_next(&canales);
+		}
+    }
+
+}
+
+/***********************************************
+*
+* @Finalidad: Eliminar el correo de un usuario como suscriptor de un canal.
+* @Parametros:	in: canal[] = Nombre del canal a eliminar el usuario.
+*				in: usuario[] = Correo del usuario a eliminar.
+* @Retorno: ----.
+* 
+************************************************/
+void retirarUsuarioDeCanal (char canal[MAX_CHAR_SIMPLE], char usuario[MAX_CHAR_SIMPLE]) {
+	LinkedList3 canales;
+	int num_canales, found = 0, i;
+	Canal c;
+
+	canales = canalesFileToList(&num_canales);
+	LINKEDLISTCANALES_goToHead(&canales);
+	while (!LINKEDLISTCANALES_isAtEnd(canales) && !found) {
+		c = LINKEDLISTCANALES_get(&canales);
+		if (!strcmp(c.nombre, canal)) {
+			found = 1;
+			if (usuarioAsignado(c, usuario, &i)) {
+				free(c.suscriptores[i]);
+				c.num_suscriptores--;
+				LINKEDLISTCANALES_remove(&canales);
+				LINKEDLISTCANALES_add(&canales, c);
+				actualizarFicheroCanales(canales);
+			}
+			else {
+				printf ("\tERROR (No hay una suscripcion activa a '%s' con esta cuenta)\n", canal);
+			}
+		}
+	}
+}
+
+/***********************************************
+*
+* @Finalidad: Genera la programacion de un canal.
+* @Parametros:	in: c = Estructura canal de donde extraer la programacion.
+* @Retorno: ----.
+* 
+************************************************/
+void generarProgramacion (Canal c) {
+	FILE *f;
+	Programa p;
+	int i;
+	char nombre[MAX_CHAR_SIMPLE] = "programacion";
+		
+	strcat(nombre, c.nombre);
+	strcat(nombre, ".txt");
+	f = fopen (nombre, "w");	
+	if (f == NULL) {
+		printf ("\tERROR (La programacion no se ha podido descargar correctamente)\n");
+	}
+	else {
+		fprintf (f, "\t\tPROGRAMACION %s\n", c.nombre);
+		fprintf (f, "----------------------------------------------\n");
+		LINKEDLISTPROGRAMA_goToHead(&c.programas);
+		while (!LINKEDLISTPROGRAMA_isAtEnd(c.programas)) {
+			p = LINKEDLISTPROGRAMA_get(&c.programas);
+			fprintf (f, "Hora de emision: %s\n", p.emisio);
+			fprintf (f, "Nombre del programa: %s\n", p.nom);
+			fprintf (f, "Categoria: %s\n", p.categoria);
+			fprintf (f, "Duracio: %d minutos\n", p.duracio);
+			for (i = 0; i < 2; i++) {
+				fprintf (f, "\n");
+			}
+			LINKEDLISTPROGRAMA_next(&c.programas);
+		}
+		fclose(f);
+	}
 }
 
 /***********************************************
