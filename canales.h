@@ -20,6 +20,16 @@ LinkedList3 canalesFileToList (int *numero);
 
 /***********************************************
 *
+* @Finalidad: Eliminar el correo de un usuario como suscriptor de un canal.
+* @Parametros:	in: canal[] = Nombre del canal a eliminar el usuario.
+*				in: usuario[] = Correo del usuario a eliminar.
+* @Retorno: ----.
+* 
+************************************************/
+void retirarUsuarioDeCanal (char canal[MAX_CHAR_SIMPLE], char usuario[MAX_CHAR_SIMPLE]);
+
+/***********************************************
+*
 * @Finalidad: Asignar el correo de un usuario como suscriptor de un canal.
 * @Parametros:	in: canal[] = Nombre del canal a asignar el usuario.
 *				in: usuario[] = Correo del usuario a asignar.
