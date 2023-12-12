@@ -7,6 +7,7 @@
 #include "canales.h"
 #include "linkedlistprograma.h"
 #include "user.h"
+#include "dato.h"
 
 void menuActors();
 
