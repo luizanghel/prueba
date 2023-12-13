@@ -1,16 +1,32 @@
 #ifndef CANALES_H
 #define CANALES_H
 
+#include <stdio.h>
+#include <string.h>
+
 #include "actors.h"
 #include "linkedlistcanales.h"
 #include "linkedlistprograma.h"
 #include "dato.h"
+
+#define MAX_CHAR_SIMPLE 	  200
+#define MAX_ACTORES_PROGRAMA	3
 
 void menuCanales();
 int assignarAlPrograma(int numero, char letra);
 LinkedList4 programaFileToList ();
 void actualizarFicheroPrograma (LinkedList4 programas);
 LinkedList3 canalesFileToList (int *numero);
+
+/***********************************************
+*
+* @Finalidad: Eliminar el correo de un usuario como suscriptor de un canal.
+* @Parametros:	in: canal[] = Nombre del canal a eliminar el usuario.
+*				in: usuario[] = Correo del usuario a eliminar.
+* @Retorno: ----.
+* 
+************************************************/
+void retirarUsuarioDeCanal (char canal[MAX_CHAR_SIMPLE], char usuario[MAX_CHAR_SIMPLE]);
 
 /***********************************************
 *
@@ -59,6 +75,18 @@ void selectionSort (Canal *c, int num_canales);
 * 
 ************************************************/
 int canalUnico (char nombre[100], Canal *c);
+
+///////////////////////////////////////////////////////////////////////////
+
+/***********************************************
+ * @Finalidad: Verificar si un usuario está asignado a un canal.
+ * @Parametros:  in: canal = Canal a verificar.
+ *               in: usuario = Correo del usuario.
+ *               out: i = Índice del usuario en la lista de suscriptores.
+ * @Retorno: 1 si el usuario está asignado al canal, 0 si no lo está.
+ ************************************************/
+int usuarioAsignado (Canal c, char usuario[MAX_CHAR_SIMPLE], int *i);
+
 
 #endif
 

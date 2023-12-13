@@ -1,11 +1,4 @@
-#include <string.h>
-#include <stdio.h>
-
-
 #include "canales.h"
-
-#define MAX_CHAR_SIMPLE 	  200
-#define MAX_ACTORES_PROGRAMA	3
 
 /***********************************************
 *
@@ -49,13 +42,9 @@ void actualizarFicheroCanales (LinkedList3 canal) {
 ************************************************/
 Canal solicitarDatosCanal () {
 	Canal c;
-
-	printf ("Entra nombre canal: ");
-	scanf ("%s", c.nombre);
-
-	printf ("Entra coste suscripcion: ");
-	scanf ("%f", &c.coste_suscripcion);
 	
+	solicitarPalabra("Introduce nombre del canal: ", c.nombre, NOMBRE_CANAL);
+	c.coste_suscripcion = solicitarFloat("Introduce coste de suscripcion: ");
 	c.num_suscriptores = 0;
 
 	return c;
@@ -422,9 +411,8 @@ int assignarAlPrograma(int numeros, char letra) {
 	Programa p;
 	int correcto = 0, posicion;
 	LinkedList4 programas;
-	
-	printf ("Introduce nombre de programa: ");
-	scanf ("%s", nombre);
+
+	solicitarPalabra("Introduce nombre del programa: ", nombre, NOMBRE_PROGRAMA);
 	programas = programaFileToList();
 	LINKEDLISTPROGRAMA_goToHead(&programas);
 	while (!LINKEDLISTPROGRAMA_isAtEnd(programas)) {
@@ -664,16 +652,23 @@ Canal * listaAArrayDinamico (int *num_canales) {
 	return array;
 }
 
-int usuarioAsignado (Canal c, char usuario[MAX_CHAR_SIMPLE]) {
-    int i, found = 0;
+/***********************************************
+*
+* @Finalidad: Verificar si un usuario se encuentra suscrito a un canal.
+* @Parametros:	in: c = Canal a verificar la suscripcion.
+*				in: usuario[] = Correo del usuario a verificar.
+* @Retorno: Retorna un 1 si el usuario se encuentra suscrito al canal y un 0 si no lo esta.
+* 
+************************************************/
+int usuarioAsignado (Canal c, char usuario[MAX_CHAR_SIMPLE], int *i) {
 
-    for (i = 0; i < c.num_suscriptores && !found; i++) {
-        if (!strcmp(c.suscriptores[i], usuario)) {
-            found = 1;
+    for (*i = 0; *i < c.num_suscriptores; (*i)++) {
+		if (!strcmp(c.suscriptores[*i], usuario)) {
+			return 1;
         }
     }
-
-    return found;
+    
+	return 0;
 }
 
 /***********************************************
@@ -686,7 +681,7 @@ int usuarioAsignado (Canal c, char usuario[MAX_CHAR_SIMPLE]) {
 ************************************************/
 void asignarUsuarioACanal(char canal[MAX_CHAR_SIMPLE], char usuario[MAX_CHAR_SIMPLE]) {
     LinkedList3 canales;
-    int num_canales, found = 0;
+    int num_canales, found = 0, i;
     Canal c;
 
 	canales = canalesFileToList(&num_canales);
@@ -695,7 +690,7 @@ void asignarUsuarioACanal(char canal[MAX_CHAR_SIMPLE], char usuario[MAX_CHAR_SIM
         c = LINKEDLISTCANALES_get(&canales);
         if (!strcmp(c.nombre, canal)) {
 			found = 1;
-			if (!usuarioAsignado(c, usuario)) {
+			if (!usuarioAsignado(c, usuario, &i)) {
 				c.num_suscriptores++;
 				c.suscriptores = realloc(c.suscriptores, sizeof(char *) * c.num_suscriptores);
 				c.suscriptores[c.num_suscriptores - 1] = (char *)malloc(sizeof(char) * (strlen(usuario) + 1));	
@@ -714,6 +709,39 @@ void asignarUsuarioACanal(char canal[MAX_CHAR_SIMPLE], char usuario[MAX_CHAR_SIM
 		}
     }
 
+}
+
+/***********************************************
+*
+* @Finalidad: Eliminar el correo de un usuario como suscriptor de un canal.
+* @Parametros:	in: canal[] = Nombre del canal a eliminar el usuario.
+*				in: usuario[] = Correo del usuario a eliminar.
+* @Retorno: ----.
+* 
+************************************************/
+void retirarUsuarioDeCanal (char canal[MAX_CHAR_SIMPLE], char usuario[MAX_CHAR_SIMPLE]) {
+	LinkedList3 canales;
+	int num_canales, found = 0, i;
+	Canal c;
+
+	canales = canalesFileToList(&num_canales);
+	LINKEDLISTCANALES_goToHead(&canales);
+	while (!LINKEDLISTCANALES_isAtEnd(canales) && !found) {
+		c = LINKEDLISTCANALES_get(&canales);
+		if (!strcmp(c.nombre, canal)) {
+			found = 1;
+			if (usuarioAsignado(c, usuario, &i)) {
+				free(c.suscriptores[i]);
+				c.num_suscriptores--;
+				LINKEDLISTCANALES_remove(&canales);
+				LINKEDLISTCANALES_add(&canales, c);
+				actualizarFicheroCanales(canales);
+			}
+			else {
+				printf ("\tERROR (No hay una suscripcion activa a '%s' con esta cuenta)\n", canal);
+			}
+		}
+	}
 }
 
 /***********************************************

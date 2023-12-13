@@ -5,7 +5,23 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAX_CHAR_SIMPLE 200
+#define MAX_CHAR_SIMPLE 	200
+
+#define NOMBRE 				0
+#define PRIMER_APELLIDO  	1
+#define SEGUNDO_APELLIDO 	2
+#define NOMBRE_CANAL 		0
+#define NOMBRE_PROGRAMA		0
+/***********************************************
+*
+* @Finalidad: Comprobar que los parametros introducudidos por el usuario sean correctos y se encuentren dentro del rango..
+* @Parametros:	out: option = Valor de la opcion del menú a interaccionar.
+*				in: min = Valor minimo permitido en el menú.
+*				in: max = Valor máximo permitido en el menú.
+* @Retorno: Devuelve si el numero introducido se encuentra dentro del rango o no.
+* 
+************************************************/
+int optionAsNumber (int *option, int min, int max);
 
 /***********************************************
 *
