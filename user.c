@@ -541,9 +541,10 @@ int menuCliente () {
 		printf ("4- Buscar Programa por nombre\n");
 		printf ("5- Suscribirse a un canal\n");
 		printf ("6- Cancelar suscripcion a un canal\n");
-		printf ("7- Salir\n");
+		printf ("7- Descargar programacion de un canal\n");
+		printf ("8- Salir\n");
 		printf ("Entra opcion: ");
-		error = optionAsNumber(&option, 1, 7);
+		error = optionAsNumber(&option, 1, 8);
 	} while (error);
 	
 	return option;
@@ -782,6 +783,29 @@ void BuscarPrograma(char usuario[MAX_CHAR_SIMPLE]) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void descargarProgramacion (Persona p) {
+	char canal[MAX_CHAR_SIMPLE];
+	Canal c;
+	int i;
+	solicitarPalabra("Introduce canal: ", canal, NOMBRE_CANAL);
+	if (canalUnico(canal, &c)) {
+		if (usuarioAsignado(c, p.correo, &i)) {
+			LINKEDLISTPROGRAMA_goToHead(&c.programas);
+			if (!LINKEDLISTPROGRAMA_isAtEnd(c.programas)) {
+				generarProgramacion(c);
+			}
+			else {
+				printf ("\tERROR (El canal seleccionado no dispone de programas actualmente)\n");
+			}
+		}
+		else {
+			printf ("\tERROR (Para descargar la programacion de un canal, debes estar suscrito)\n");	
+		}
+	}
+	else {
+		printf ("\tERROR (El canal que ha introducido no existe)\n");
+	}
+}
 
 /***********************************************
 *
@@ -817,9 +841,12 @@ void modoCliente (Persona p) {
 				eliminarSuscripcion(p);
 				break;
 			case 7:
+				descargarProgramacion(p);
+				break;
+			case 8:
 				printf ("¡Hasta pronto!\n");
 				break;
 		}
-	} while (option != 7);
+	} while (option != 8);
 
 }
