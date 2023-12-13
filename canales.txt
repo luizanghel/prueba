@@ -1,11 +1,12 @@
 Juan
 150.000000
-5
+6
 correotest1@gmail.com
 aux@gmail.com
 aux@gmail.com
 aux@gmail.com
 aux@gmail.com
+josejuan@gmail.com
 Ramonete
 150.000000
 3
@@ -37,7 +38,8 @@ Buenas
 josejuan@gmail.com
 Rosario
 12.500000
-0
+1
+josejuan@gmail.com
 Juanan
 12.000000
 1
