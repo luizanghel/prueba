@@ -1,15 +1,13 @@
 #ifndef _LINKEDLISTADVERTISEMENTS_H
 #define _LINKEDLISTADVERTISEMENTS_H
+#include <stdlib.h>
 
-// Libraries
-#include <stdlib.h>	// To use dynamic memory.
 
-// Constants to manage the list's error codes.
 #define LIST_NO_ERROR 0
-#define LIST_ERROR_FULL 1		// Error, the list is full.
-#define LIST_ERROR_EMPTY 2		// Error, the list is empty.
-#define LIST_ERROR_MALLOC 3		// Error, a malloc failed.
-#define LIST_ERROR_END 4		// Error, the POV is at the end.
+#define LIST_ERROR_FULL 1
+#define LIST_ERROR_EMPTY 2
+#define LIST_ERROR_MALLOC 3
+#define LIST_ERROR_END 4
 
 
 typedef struct {
@@ -19,16 +17,9 @@ typedef struct {
     float precio;
 } Anuncio;
 
-// Data types
+
 typedef Anuncio Element5;
 
-/*
- * Node is a recursive structure that will contain each one of the elements.
- * A node has two main fields, the element to store and a pointer to the next
- *  node in the Linear Data Structure.
- * The structure is recursively defined (a Node has a pointer to another node),
- *  so we need to define a new type (typedef) from a structure (struct _Node5).
- */
 typedef struct _Node5 {
     Element5 element;
     struct _Node5* next;
@@ -77,12 +68,12 @@ typedef struct _Node5 {
  *
  */
 typedef struct {
-    int error;        // Error code to keep track of failing operations;
-    Node5* head;	 	// Head/First element or Phantom node;
-    Node5* previous; 	// Previous node before the point of view;
+    int error;
+    Node5* head;
+    Node5* previous;
 } LinkedListAd;
 
-// Procedures & Functions
+
 
 /****************************************************************************
  *

@@ -12,11 +12,8 @@
 #include "actors.h"
 #include "linkedlistcanales.h"
 
-// Constantes 
 
-// Tipo
 
-// Operaciones
 Persona registerUser ();
 Persona iniciarSesion ();
 void modoProductor ();
