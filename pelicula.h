@@ -13,6 +13,7 @@ typedef struct {
 
 void listarPeliculas ();
 
+void eliminarPelicula ();
 /***********************************************
 *
 * @Finalidad: Anadir una pelicula a la base de datos..

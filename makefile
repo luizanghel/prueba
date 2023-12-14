@@ -36,8 +36,8 @@ anuncios.o: anuncios.c anuncios.h linkedlistadvertisements.h
 linkedlistadvertisements.o: linkedlistadvertisements.c linkedlistadvertisements.h
 	gcc linkedlistadvertisements.c -g -c
 
-project: main.o linkedlist.o user.o presupuesto.o actors.o linkedlistactores.o canales.o linkedlistcanales.o linkedlistprograma.o dato.o anuncios.o pelicula.o linkedlistadvertisements.o
-	gcc main.o linkedlist.o user.o presupuesto.o actors.o linkedlistactores.o canales.o linkedlistcanales.o linkedlistprograma.o dato.o anuncios.o pelicula.o linkedlistadvertisements.o -g -o project
+project: main.o linkedlist.o user.o presupuesto.o actors.o linkedlistactores.o canales.o linkedlistcanales.o linkedlistprograma.o dato.o anuncios.o linkedlistadvertisements.o pelicula.o
+	gcc main.o linkedlist.o user.o presupuesto.o actors.o linkedlistactores.o canales.o linkedlistcanales.o linkedlistprograma.o dato.o anuncios.o linkedlistadvertisements.o pelicula.o -g -o project
 
 gdb: project
 	gdb -tui ./project

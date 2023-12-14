@@ -536,7 +536,7 @@ void modoProductorPeliculas () {
 				anadirPelicula();
 				break;
 			case 2:
-				// eliminarPelicula();
+				eliminarPelicula();
 				break;
 			case 3:
 				listarPeliculas();

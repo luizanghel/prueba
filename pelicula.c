@@ -34,17 +34,18 @@ Pelicula * leerPeliculas (int *num_peliculas) {
 	return p;
 }
 
-int peliculaExiste (Pelicula *p, int num_peliculas, char nombre[MAX_CHAR_SIMPLE]) {
-	int i = 0, found = 0;
+int peliculaExiste (Pelicula *p, int num_peliculas, char nombre[MAX_CHAR_SIMPLE], int *i) {
 	
-	while (i < num_peliculas) {
-		if (!strcmp(p[i].titulo, nombre)) {
-			found = 1;
+	*i = 0;
+	while (*i < num_peliculas) {
+		if (!strcmp(p[*i].titulo, nombre)) {
+			return 1;
 		}
-		i++;
+		(*i)++;
+
 	}
 	
-	return found;
+	return 0;
 }
 
 void actualizacionFicheroPeliculas (Pelicula *p, int num_peliculas) {
@@ -78,7 +79,7 @@ void actualizacionFicheroPeliculas (Pelicula *p, int num_peliculas) {
 ************************************************/
 void anadirPelicula() {
 	Pelicula p;
-	int num_peliculas;
+	int num_peliculas, i;
 	Pelicula *pelis;
 
 	printf ("Introduce los datos de la pelicula: \n");
@@ -89,8 +90,7 @@ void anadirPelicula() {
 	p.precio = solicitarFloat("\tPrecio de la pelicula: ");
 
 	pelis = leerPeliculas(&num_peliculas);
-	
-	if (!peliculaExiste(pelis, num_peliculas, p.titulo)) {
+	if (!peliculaExiste(pelis, num_peliculas, p.titulo, &i)) {
 		num_peliculas++;
 		pelis = realloc(pelis, sizeof(Pelicula) * num_peliculas);
 		pelis[num_peliculas - 1] = p;	
@@ -112,5 +112,30 @@ void listarPeliculas () {
 		printf ("Director: %s\n", pelis[i].director);
 		printf ("Precio: %f\n", pelis[i].precio);
 		i++;
+	}
+}
+
+void eliminarPelicula () {
+	Pelicula *pelis = NULL;
+	int num_peliculas, i, eliminar;
+	char nombre[MAX_CHAR_SIMPLE];
+	
+	pelis = leerPeliculas(&num_peliculas);
+	if (num_peliculas != 0) {
+		solicitarPalabra("Introduce pelicula a eliminar: ", nombre, NOMBRE);
+		if (peliculaExiste(pelis, num_peliculas, nombre, &eliminar)) {
+			for (i = eliminar; i < num_peliculas - 1; i++) {
+        		pelis[i] = pelis[i + 1];
+    		}
+  		  	num_peliculas--;
+    		pelis = realloc(pelis, sizeof(Pelicula) * num_peliculas);
+			actualizacionFicheroPeliculas(pelis, num_peliculas);
+		}
+		else {
+			printf ("\tERROR (La pelicula introducida no existe)\n");
+		}
+	}
+	else {
+		printf ("\tERROR (No hay peliculas registradas para eliminar)\n");
 	}
 }
