@@ -577,8 +577,9 @@ int menuCliente () {
     do {
         printf ("Bienvenido al MENU CLIENTE. ¿Que desea realizar?\n");
         printf ("1- Registrar tarjeta\n");
-        printf ("2- Listar programas canal\n");
+        printf ("2- Listar programas de un canal\n");
 		printf ("3- Visualizar canales por audiencia\n");
+		printf ("4- Listar Programas a los que estoy suscrito\n");
 		printf ("4- Buscar programa por nombre\n");
 		printf ("5- Suscribirse a un canal\n");
 		printf ("6- Cancelar suscripcion a un canal\n");
@@ -899,6 +900,15 @@ void comprarPelicula (Persona p) {
 	}
 }
 
+//void listarProgramas(){
+	
+	
+	
+	
+	
+	
+//}
+
 /***********************************************
 *
 * @Finalidad: Mostrar un menu y ejecutar la opcion introducida por el usuario.
@@ -923,29 +933,32 @@ void modoCliente (Persona p) {
 				visualizarCanales();
 				break;
 			case 4:
+				listarProgramas();
+				break;
+			case 5:
 				buscarPrograma(p.correo);
 				break;
-			case 5:		
+			case 6:		
 				suscribirseACanal(p);
 				break;
-			case 6:
+			case 7:
 				eliminarSuscripcion(p);
 				break;
-			case 7:
+			case 8:
 				verProgramario();
 				break;
-			case 8:
+			case 9:
 				descargarProgramacion(p);
 				break;
-			case 9:
+			case 10:
 				ordenacionPeliculas();
 				break;
-			case 10:
+			case 11:
 				comprarPelicula(p);
 				break;
-			case 11:
+			case 12:
 				printf ("¡Hasta pronto!\n");
 				break;
 		}
-	} while (option != 11);
+	} while (option != 12);
 }
