@@ -885,6 +885,20 @@ void ordenacionPeliculas () {
 	}
 }
 
+void comprarPelicula (Persona p) {
+	char peli[MAX_CHAR_SIMPLE];
+	int num_peliculas, posicion;
+	Pelicula *peliculas = leerPeliculas(&num_peliculas);
+	
+	solicitarPalabra("\nIntroduce pelicula que desea adquirir: ", peli, NOMBRE);
+	if (peliculaExiste(peliculas, num_peliculas, peli, &posicion)) {
+		asignarUsuarioAPelicula(posicion, p.correo);
+	}
+	else {	
+		printf ("\tERROR (La pelicula introducida no existe)\n");
+	}
+}
+
 /***********************************************
 *
 * @Finalidad: Mostrar un menu y ejecutar la opcion introducida por el usuario.
@@ -927,9 +941,11 @@ void modoCliente (Persona p) {
 				ordenacionPeliculas();
 				break;
 			case 10:
+				comprarPelicula(p);
+				break;
+			case 11:
 				printf ("¡Hasta pronto!\n");
 				break;
 		}
-
-    } while (option != 10);
+	} while (option != 11);
 }
