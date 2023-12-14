@@ -41,7 +41,7 @@ Nombretarjeta
 1010101010
 1234
 620968077
-1
+0
 78554963F
 Roberto
 Llopis
