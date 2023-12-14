@@ -19,10 +19,6 @@ josejuan@gmail.com
 anAntonio
 12.000000
 0
-Flownek
-12.000000
-1
-josejuan@gmail.com
 a
 12.000000
 0
@@ -32,10 +28,6 @@ b
 c
 12.000000
 0
-Buenas
-2.785000
-1
-josejuan@gmail.com
 Rosario
 12.500000
 1
@@ -44,3 +36,6 @@ Juanan
 12.000000
 1
 josejuan@gmail.com
+Eneco
+123.300003
+0

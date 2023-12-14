@@ -405,9 +405,9 @@ char solicitarCaracter (char texto[MAX_CHAR_SIMPLE]) {
 * @Retorno: Devuelve el numero decimal, cuando se ha comprobado que es correcto.
 * 
 ************************************************/
-float solicitarFloat (char texto[MAX_CHAR_SIMPLE]) {
+float solicitarFloat (char texto[MAX_CHAR_SIMPLE], int option) {
 	int i, error;
-	char palabra[MAX_CHAR_SIMPLE];
+	char palabra[MAX_CHAR_SIMPLE], tipo[3][MAX_CHAR_SIMPLE] = {"el coste de suscripcion", "los minutos", "el salario"};
 	float numero;
 
 	do {
@@ -417,8 +417,8 @@ float solicitarFloat (char texto[MAX_CHAR_SIMPLE]) {
 		error = 0;
 
 		for (i = 0; palabra[i] != '\0' && !error; i++) {
-			if (palabra[i] < '0' || palabra[i] > '9') {
-				printf ("\tERROR (Debes introducir un numero que indique los minutos)\n");
+			if ((palabra[i] < '0' || palabra[i] > '9') && palabra[i] != '.') {
+				printf ("\tERROR (Debes introducir un numero que indique %s)\n", tipo[option]);
 				error = 1;
 			}
 		}
@@ -426,7 +426,7 @@ float solicitarFloat (char texto[MAX_CHAR_SIMPLE]) {
 	} while (error);
 	
 	if (!error) {
-		numero = atoi(palabra);
+		numero = atof(palabra);
 	}
 	
 	return numero;
