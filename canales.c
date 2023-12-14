@@ -789,35 +789,35 @@ void retirarUsuarioDeCanal (char canal[MAX_CHAR_SIMPLE], char usuario[MAX_CHAR_S
 *
 ************************************************/
 void generarProgramacion (Canal c) {
-    FILE *f;
-    Programa p;
-    int i;
-    char nombre[MAX_CHAR_SIMPLE] = "programacion";
+	FILE *f;
+	Programa p;
+	int i;
+	char nombre[MAX_CHAR_SIMPLE] = "programacion";
+		
+	strcat(nombre, c.nombre);
+	strcat(nombre, ".txt");
 
-    strcat(nombre, c.nombre);
-    strcat(nombre, ".txt");
-
-    f = fopen (nombre, "w");
-    if (f == NULL) {
-        printf ("\tERROR (La programacion no se ha podido descargar correctamente)\n");
-    }
-    else {
-        fprintf (f, "\t\tPROGRAMACION %s\n", c.nombre);
-        fprintf (f, "----------------------------------------------\n");
-        LINKEDLISTPROGRAMA_goToHead(&c.programas);
-        while (!LINKEDLISTPROGRAMA_isAtEnd(c.programas)) {
-            p = LINKEDLISTPROGRAMA_get(&c.programas);
-            fprintf (f, "Hora de emision: %s\n", p.emisio);
-            fprintf (f, "Nombre del programa: %s\n", p.nom);
-            fprintf (f, "Categoria: %s\n", p.categoria);
-            fprintf (f, "Duracio: %d minutos\n", p.duracio);
-            for (i = 0; i < 2; i++) {
-                fprintf (f, "\n");
-            }
-            LINKEDLISTPROGRAMA_next(&c.programas);
-        }
-        fclose(f);
-    }
+	f = fopen (nombre, "w");	
+	if (f == NULL) {
+		printf ("\tERROR (La programacion no se ha podido descargar correctamente)\n");
+	}
+	else {
+		fprintf (f, "\t\tPROGRAMACION %s\n", c.nombre);
+		fprintf (f, "----------------------------------------------\n");
+		LINKEDLISTPROGRAMA_goToHead(&c.programas);
+		while (!LINKEDLISTPROGRAMA_isAtEnd(c.programas)) {
+			p = LINKEDLISTPROGRAMA_get(&c.programas);
+			fprintf (f, "Hora de emision: %s\n", p.emisio);
+			fprintf (f, "Nombre del programa: %s\n", p.nom);
+			fprintf (f, "Categoria: %s\n", p.categoria);
+			fprintf (f, "Duracio: %d minutos\n", p.duracio);
+			for (i = 0; i < 2; i++) {
+				fprintf (f, "\n");
+			}
+			LINKEDLISTPROGRAMA_next(&c.programas);
+		}
+		fclose(f);
+	}
 }
 
 /***********************************************

@@ -501,7 +501,7 @@ int menuProductorGeneral() {
         printf ("2- Gestionar canales\n");
         printf ("3- Gestionar actores\n");
         printf ("4- Gestionar peliculas\n");
-        printf("5- Gestionar anuncios\n");
+        printf ("5- Gestionar anuncios\n");
         printf ("6- Salir\n");
         printf ("Entra opcion: ");
         error = optionAsNumber(&option, 1, 6);
@@ -525,26 +525,50 @@ int menuPeliculas () {
     return option;
 }
 
-void modoProductor () {
-    int option, quit = 0;
+void modoProductorPeliculas () {
+	int option;
 
-    do {
-        option = menuProductorGeneral();
-        switch (option) {
-            case 1:
-                modoProductorClientes();
-                break;
-            case 2:
-                menuCanales();
-                break;
-            case 3:
-                menuActors();
-                break;
-            case 4:
-                quit = 1;
-                break;
-        }
-    } while (!quit);
+	do {
+		
+		option = menuPeliculas();
+		switch (option) {
+			case 1:
+				anadirPelicula();
+				break;
+			case 2:
+				// eliminarPelicula();
+				break;
+			case 3:
+				listarPeliculas();
+				break;
+		}
+
+	} while (option != 4);
+}
+
+void modoProductor () {
+	int option, quit = 0;
+	
+	do {
+		option = menuProductorGeneral();
+		switch (option) {
+			case 1:
+				modoProductorClientes();
+				break;
+			case 2:
+				menuCanales();
+				break;
+			case 3:
+				menuActors();
+				break;
+			case 4:
+				modoProductorPeliculas();
+				break;
+			case 5:
+				quit = 1;
+				break;
+		} 
+	} while (!quit);
 }
 
 int menuCliente () {

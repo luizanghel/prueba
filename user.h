@@ -11,6 +11,7 @@
 #include "dato.h"
 #include "actors.h"
 #include "linkedlistcanales.h"
+#include "pelicula.h"
 
 Persona registerUser ();
 Persona iniciarSesion ();
