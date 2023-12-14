@@ -13,16 +13,10 @@
 #include "linkedlistcanales.h"
 #include "pelicula.h"
 
-// Constantes 
-
-// Tipo
-
-// Operaciones
 Persona registerUser ();
 Persona iniciarSesion ();
 void modoProductor ();
-void modoCliente();
-
+void modoCliente(Persona p);
 
 void leerPersona(Persona p);
 LinkedList FicheroALista();
