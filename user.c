@@ -538,7 +538,7 @@ int menuCliente () {
 		printf ("1- Registrar tarjeta\n");
         printf ("2- Listar programas canal\n");
 		printf ("3- Visualizar canales por audiencia\n");
-		printf ("4- Buscar Programa por nombre\n");
+		printf ("4- Buscar programa por nombre\n");
 		printf ("5- Suscribirse a un canal\n");
 		printf ("6- Cancelar suscripcion a un canal\n");
 		printf ("7- Descargar programacion de un canal\n");
@@ -715,15 +715,13 @@ void eliminarSuscripcion (Persona p) {
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 /***********************************************
  * @Finalidad: Buscar un programa por nombre en el canal al que está suscrito el usuario.
  * @Parametros:  in: usuario = Correo del usuario.
  * @Retorno: ----.
  ************************************************/
-void BuscarPrograma(char usuario[MAX_CHAR_SIMPLE]) {
-    char nombrePrograma[MAX_CHAR_SIMPLE], trash;
+void buscarPrograma(char usuario[MAX_CHAR_SIMPLE]) {
+    char nombrePrograma[MAX_CHAR_SIMPLE];
     LinkedList3 canales;
 	LinkedList4 programas;
 	Programa p;
@@ -731,30 +729,19 @@ void BuscarPrograma(char usuario[MAX_CHAR_SIMPLE]) {
     int encontrado = 0;
 	int num_canales,i;
 
-   // solicitarPalabra("Introduce el nombre del programa a buscar: ", nombrePrograma, MAX_CHAR_SIMPLE);
-	printf ("Ingrese el nombre del Programa que desea buscar: ");
-    scanf("%s", nombrePrograma);
-	scanf("%c", &trash);
-
-    canales = canalesFileToList(&num_canales);
+   	solicitarPalabra("Introduce el nombre del programa a buscar: ", nombrePrograma, MAX_CHAR_SIMPLE);
+    
+	canales = canalesFileToList(&num_canales);
     programas = programaFileToList();
 
     LINKEDLISTCANALES_goToHead(&canales);
 
     while (!LINKEDLISTCANALES_isAtEnd(canales)) {
         c = LINKEDLISTCANALES_get(&canales);
-		// printf("1er WHILE\n");
         if (usuarioAsignado(c, usuario, &i)) { // Verificar si el usuario está suscrito al canal
-        //  programas = programaFileToList();
-		//	printf("PRIMER IF usuario ASIGNADO A CANAL \n");
-
             LINKEDLISTPROGRAMA_goToHead(&programas);
-
             while (!LINKEDLISTPROGRAMA_isAtEnd(programas)) {
                 p = LINKEDLISTPROGRAMA_get(&programas);
-			//	printf("SEGUNDO WHILE BUSQUEDA PROGRAMA  \n");
-			//	printf("NOMBRE %s \n", p.nom);
-			
                 if (strcmp(p.nom, nombrePrograma) == 0) {
                     encontrado = 1;
                     printf("Programa encontrado en el canal '%s':\n", c.nombre);
@@ -763,12 +750,10 @@ void BuscarPrograma(char usuario[MAX_CHAR_SIMPLE]) {
                     printf("Hora de emisión: %s\n", p.emisio);
                     break;
                 }
-
                 LINKEDLISTPROGRAMA_next(&programas);
             }
        }
-		//printf("llega aqui\n");
-        LINKEDLISTCANALES_next(&canales);
+       LINKEDLISTCANALES_next(&canales);
     }
    	LINKEDLISTPROGRAMA_destroy(&programas); // Liberar memoria de la lista de programaºs
     LINKEDLISTCANALES_destroy(&canales); // Liberar memoria de la lista de canales
@@ -777,11 +762,6 @@ void BuscarPrograma(char usuario[MAX_CHAR_SIMPLE]) {
         printf("Programa no encontrado en los canales a los que estás suscrito.\n");
     }
 }
-
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void descargarProgramacion (Persona p) {
 	char canal[MAX_CHAR_SIMPLE];
@@ -821,18 +801,16 @@ void modoCliente (Persona p) {
 		option = menuCliente();
 		switch (option) {
 			case 1:
-				// Registro tarjeta
 				registroTarjeta(&p);
             	break;
             case 2:
-                //Listar programas canal
                 mostrarprog();
 				break;
 			case 3:
 				visualizarCanales();
 				break;
 			case 4:
-				BuscarPrograma(p.correo);
+				buscarPrograma(p.correo);
 				break;
 			case 5:		
 				suscribirseACanal(p);
