@@ -390,7 +390,7 @@ void runOption (int option, Persona *p) {
             break;
         case 4:
             printf ("Su correo actual es %s.", p->correo);
-            solicitarCorreo("Introduce primer apellido a modificar: ", cambio);
+            solicitarCorreo("Introduce correo a modificar: ", cambio);
             strcpy(p->correo, cambio);
             break;
         case 5:
@@ -412,11 +412,11 @@ void modificarClientes (LinkedList *users) {
     char correo[MAX_CHAR_SIMPLE], tipo[6][MAX_CHAR_SIMPLE] = {"nombre", "primer apellido", "segundo apellido", "correo", "contraseña", "numero de telefono"};
 
     do {
+        mostrarLista(*users);
         option = menuModificacion();
         if (option != 7) {
             solicitarCorreo("Introduce el correo del usuario: ", correo);
             found = 0;
-            mostrarLista(*users);
             LINKEDLIST_goToHead(users);
             while (!LINKEDLIST_isAtEnd(*users) && !found) {
                 p = LINKEDLIST_get(users);
