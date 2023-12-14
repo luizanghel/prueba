@@ -504,7 +504,7 @@ int menuProductorGeneral() {
         printf ("3- Gestionar actores\n");
         printf ("4- Gestionar peliculas\n");
         printf ("5- Gestionar anuncios\n");
-        printf ("6- Salir\n");
+        printf ("6- Cerrar sesión\n");
         printf ("Entra opcion: ");
         error = optionAsNumber(&option, 1, 6);
     } while (error);
@@ -566,7 +566,7 @@ void modoProductor () {
 			case 4:
 				modoProductorPeliculas();
 				break;
-			case 5:
+			case 6:
 				quit = 1;
 				break;
 		} 
@@ -588,7 +588,7 @@ int menuCliente () {
 		printf ("8- Descargar programacion de un canal\n");
         printf ("9- Visualizar peliculas\n");
         printf ("10- Comprar peliculas\n");
-        printf ("11- Salir\n");
+        printf ("11- Cerrar sesión\n");
         printf ("Entra opcion: ");
         error = optionAsNumber(&option, 1, 11);
     } while (error);
@@ -909,7 +909,7 @@ void comprarPelicula (Persona p) {
 *
 ************************************************/
 void modoCliente (Persona p) {
-	int option;
+	int option, quit = 0;
 
     do {
         option = menuCliente();
@@ -946,8 +946,8 @@ void modoCliente (Persona p) {
 				comprarPelicula(p);
 				break;
 			case 11:
-				printf ("¡Hasta pronto!\n");
+				quit = 1;
 				break;
 		}
-	} while (option != 11);
+	} while (!quit);
 }
