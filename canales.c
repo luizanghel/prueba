@@ -657,6 +657,35 @@ void selectionSort (Canal *c, int num_canales) {
 
 /***********************************************
 *
+* @Finalidad: Ordenar por numero descendente un array.
+* @Parametros: 	in: *c = Array de canales a ordenar.
+*				in: num_canales = Numero de canales a ordenar.
+* @Retorno: ----.
+*
+************************************************/
+void selectionSortSusciptores (Canal *c, int num_canales) {
+    Canal minim;
+    int i, j, posminim;
+    for (j = 0; j < (num_canales - 1); j++) {
+        minim = c[j];
+        posminim = j;
+        for (i = j+1; i < num_canales; i++) {
+            if (c[i].num_suscriptores <=  minim.num_suscriptores) {
+                minim = c[i];
+                posminim = i;
+            }
+        }
+        c[posminim] = c[j];
+        c[j] = minim;
+    }
+
+    for (i = 0; i < num_canales; i++) {
+        printf ("Nombre canal: %s\n", c[i].nombre);
+        printf ("Coste suscripcion%f\n", c[i].coste_suscripcion);
+    }
+}
+/***********************************************
+*
 * @Finalidad: Generar una estructura dinamica con todos los canales.
 * @Parametros: in/out = *num_canales = Numero de canales existentes en el sistema.
 * @Retorno: Retorna un array dinamico de todos los canales.
