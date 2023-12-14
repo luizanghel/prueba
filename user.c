@@ -111,7 +111,8 @@ LinkedList ficheroALista () {
     users = fopen("clients.txt", "r");
     if (users == NULL) {
         printf ("\tERROR DE SISTEMA (El sistema ha caído. Pongase en contacto con un administrador en la mayor brevedad posible).\n");
-    }
+    	exit(0);
+	}
     else {
         users_list = LINKEDLIST_create();
         fscanf(users, "%d", &p.dni.numeros);
@@ -192,7 +193,8 @@ int tipoUsuario (Dni dni) {
     id_productores = fopen("productors.txt", "r");
     if (id_productores == NULL) {
         printf ("\tERROR DE SISTEMA (El sistema ha caído. Pongase en contacto con un administrador en la mayor brevedad posible).\n");
-    }
+    	exit(0);
+	}
     else {
         fscanf(id_productores, "%d", &numero);
         while (!feof(id_productores)) {
@@ -388,7 +390,7 @@ void runOption (int option, Persona *p) {
             break;
         case 4:
             printf ("Su correo actual es %s.", p->correo);
-            solicitarCorreo("Introduce primer apellido a modificar: ", cambio);
+            solicitarCorreo("Introduce correo a modificar: ", cambio);
             strcpy(p->correo, cambio);
             break;
         case 5:
@@ -410,11 +412,11 @@ void modificarClientes (LinkedList *users) {
     char correo[MAX_CHAR_SIMPLE], tipo[6][MAX_CHAR_SIMPLE] = {"nombre", "primer apellido", "segundo apellido", "correo", "contraseña", "numero de telefono"};
 
     do {
+        mostrarLista(*users);
         option = menuModificacion();
         if (option != 7) {
             solicitarCorreo("Introduce el correo del usuario: ", correo);
             found = 0;
-            mostrarLista(*users);
             LINKEDLIST_goToHead(users);
             while (!LINKEDLIST_isAtEnd(*users) && !found) {
                 p = LINKEDLIST_get(users);
@@ -502,7 +504,7 @@ int menuProductorGeneral() {
         printf ("3- Gestionar actores\n");
         printf ("4- Gestionar peliculas\n");
         printf ("5- Gestionar anuncios\n");
-        printf ("6- Salir\n");
+        printf ("6- Cerrar sesión\n");
         printf ("Entra opcion: ");
         error = optionAsNumber(&option, 1, 6);
     } while (error);
@@ -564,7 +566,7 @@ void modoProductor () {
 			case 4:
 				modoProductorPeliculas();
 				break;
-			case 5:
+			case 6:
 				quit = 1;
 				break;
 		} 
@@ -585,8 +587,8 @@ int menuCliente () {
 		printf ("7- Visualizar programacion\n");
 		printf ("8- Descargar programacion de un canal\n");
         printf ("9- Visualizar peliculas\n");
-        printf ("10- Mostrar programario de lo que queda de dia\n");
-        printf ("11- Salir\n");
+        printf ("10- Comprar peliculas\n");
+        printf ("11- Cerrar sesión\n");
         printf ("Entra opcion: ");
         error = optionAsNumber(&option, 1, 11);
     } while (error);
@@ -907,7 +909,7 @@ void comprarPelicula (Persona p) {
 *
 ************************************************/
 void modoCliente (Persona p) {
-	int option;
+	int option, quit = 0;
 
     do {
         option = menuCliente();
@@ -944,8 +946,8 @@ void modoCliente (Persona p) {
 				comprarPelicula(p);
 				break;
 			case 11:
-				printf ("¡Hasta pronto!\n");
+				quit = 1;
 				break;
 		}
-	} while (option != 11);
+	} while (!quit);
 }

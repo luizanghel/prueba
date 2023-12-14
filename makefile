@@ -27,7 +27,7 @@ user.o: user.c linkedlist.h dato.h canales.h dato.h linkedlistcanales.h pelicula
 linkedlistactores.o: linkedlistactores.c linkedlistactores.h
 	gcc linkedlistactores.c -g -c
 
-actors.o: actors.c linkedlistactores.h actors.h canales.h linkedlistprograma.h user.h actors.h
+actors.o: actors.c linkedlistactores.h actors.h canales.h linkedlistprograma.h user.h actors.h dato.h
 	gcc actors.c -g -c
 
 anuncios.o: anuncios.c anuncios.h linkedlistadvertisements.h

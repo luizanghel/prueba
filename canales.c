@@ -45,7 +45,7 @@ Canal solicitarDatosCanal () {
     Canal c;
 
     solicitarPalabra("Introduce nombre del canal: ", c.nombre, NOMBRE_CANAL);
-    c.coste_suscripcion = solicitarFloat("Introduce coste de suscripcion: ");
+    c.coste_suscripcion = solicitarFloat("Introduce coste de suscripcion: ", COSTE_SUSCRIPCION);
     c.num_suscriptores = 0;
 
     return c;
@@ -228,7 +228,7 @@ Programa solicitarDatosPrograma () {
     printf("\tIntroduce hora emision del programa (HH:mm): ");
     scanf("%s", p.emisio);
     fflush(stdin);
-    p.duracio = solicitarFloat("\tIntroduce duracion del programa: ");
+    p.duracio = solicitarFloat("\tIntroduce duracion del programa: ", MINUTOS);
 
     return p;
 }
@@ -548,7 +548,6 @@ void eliminarCanal(){
     lista = canalesFileToList(&num_canales);
     printf("\nEnter the canal name to remove: ");
     scanf("%s", nombre);
-    printf ("%s\n", nombre);
     eliminarC(&lista, nombre);
 
 }
@@ -598,7 +597,7 @@ void eliminarPrograma(LinkedList3 *canales) {
 void runOptionCanales (int option, int *quit) {
     LinkedList3 canales;
     int num_canales;
-
+	LinkedList4 programa = programaFileToList();
     canales = canalesFileToList(&num_canales);
     switch (option) {
         case 1:
@@ -617,7 +616,7 @@ void runOptionCanales (int option, int *quit) {
             anadirProgramaACanal(&canales);
             break;
         case 6:
-            //mostraProgramas(programa);
+            mostraProgramas(programa);
             break;
         case 7:
             *quit = 1;
