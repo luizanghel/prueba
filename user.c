@@ -548,6 +548,23 @@ void modoProductorPeliculas () {
 	} while (option != 4);
 }
 
+int solicitarVerificacion () {
+	int quit = 0;
+	char confirmacion[MAX_CHAR_SIMPLE];
+	do {
+		printf ("Esta seguro que quiere cerrar sesion? ");
+		fgets(confirmacion, MAX_CHAR_SIMPLE, stdin);
+		confirmacion[strlen(confirmacion) - 1] = '\0';
+		todoAMinusculas(confirmacion);
+	} while (strcmp(confirmacion, "si") && strcmp(confirmacion, "no"));
+
+	if (!strcmp(confirmacion, "si")) {
+		printf ("Se estan guardando los datos...Cerrando sesion...\n");
+		quit = 1;
+	}
+	return quit;
+}
+
 void modoProductor () {
 	int option, quit = 0;
 	
@@ -567,7 +584,7 @@ void modoProductor () {
 				modoProductorPeliculas();
 				break;
 			case 6:
-				quit = 1;
+				quit = solicitarVerificacion();
 				break;
 		} 
 	} while (!quit);
@@ -946,7 +963,7 @@ void modoCliente (Persona p) {
 				comprarPelicula(p);
 				break;
 			case 11:
-				quit = 1;
+				quit = solicitarVerificacion();
 				break;
 		}
 	} while (!quit);
