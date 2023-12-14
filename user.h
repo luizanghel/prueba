@@ -12,13 +12,10 @@
 #include "actors.h"
 #include "linkedlistcanales.h"
 
-
-
 Persona registerUser ();
 Persona iniciarSesion ();
 void modoProductor ();
-void modoCliente();
-
+void modoCliente(Persona p);
 
 void leerPersona(Persona p);
 LinkedList FicheroALista();
