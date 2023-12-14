@@ -1,4 +1,5 @@
 #include "user.h"
+#include <time.h>
 
 /***********************************************
 *
@@ -909,7 +910,15 @@ void listarProgramasUsuario(char usuario[MAX_CHAR_SIMPLE]){
 //	Programa p;
 	Canal c;
 	int i;
-
+//CAPTURA DE HORA
+	time_t tiempoActual;
+	struct tm* infoTiempo;
+	time(&tiempoActual);
+	infoTiempo= localtime(&tiempoActual);
+	
+	int hora = infoTiempo->tm_hour;
+	int minutos = infoTiempo->tm_min;
+	printf("Hora actual: %02d:%02d\n",hora, minutos);
 
     f= fopen("canales.txt", "r");
     if (f==NULL){
