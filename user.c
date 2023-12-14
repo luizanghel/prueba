@@ -511,18 +511,18 @@ int menuProductorGeneral() {
 }
 
 int menuPeliculas () {
-	int option, error = 0;
+    int option, error = 0;
 
-	do {
-		printf ("\t1- Añadir peliculas\n");
-		printf ("\t2- Eliminar peliculas\n");
-		printf ("\t3- Visualizar peliculas\n");
-		printf ("\t4- Salir\n");
-		printf ("\tEntra opcion: ");
-		error = optionAsNumber(&option, 1, 4);
-	} while (error);
-	
-	return option;
+    do {
+        printf ("\t1- Añadir peliculas\n");
+        printf ("\t2- Eliminar peliculas\n");
+        printf ("\t3- Visualizar peliculas\n");
+        printf ("\t4- Salir\n");
+        printf ("\tEntra opcion: ");
+        error = optionAsNumber(&option, 1, 4);
+    } while (error);
+
+    return option;
 }
 
 void modoProductorPeliculas () {
