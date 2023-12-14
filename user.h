@@ -12,7 +12,7 @@
 #include "actors.h"
 #include "linkedlistcanales.h"
 
-// Constantes 
+// Constantes
 
 // Tipo
 
@@ -20,7 +20,7 @@
 Persona registerUser ();
 Persona iniciarSesion ();
 void modoProductor ();
-void modoCliente();
+void modoCliente(Persona p);
 
 
 void leerPersona(Persona p);
