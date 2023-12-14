@@ -872,6 +872,33 @@ void verProgramario() {
     printf("\n");
 }
 
+void ordenacionPeliculas () {
+	Pelicula *peli = NULL;
+	int num_peliculas;
+	
+	peli = leerPeliculas(&num_peliculas);
+	if (num_peliculas != 0) {
+		selectionSortPelicula(peli, num_peliculas);
+	}
+	else {
+		printf ("\tERROR (No hay peliculas disponible actualmente)\n");
+	}
+}
+
+void comprarPelicula (Persona p) {
+	char peli[MAX_CHAR_SIMPLE];
+	int num_peliculas, posicion;
+	Pelicula *peliculas = leerPeliculas(&num_peliculas);
+	
+	solicitarPalabra("\nIntroduce pelicula que desea adquirir: ", peli, NOMBRE);
+	if (peliculaExiste(peliculas, num_peliculas, peli, &posicion)) {
+		asignarUsuarioAPelicula(posicion, p.correo);
+	}
+	else {	
+		printf ("\tERROR (La pelicula introducida no existe)\n");
+	}
+}
+
 /***********************************************
 *
 * @Finalidad: Mostrar un menu y ejecutar la opcion introducida por el usuario.
@@ -911,8 +938,14 @@ void modoCliente (Persona p) {
 				descargarProgramacion(p);
 				break;
 			case 9:
+				ordenacionPeliculas();
+				break;
+			case 10:
+				comprarPelicula(p);
+				break;
+			case 11:
 				printf ("¡Hasta pronto!\n");
 				break;
-        }
-    } while (option != 9);
+		}
+	} while (option != 11);
 }
