@@ -898,6 +898,26 @@ void comprarPelicula (Persona p) {
 		printf ("\tERROR (La pelicula introducida no existe)\n");
 	}
 }
+void eliminarcuenta(Persona p){
+    FILE *f;
+    LinkedList c;
+    Persona p1;
+    int found=0;
+
+    c = ficheroALista(&c);
+
+    LINKEDLIST_goToHead(&c);
+    while (!LINKEDLIST_isAtEnd(c) && !found){
+        p1=LINKEDLIST_get(&c);
+        if (strcmp(p1.correo, p.correo)==0){
+
+        }
+        LINKEDLIST_next(&c);
+    }
+
+
+}
+
 
 /***********************************************
 *
@@ -943,7 +963,9 @@ void modoCliente (Persona p) {
 			case 10:
 				comprarPelicula(p);
 				break;
-			case 11:
+            case 11:
+                eliminarcuenta(p);
+			case 12:
 				printf ("¡Hasta pronto!\n");
 				break;
 		}
