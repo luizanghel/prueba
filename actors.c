@@ -363,7 +363,6 @@ void modificarActores (LinkedList2 *actors) {
 
 			while (!LINKEDLISTactors_isAtEnd(*actors) && !found) {
 				p = LINKEDLISTactors_get(actors);
-				// printf("Numero Ingresado: %ld || Numero en base: %d && Letra Ingresada %c || Letra en Base %c", idl, p.dni.numeros, letid, p.dni.letra);
 
 				if (p.dni.numeros == dni.numeros && p.dni.letra == dni.letra) {
 					found = 1;

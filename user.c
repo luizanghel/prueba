@@ -587,7 +587,7 @@ int menuCliente () {
 		printf ("7- Visualizar programacion\n");
 		printf ("8- Descargar programacion de un canal\n");
         printf ("9- Visualizar peliculas\n");
-        printf ("10- Mostrar programario de lo que queda de dia\n");
+        printf ("10- Comprar peliculas\n");
         printf ("11- Salir\n");
         printf ("Entra opcion: ");
         error = optionAsNumber(&option, 1, 11);
