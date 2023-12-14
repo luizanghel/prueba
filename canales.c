@@ -228,7 +228,7 @@ Programa solicitarDatosPrograma () {
     solicitarPalabra("\tIntroduce cadena del programa: ", p.cadena, 0);
     solicitarPalabra("\tIntroduce categoria del programa: ", p.categoria, 0);
     printf("\tIntroduce hora emision del programa (HH:mm): ");
-    scanf("%s", &p.emisio);
+    scanf("%s", p.emisio);
     fflush(stdin);
     p.duracio = solicitarFloat("\tIntroduce duracion del programa: ");
 
