@@ -577,18 +577,19 @@ int menuCliente () {
     do {
         printf ("Bienvenido al MENU CLIENTE. ¿Que desea realizar?\n");
         printf ("1- Registrar tarjeta\n");
-        printf ("2- Listar programas canal\n");
+        printf ("2- Listar programas de un canal\n");
 		printf ("3- Visualizar canales por audiencia\n");
-		printf ("4- Buscar programa por nombre\n");
-		printf ("5- Suscribirse a un canal\n");
-		printf ("6- Cancelar suscripcion a un canal\n");
-		printf ("7- Visualizar programacion\n");
-		printf ("8- Descargar programacion de un canal\n");
-        printf ("9- Visualizar peliculas\n");
-        printf ("10- Mostrar programario de lo que queda de dia\n");
-        printf ("11- Salir\n");
+		printf ("4- Listar programas que el  usuario esta suscrito\n");
+		printf ("5- Buscar programa por nombre\n");
+		printf ("6- Suscribirse a un canal\n");
+		printf ("7- Cancelar suscripcion a un canal\n");
+		printf ("8- Visualizar programacion\n");
+		printf ("9- Descargar programacion de un canal\n");
+        printf ("10- Visualizar peliculas\n");
+        printf ("11- Mostrar programario de lo que queda de dia\n");
+        printf ("12- Salir\n");
         printf ("Entra opcion: ");
-        error = optionAsNumber(&option, 1, 11);
+        error = optionAsNumber(&option, 1, 12);
     } while (error);
 
     return option;
@@ -899,6 +900,52 @@ void comprarPelicula (Persona p) {
 	}
 }
 
+void listarProgramasUsuario(char usuario[MAX_CHAR_SIMPLE]){
+    int trobat=0;
+    FILE *f;
+    LinkedList3 canales;
+//	LinkedList4 programas;
+//	Programa p;
+	Canal c;
+	int i;
+
+
+    f= fopen("canales.txt", "r");
+    if (f==NULL){
+        printf("ERROR, no existe este archivo\n");
+    }else{
+        canales = canalesFileToList(&trobat);
+        trobat = 0;
+        LINKEDLISTCANALES_goToHead(&canales);
+        while (!LINKEDLISTCANALES_isAtEnd(canales)){
+            c = LINKEDLISTCANALES_get(&canales);
+			 if (usuarioAsignado(c, usuario, &i)) { // Verificar si el usuario está suscrito al canal
+            //	LINKEDLISTPROGRAMA_goToHead(&programas);
+            	//while (!LINKEDLISTPROGRAMA_isAtEnd(programas)) {
+              	//  p = LINKEDLISTPROGRAMA:;_get(&programas);
+                //  encontrado = 1;
+				  listarprogramas(c.nombre);
+                //  printf("Programa encontrado en el canal '%s':\n", c.nombre);
+                //  printf("Nombre: %s\n", p.nom);
+                //  printf("Categoria: %s\n", p.categoria);
+                //  printf("Hora de emisión: %s\n", p.emisio);
+                //	LINKEDLISTPROGRAMA_next(&programas);
+           	 //	}
+      	 }
+
+                LINKEDLISTCANALES_next(&canales);
+      }
+
+      if (!trobat){
+            printf("Este canal no existe\n");
+      }
+
+      fclose(f);
+    }
+
+}
+
+
 /***********************************************
 *
 * @Finalidad: Mostrar un menu y ejecutar la opcion introducida por el usuario.
@@ -923,29 +970,32 @@ void modoCliente (Persona p) {
 				visualizarCanales();
 				break;
 			case 4:
+				listarProgramasUsuario(p.correo);
+				break;
+			case 5:
 				buscarPrograma(p.correo);
 				break;
-			case 5:		
+			case 6:		
 				suscribirseACanal(p);
 				break;
-			case 6:
+			case 7:
 				eliminarSuscripcion(p);
 				break;
-			case 7:
+			case 8:
 				verProgramario();
 				break;
-			case 8:
+			case 9:
 				descargarProgramacion(p);
 				break;
-			case 9:
+			case 10:
 				ordenacionPeliculas();
 				break;
-			case 10:
+			case 11:
 				comprarPelicula(p);
 				break;
-			case 11:
+			case 12:
 				printf ("¡Hasta pronto!\n");
 				break;
 		}
-	} while (option != 11);
+	} while (option != 12);
 }
