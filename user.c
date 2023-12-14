@@ -910,12 +910,13 @@ void eliminarcuenta(Persona p){
     while (!LINKEDLIST_isAtEnd(c) && !found){
         p1=LINKEDLIST_get(&c);
         if (strcmp(p1.correo, p.correo)==0){
-
+            found=1;
+            LINKEDLIST_remove(&c);
         }
         LINKEDLIST_next(&c);
     }
-
-
+    actualizarFichero(c);
+    printf("Se ha eliminado la cuenta correctamente!\n");
 }
 
 
@@ -965,6 +966,7 @@ void modoCliente (Persona p) {
 				break;
             case 11:
                 eliminarcuenta(p);
+                option=11;
 			case 12:
 				printf ("¡Hasta pronto!\n");
 				break;
