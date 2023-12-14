@@ -22,6 +22,7 @@ Dni solicitarDni (char texto[MAX_CHAR_SIMPLE]) {
     return dni;
 }
 
+
 /***********************************************
 *
 * @Finalidad: Solicitar los campos para poder iniciar el registro de un usuario.
