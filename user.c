@@ -111,7 +111,8 @@ LinkedList ficheroALista () {
     users = fopen("clients.txt", "r");
     if (users == NULL) {
         printf ("\tERROR DE SISTEMA (El sistema ha caído. Pongase en contacto con un administrador en la mayor brevedad posible).\n");
-    }
+    	exit(0);
+	}
     else {
         users_list = LINKEDLIST_create();
         fscanf(users, "%d", &p.dni.numeros);
@@ -192,7 +193,8 @@ int tipoUsuario (Dni dni) {
     id_productores = fopen("productors.txt", "r");
     if (id_productores == NULL) {
         printf ("\tERROR DE SISTEMA (El sistema ha caído. Pongase en contacto con un administrador en la mayor brevedad posible).\n");
-    }
+    	exit(0);
+	}
     else {
         fscanf(id_productores, "%d", &numero);
         while (!feof(id_productores)) {

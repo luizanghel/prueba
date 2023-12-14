@@ -71,7 +71,9 @@ int revisarCaracteresCorrectos (char palabra[MAX_CHAR_SIMPLE], int option) {
 	char tipo[3][MAX_CHAR_SIMPLE] = {"del nombre", "del primer apellido", "del segundo apellido"};
 
 	for (i = 1; palabra[i] != '\0' && !error_minusculas; i++) {
-		error_minusculas = !esMinuscula(palabra[i]);
+		if (palabra[i] != ' ') {
+			error_minusculas = !esMinuscula(palabra[i]);
+		}
 	}
 	if (error_minusculas == 1) {
 		printf ("\tERROR: Todos los caracteres %s excepto el primero deben ser minusculas.\n", tipo[option]);
