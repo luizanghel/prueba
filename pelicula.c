@@ -181,13 +181,14 @@ void anadirPelicula() {
 	Pelicula p;
 	int num_peliculas, i;
 	Pelicula *pelis;
-
+	int ano = 0, precio=0;
+	
 	printf ("Introduce los datos de la pelicula: \n");
 	solicitarPalabra("\tNombre de la pelicula: ", p.titulo, NOMBRE);
 	solicitarPalabra("\tDirector de la pelicula: ", p.director, NOMBRE);
-	p.ano = solicitarFloat("\tAño de creacion: ");
+	p.ano = solicitarFloat("\tAño de creacion: ", ano );
 	solicitarPalabra("\tCategoria de la pelicula: ", p.categoria, CATEGORIA);
-	p.precio = solicitarFloat("\tPrecio de la pelicula: ");
+	p.precio = solicitarFloat("\tPrecio de la pelicula: ", precio);
 	p.num_usuarios = 0;
 	p.usuarios = NULL;
 
