@@ -907,7 +907,7 @@ void listarProgramasUsuario(char usuario[MAX_CHAR_SIMPLE]){
     int trobat=0;
     FILE *f;
     LinkedList3 canales;
-//	LinkedList4 programas;
+
 //	Programa p;
 	Canal c;
 	int i;
