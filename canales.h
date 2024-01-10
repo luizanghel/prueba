@@ -95,8 +95,6 @@ void selectionSort (Canal *c, int num_canales);
 ************************************************/
 int canalUnico (char nombre[100], Canal *c);
 
-///////////////////////////////////////////////////////////////////////////
-
 /***********************************************
  * @Finalidad: Verificar si un usuario está asignado a un canal.
  * @Parametros:  in: canal = Canal a verificar.

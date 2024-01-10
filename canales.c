@@ -45,7 +45,7 @@ Canal solicitarDatosCanal () {
     Canal c;
 
     solicitarPalabra("Introduce nombre del canal: ", c.nombre, NOMBRE_CANAL);
-    c.coste_suscripcion = solicitarFloat("Introduce coste de suscripcion: ");
+    c.coste_suscripcion = solicitarFloat("Introduce coste de suscripcion: ", COSTE_SUSCRIPCION);
     c.num_suscriptores = 0;
 
     return c;
@@ -228,7 +228,7 @@ Programa solicitarDatosPrograma () {
     printf("\tIntroduce hora emision del programa (HH:mm): ");
     scanf("%s", p.emisio);
     fflush(stdin);
-    p.duracio = solicitarFloat("\tIntroduce duracion del programa: ");
+    p.duracio = solicitarFloat("\tIntroduce duracion del programa: ", MINUTOS);
 
     return p;
 }
@@ -278,19 +278,20 @@ void actualizarFicheroPrograma (LinkedList4 programas) {
 *
 ************************************************/
 int mostrarMenuCanales () {
-    int option;
-    char aux;
-
-    printf ("\t1- Crear nuevo canal\n");
-    printf ("\t2- Eliminar programa\n");
-    printf ("\t3- Eliminar canal\n");
-    printf ("\t4- Mostrar canales\n");
-    printf ("\t5- Añadir programa\n");
-    printf ("\t6- Mostrar programas\n");
-    printf ("\t7- Salir\n");
-    printf ("\tEnter option: ");
-    scanf ("%d", &option);
-    scanf ("%c", &aux);
+    int option, error = 0;
+	
+	do {
+    	printf ("\t1- Crear nuevo canal\n");
+    	printf ("\t2- Eliminar programa\n");
+  	 	printf ("\t3- Eliminar canal\n");
+    	printf ("\t4- Mostrar canales\n");
+		printf ("\t5- Mostrar canales por suscriptores\n");
+    	printf ("\t6- Añadir programa\n");
+	    printf ("\t7- Mostrar programas\n");
+    	printf ("\t8- Salir\n");
+	    printf ("\tEnter option: ");
+    	error = optionAsNumber(&option, 1, 8);
+	} while (error);
 
     return option;
 }
@@ -548,7 +549,6 @@ void eliminarCanal(){
     lista = canalesFileToList(&num_canales);
     printf("\nEnter the canal name to remove: ");
     scanf("%s", nombre);
-    printf ("%s\n", nombre);
     eliminarC(&lista, nombre);
 
 }
@@ -587,44 +587,6 @@ void eliminarPrograma(LinkedList3 *canales) {
     printf("No se encontró el canal \"%s\".\n", nombreCanal);
 }
 
-/***********************************************
-*
-* @Finalidad: Ejecutar las opciones del menu.
-* @Parametros: 	in: option = Opcion a ejecutar.
-*				out: *quit = Flag que indica la salida del menu.
-* @Retorno: ----.
-*
-************************************************/
-void runOptionCanales (int option, int *quit) {
-    LinkedList3 canales;
-    int num_canales;
-
-    canales = canalesFileToList(&num_canales);
-    switch (option) {
-        case 1:
-            crearCanal(&canales);
-            break;
-        case 2:
-            eliminarPrograma(&canales);
-            break;
-        case 3:
-            eliminarCanal();
-            break;
-        case 4:
-            mostrarCanales();
-            break;
-        case 5:
-            anadirProgramaACanal(&canales);
-            break;
-        case 6:
-            //mostraProgramas(programa);
-            break;
-        case 7:
-            *quit = 1;
-            break;
-    }
-
-}
 
 /***********************************************
 *
@@ -658,6 +620,52 @@ void selectionSort (Canal *c, int num_canales) {
 
 /***********************************************
 *
+* @Finalidad: Ordenar por numero descendente un array.
+* @Parametros: 	in: *c = Array de canales a ordenar.
+*				in: num_canales = Numero de canales a ordenar.
+* @Retorno: ----.
+*
+************************************************/
+void selectionSortSusciptores (Canal *c, int num_canales) {
+    Canal minim;
+    int i, j, posminim;
+    for (j = 0; j < (num_canales - 1); j++) {
+        minim = c[j];
+        posminim = j;
+        for (i = j+1; i < num_canales; i++) {
+            if (c[i].num_suscriptores <=  minim.num_suscriptores) {
+                minim = c[i];
+                posminim = i;
+            }
+        }
+        c[posminim] = c[j];
+        c[j] = minim;
+    }
+
+    for (i = 0; i < num_canales; i++) {
+        printf ("Nombre canal: %s\n", c[i].nombre);
+        printf ("Coste suscripcion%f\n", c[i].coste_suscripcion);
+    	printf ("Num suscriptores: %d\n", c[i].num_suscriptores);
+	}
+}
+
+/***********************************************
+*
+* @Finalidad: Listar el nombre de canales por orden alfabetico.
+* @Parametros: ----.
+* @Retorno: ----.
+*
+************************************************/
+void visualizarCanalesPorSuscriptores () {
+    int num_canales;
+    Canal *c;
+
+    c = listaAArrayDinamico(&num_canales);
+    selectionSortSusciptores(c, num_canales);
+}
+
+/***********************************************
+*
 * @Finalidad: Generar una estructura dinamica con todos los canales.
 * @Parametros: in/out = *num_canales = Numero de canales existentes en el sistema.
 * @Retorno: Retorna un array dinamico de todos los canales.
@@ -680,7 +688,8 @@ Canal * listaAArrayDinamico (int *num_canales) {
             todoAMinusculas(c.nombre);
             strcpy (array[i].nombre, c.nombre);
             array[i].coste_suscripcion = c.coste_suscripcion;
-            i++;
+            array[i].num_suscriptores = c.num_suscriptores;
+			i++;
             LINKEDLISTCANALES_next(&canales);
         }
     }
@@ -817,6 +826,47 @@ void generarProgramacion (Canal c) {
 	}
 }
 
+/***********************************************
+*
+* @Finalidad: Ejecutar las opciones del menu.
+* @Parametros: 	in: option = Opcion a ejecutar.
+*				out: *quit = Flag que indica la salida del menu.
+* @Retorno: ----.
+*
+************************************************/
+void runOptionCanales (int option, int *quit) {
+    LinkedList3 canales;
+    int num_canales;
+	LinkedList4 programa = programaFileToList();
+    canales = canalesFileToList(&num_canales);
+    switch (option) {
+        case 1:
+            crearCanal(&canales);
+            break;
+        case 2:
+            eliminarPrograma(&canales);
+            break;
+        case 3:
+            eliminarCanal();
+            break;
+        case 4:
+            mostrarCanales();
+            break;
+		case 5:
+			visualizarCanalesPorSuscriptores();
+        	break;
+		case 6:
+            anadirProgramaACanal(&canales);
+            break;
+        case 7:
+            mostraProgramas(programa);
+            break;
+        case 8:
+            *quit = 1;
+            break;
+    }
+
+}
 /***********************************************
 *
 * @Finalidad: Conjunto de interacciones de los canales.

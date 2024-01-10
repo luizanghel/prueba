@@ -13,6 +13,9 @@
 #define NOMBRE_CANAL 		0
 #define NOMBRE_PROGRAMA		0
 #define CATEGORIA			0
+#define COSTE_SUSCRIPCION	0
+#define MINUTOS				1
+#define SALARIO				2
 
 /***********************************************
 *
@@ -180,6 +183,6 @@ int solicitarTelefono (char texto[MAX_CHAR_SIMPLE], int medida);
 * @Retorno: Devuelve el numero decimal, cuando se ha comprobado que es correcto.
 * 
 ************************************************/
-float solicitarFloat (char texto[MAX_CHAR_SIMPLE]);
+float solicitarFloat (char texto[MAX_CHAR_SIMPLE], int option);
 
 #endif

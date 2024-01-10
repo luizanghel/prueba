@@ -31,19 +31,22 @@ DniActor solicitarDniActor (char texto[MAX_CHAR_SIMPLE]) {
 ************************************************/
 void mostrarActoresDisponibles (LinkedList2 list) {
 	Actor actor;
-	int i = 1;
+	int i = 0;
 
 	LINKEDLISTactors_goToHead(&list);
 	while (!LINKEDLISTactors_isAtEnd(list)) {
 		actor = LINKEDLISTactors_get(&list);
 		if (!actor.contractat) {
-			printf ("--Actor numero %d--\n", i++);
+			printf ("--Actor numero %d--\n", i+1);
 			printf ("  Identificador: %d%c\n", actor.dni.numeros, actor.dni.letra);
 			printf ("  Nombre y apellidos: %s %s %s\n", actor.nombre, actor.apellido1, actor.apellido2);
 			printf ("  Numero de telefono: %d\n", actor.telefono);
 			printf ("  Salario: %d€\n", actor.salari);
 		}
 		LINKEDLISTactors_next(&list);
+	}
+	if (!i) {
+		printf ("ERROR (No hay actores disponibles)\n");
 	}
 	
 }
@@ -134,8 +137,8 @@ Actor solicitarDatosActor () {
    	solicitarPalabra("Introduce el nombre del actor: ", actor.nombre, NOMBRE); 
   	solicitarPalabra("Introduce el primer apellido del actor: ", actor.apellido1, PRIMER_APELLIDO); 
    	solicitarPalabra("Introduce el segundo apellido del actor: ", actor.apellido2, SEGUNDO_APELLIDO); 
-    actor.telefono = solicitarTelefono("Introduce el nombre del actor: ", 9);
-  	actor.salari = solicitarFloat("Introduce el salario del actor: ");	
+    actor.telefono = solicitarTelefono("Introduce el telefono del actor: ", 9);
+  	actor.salari = solicitarFloat("Introduce el salario del actor: ", SALARIO);	
    	actor.contractat = 0; 
 
 	return actor;
@@ -360,7 +363,6 @@ void modificarActores (LinkedList2 *actors) {
 
 			while (!LINKEDLISTactors_isAtEnd(*actors) && !found) {
 				p = LINKEDLISTactors_get(actors);
-				// printf("Numero Ingresado: %ld || Numero en base: %d && Letra Ingresada %c || Letra en Base %c", idl, p.dni.numeros, letid, p.dni.letra);
 
 				if (p.dni.numeros == dni.numeros && p.dni.letra == dni.letra) {
 					found = 1;
