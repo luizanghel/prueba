@@ -288,7 +288,7 @@ int mostrarMenuCanales () {
 		printf ("\t5- Mostrar canales por suscriptores\n");
     	printf ("\t6- Añadir programa\n");
 	    printf ("\t7- Mostrar programas\n");
-    	printf ("\t8- Salir\n");
+    	printf ("\t8- Volver\n");
 	    printf ("\tEnter option: ");
     	error = optionAsNumber(&option, 1, 8);
 	} while (error);
