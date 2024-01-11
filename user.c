@@ -557,6 +557,9 @@ int solicitarVerificacion () {
 		fgets(confirmacion, MAX_CHAR_SIMPLE, stdin);
 		confirmacion[strlen(confirmacion) - 1] = '\0';
 		todoAMinusculas(confirmacion);
+		if (strcmp(confirmacion, "si") != 0 && strcmp(confirmacion, "no") != 0) {
+			printf ("ERROR: Debes introducir 'SI' o 'NO'\n");
+		}
 	} while (strcmp(confirmacion, "si") && strcmp(confirmacion, "no"));
 
 	if (!strcmp(confirmacion, "si")) {
