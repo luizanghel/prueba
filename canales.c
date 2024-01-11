@@ -283,15 +283,16 @@ int mostrarMenuCanales () {
 	
 	do {
     	printf ("\t1- Crear nuevo canal\n");
-    	printf ("\t2- Eliminar programa\n");
-  	 	printf ("\t3- Eliminar canal\n");
-    	printf ("\t4- Mostrar canales\n");
-		printf ("\t5- Mostrar canales por suscriptores\n");
-    	printf ("\t6- Añadir programa\n");
-	    printf ("\t7- Mostrar programas\n");
-    	printf ("\t8- Volver\n");
+    	printf ("\t2- Modificar canal\n");
+		printf ("\t3- Eliminar programa\n");
+  	 	printf ("\t4- Eliminar canal\n");
+    	printf ("\t5- Mostrar canales\n");
+		printf ("\t6- Mostrar canales por suscriptores\n");
+    	printf ("\t7- Añadir programa\n");
+	    printf ("\t8- Mostrar programas\n");
+    	printf ("\t9- Volver\n");
 	    printf ("\tEnter option: ");
-    	error = optionAsNumber(&option, 1, 8);
+    	error = optionAsNumber(&option, 1, 9);
 	} while (error);
 
     return option;
@@ -827,6 +828,79 @@ void generarProgramacion (Canal c) {
 	}
 }
 
+void modificarCanal (LinkedList3 *canales) {
+	char nombre[MAX_CHAR_SIMPLE], nombreNuevo[MAX_CHAR_SIMPLE];
+	float nuevoPrecio;
+	int error, option;
+
+	Canal c, aux;
+	solicitarPalabra("Introduce nombre del canal a modificar: ", nombre, NOMBRE);
+	if (canalUnico(nombre, &aux)) {
+		do {	
+			printf ("1- Modificar nombre\n");
+			printf ("2- Modificar coste\n");
+			printf ("3- Atras\n");
+			printf ("Entra opcion: ");
+			error =	optionAsNumber(&option, 1, 3);
+		} while (error);
+		switch (option) {
+			case 1: 
+				printf ("El nombre actual es %s\n", aux.nombre);
+				solicitarPalabra("Introduce el nombre del canal: ", nombreNuevo, NOMBRE);
+				if (strcmp(nombreNuevo, nombre) != 0) {
+					if (!canalUnico(nombreNuevo, &aux)) {
+						LINKEDLISTCANALES_goToHead(canales);
+						while (!LINKEDLISTCANALES_isAtEnd(*canales)) {
+							c = LINKEDLISTCANALES_get(canales);
+							if (!strcmp(c.nombre, nombre)) {
+								strcpy(c.nombre, nombreNuevo);
+								LINKEDLISTCANALES_remove(canales);
+								LINKEDLISTCANALES_add(canales, c);
+								actualizarFicheroCanales(*canales);
+								printf ("Se ha actualizado el nombre correctamente.\n");
+								break;
+							} else {
+								LINKEDLISTCANALES_next(canales);
+							}
+						}
+					}
+					else {
+						printf ("El nombre introducido ya pertenece a otro canal.\n");
+					}
+				}
+				else {
+					printf ("Debes introducir un nombre diferente al anterior.\n");
+				}
+				break;
+			case 2:
+				printf ("El precio de suscripcion actual del canal es %.2f euros.\n", aux.coste_suscripcion);
+				do {
+					nuevoPrecio = solicitarFloat("Introduce nuevo costo: ", COSTE_SUSCRIPCION);
+					if (nuevoPrecio < 0) {
+						printf ("ERROR: Debes introducir un numero positivo.\n");
+					}
+				} while (nuevoPrecio < 0);
+					LINKEDLISTCANALES_goToHead(canales);
+					while (!LINKEDLISTCANALES_isAtEnd(*canales)) {
+						c = LINKEDLISTCANALES_get(canales);
+						if (!strcmp(c.nombre, nombre)) {
+							c.coste_suscripcion = nuevoPrecio;
+							LINKEDLISTCANALES_remove(canales);
+							LINKEDLISTCANALES_add(canales, c);
+							actualizarFicheroCanales(*canales);
+							printf ("Se ha actualizado el coste de suscripcion correctamente.\n");
+							break;
+						} else {
+							LINKEDLISTCANALES_next(canales);
+						}
+					}
+		}
+	}
+	else {
+		printf ("ERROR: El canal introducido no existe.\n");
+	}
+}
+
 /***********************************************
 *
 * @Finalidad: Ejecutar las opciones del menu.
@@ -844,25 +918,28 @@ void runOptionCanales (int option, int *quit) {
         case 1:
             crearCanal(&canales);
             break;
-        case 2:
+		case 2:
+			modificarCanal(&canales);
+			break;
+        case 3:
             eliminarPrograma(&canales);
             break;
-        case 3:
+        case 4:
             eliminarCanal();
             break;
-        case 4:
+        case 5:
             mostrarCanales();
             break;
-		case 5:
+		case 6:
 			visualizarCanalesPorSuscriptores();
         	break;
-		case 6:
+		case 7:
             anadirProgramaACanal(&canales);
             break;
-        case 7:
+        case 8:
             mostraProgramas(programa);
             break;
-        case 8:
+        case 9:
             *quit = 1;
             break;
     }
