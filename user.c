@@ -340,7 +340,7 @@ int menuProductorClientes () {
         printf ("\t1- Visualizar clientes\n");
         printf ("\t2- Modificar clientes\n");
         printf ("\t3- Eliminar clientes\n");
-        printf ("\t4- Salir\n");
+        printf ("\t4- Volver\n");
         printf ("\tEnter option: ");
         error = optionAsNumber(&option, 1, 4);
     } while (error);
@@ -520,7 +520,7 @@ int menuPeliculas () {
         printf ("\t1- Añadir peliculas\n");
         printf ("\t2- Eliminar peliculas\n");
         printf ("\t3- Visualizar peliculas\n");
-        printf ("\t4- Salir\n");
+        printf ("\t4- Volver\n");
         printf ("\tEntra opcion: ");
         error = optionAsNumber(&option, 1, 4);
     } while (error);
