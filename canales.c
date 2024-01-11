@@ -13,7 +13,8 @@ void actualizarFicheroCanales (LinkedList3 canal) {
     actualizado = fopen("nuevo.txt", "w");
     if (actualizado == NULL) {
         printf ("\tERROR DE SISTEMA (El sistema ha caído. Pongase en contacto con un administrador en la mayor brevedad posible).\n");
-    }
+    	exit(0);
+	}
     else {
         Canal c;
 
@@ -89,12 +90,11 @@ LinkedList4 programaFileToList () {
     Programa p;
     char aux;
 
+    lista = LINKEDLISTPROGRAMA_create();
     f = fopen ("programas.txt", "r");
     if (f == NULL) {
-        printf ("Error!\n");
     }
     else {
-        lista = LINKEDLISTPROGRAMA_create();
         fgets(p.cadena, MAX_CHAR_SIMPLE, f);
         while (!feof(f)) {
             p.cadena[strlen(p.cadena) - 1] = '\0';
@@ -166,13 +166,13 @@ LinkedList3 canalesFileToList (int *num_canales) {
 
 	*num_canales = 0;
 
+	canales = LINKEDLISTCANALES_create();
 	f = fopen ("canales.txt", "r");
 	if (f == NULL) {
-		printf ("ERROR\n");
+	
 	}
 	else {
 		programas = programaFileToList();
-		canales = LINKEDLISTCANALES_create();
 		fgets(c.nombre, MAX_CHAR_SIMPLE, f);
 		while (!feof(f)) {
 			c.nombre[strlen(c.nombre) - 1] = '\0';
@@ -183,6 +183,7 @@ LinkedList3 canalesFileToList (int *num_canales) {
 			c.suscriptores = (char **)malloc(sizeof(char *) * c.num_suscriptores);
 			if (c.suscriptores == NULL) {
 				printf ("\tERROR (El sistema ha caído. Contacte con un administrador en la mayor brevedad posible)\n");
+				exit(0);
 			}
 			else {
 				for (int i = 0; i < c.num_suscriptores; i++) {
