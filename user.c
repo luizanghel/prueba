@@ -110,13 +110,12 @@ LinkedList ficheroALista () {
     char aux;
     Persona p;
 
+    users_list = LINKEDLIST_create();
     users = fopen("clients.txt", "r");
     if (users == NULL) {
-        printf ("\tERROR DE SISTEMA (El sistema ha caído. Pongase en contacto con un administrador en la mayor brevedad posible).\n");
-    	exit(0);
+	
 	}
     else {
-        users_list = LINKEDLIST_create();
         fscanf(users, "%d", &p.dni.numeros);
         while (!feof(users)) {
             fscanf(users, "%c", &p.dni.letra);
@@ -194,8 +193,7 @@ int tipoUsuario (Dni dni) {
 
     id_productores = fopen("productors.txt", "r");
     if (id_productores == NULL) {
-        printf ("\tERROR DE SISTEMA (El sistema ha caído. Pongase en contacto con un administrador en la mayor brevedad posible).\n");
-    	exit(0);
+		tipo = 0;
 	}
     else {
         fscanf(id_productores, "%d", &numero);
@@ -226,7 +224,8 @@ void actualizarFichero (LinkedList usuarios) {
     actualizado = fopen("nuevo.txt", "w");
     if (actualizado == NULL) {
         printf ("\tERROR DE SISTEMA (El sistema ha caído. Pongase en contacto con un administrador en la mayor brevedad posible).\n");
-    }
+    	exit(0);
+	}
     else {
         LINKEDLIST_goToHead(&usuarios);
         while (!LINKEDLIST_isAtEnd(usuarios)) {
@@ -592,30 +591,64 @@ void modoProductor () {
 	} while (!quit);
 }
 
-int menuCliente () {
+int menuGeneralCliente () {
     int error = 0, option;
 
     do {
         printf ("Bienvenido al MENU CLIENTE. ¿Que desea realizar?\n");
-        printf ("1- Registrar tarjeta\n");
-        printf ("2- Listar programas de un canal\n");
-		printf ("3- Visualizar canales por audiencia\n");
-		printf ("4- Listar programas que el  usuario esta suscrito\n");
-		printf ("5- Buscar programa por nombre\n");
-		printf ("6- Suscribirse a un canal\n");
-		printf ("7- Cancelar suscripcion a un canal\n");
-		printf ("8- Visualizar programacion\n");
-		printf ("9- Descargar programacion de un canal\n");
-        printf ("10- Visualizar peliculas\n");
-        printf ("11- Comprar la pelicula\n");
-      	printf ("12- Eliminar cuenta\n");
-		printf ("13- Salir\n");
-		//printf ("14- Solicita la verificación\n");
-		printf ("Entra opcion: ");
-        error = optionAsNumber(&option, 1, 13);
+        printf ("1- Gestion de canales\n");
+		printf ("2- Suscripciones\n");
+		printf ("3- Peliculas\n");
+		printf ("4- Registrar tarjetas\n");
+		printf ("5- Eliminar cuenta\n");
+		printf ("6- Cerrar sesion\n");
+		printf ("Enter option: ");
+        error = optionAsNumber(&option, 1, 6);
     } while (error);
 
     return option;
+}
+
+int menuCanalesCliente () {
+	int error = 0, option;
+
+	do {
+		printf ("\t1- Visualizar canales\n");
+		printf ("\t2- Listar programas de un canal\n");
+		printf ("\t3- Buscar programa por nombre\n");
+		printf ("\t4- Visualizar programacion\n");
+		printf ("\t5- Descargar programacion\n");
+		printf ("\t6- Volver\n");
+		printf ("\t Enter option: ");
+		error = optionAsNumber(&option, 1, 6);
+	} while (error);
+	return option;
+}
+
+int menuSuscripcionesCliente () {
+	int error = 0, option;
+
+	do {
+		printf ("\t1- Suscribirse a un canal\n");
+		printf ("\t2- Cancelar suscripcion a un canal\n");
+		printf ("\t3- Volver\n");
+		printf ("\t Enter option: ");
+		error = optionAsNumber(&option, 1, 3);
+	} while (error);
+	return option;
+}
+
+int menuPeliculasCliente () {
+	int error = 0, option;
+
+	do {
+		printf ("\t1- Visualizar peliculas\n");
+		printf ("\t2- Comprar pelicula\n");
+		printf ("\t3- Volver\n");
+		printf ("\t Enter option: ");
+		error = optionAsNumber(&option, 1, 3);
+	} while (error);
+	return option;
 }
 
 void registroTarjeta(Persona *p) {
@@ -997,7 +1030,62 @@ void listarProgramasUsuario(char usuario[MAX_CHAR_SIMPLE]){
 
 }
 
+void modoCanalesCliente(Persona p) {
+	int option;
 
+	do {
+		option = menuCanalesCliente();
+		switch (option) {
+			case 1:
+				visualizarCanales();
+				break;
+			case 2:
+				listarProgramasUsuario(p.correo);
+				break;
+			case 3:
+				buscarPrograma(p.correo);
+				break;
+			case 4:
+				verProgramario();
+				break;
+			case 5:
+				descargarProgramacion(p);
+				break;
+		}
+	} while (option != 6);
+}
+
+void modoSuscripcionesCliente(Persona p) {
+	int option;
+
+	do {
+		option = menuSuscripcionesCliente();
+		switch (option) {
+			case 1:
+				suscribirseACanal(p);
+				break;
+			case 2:
+				eliminarSuscripcion(p);
+				break;
+		}
+	} while (option != 3);
+}
+
+void modoPeliculasCliente(Persona p) {
+	int option;
+
+	do {
+		option = menuPeliculasCliente();
+		switch (option) {
+			case 1:
+				ordenacionPeliculas();
+				break;
+			case 2:
+				comprarPelicula(p);
+				break;
+		}
+	} while (option != 3);
+}
 
 /***********************************************
 *
@@ -1010,52 +1098,26 @@ void modoCliente (Persona p) {
 	int option, quit = 0;
 
     do {
-        option = menuCliente();
-        switch (option) {
-            case 1:
-                // Registro tarjeta
-                registroTarjeta(&p);
-                break;
-            case 2:
-                mostrarprog();
+        option = menuGeneralCliente();
+		switch (option) {
+			case 1:
+				modoCanalesCliente(p);
+				break;
+			case 2:
+				modoSuscripcionesCliente(p);
 				break;
 			case 3:
-				visualizarCanales();
+				modoPeliculasCliente(p);
 				break;
 			case 4:
-				listarProgramasUsuario(p.correo);
+                registroTarjeta(&p);
 				break;
 			case 5:
-				buscarPrograma(p.correo);
+				eliminarcuenta(p);
 				break;
-			case 6:		
-				suscribirseACanal(p);
-				break;
-			case 7:
-				eliminarSuscripcion(p);
-				break;
-			case 8:
-				verProgramario();
-				break;
-			case 9:
-				descargarProgramacion(p);
-				break;
-			case 10:
-				ordenacionPeliculas();
-				break;
-			case 11:
-				comprarPelicula(p);
-				break;
-            case 12:
-                eliminarcuenta(p);
-                option=12;
-			case 13:
-				printf ("¡Hasta pronto!\n");
-				break;
-			case 14:
+			case 6:
 				quit = solicitarVerificacion();
 				break;
 		}
 	} while (!quit);
-
 }
