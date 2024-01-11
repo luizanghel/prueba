@@ -8,6 +8,7 @@
 #include "linkedlistcanales.h"
 #include "linkedlistprograma.h"
 #include "dato.h"
+#include "planner.h"
 
 #define MAX_CHAR_SIMPLE 	  200
 #define MAX_ACTORES_PROGRAMA	3

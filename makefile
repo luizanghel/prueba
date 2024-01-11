@@ -18,7 +18,10 @@ linkedlistcanales.o: linkedlistcanales.c linkedlistcanales.h
 linkedlistprograma.o: linkedlistprograma.c linkedlistprograma.h
 	gcc linkedlistprograma.c -g -c
 
-canales.o: canales.c linkedlistcanales.h linkedlistprograma.h dato.h canales.h
+planner.o: planner.c planner.h
+	gcc planner.c -g -c
+
+canales.o: canales.c linkedlistcanales.h linkedlistprograma.h dato.h canales.h planner.h
 	gcc canales.c -g -c
 
 user.o: user.c linkedlist.h dato.h canales.h dato.h linkedlistcanales.h pelicula.h user.h
@@ -36,8 +39,8 @@ anuncios.o: anuncios.c anuncios.h linkedlistadvertisements.h
 linkedlistadvertisements.o: linkedlistadvertisements.c linkedlistadvertisements.h
 	gcc linkedlistadvertisements.c -g -c
 
-project: main.o linkedlist.o user.o presupuesto.o actors.o linkedlistactores.o canales.o linkedlistcanales.o linkedlistprograma.o dato.o anuncios.o linkedlistadvertisements.o pelicula.o
-	gcc main.o linkedlist.o user.o presupuesto.o actors.o linkedlistactores.o canales.o linkedlistcanales.o linkedlistprograma.o dato.o anuncios.o linkedlistadvertisements.o pelicula.o -g -o project
+project: main.o linkedlist.o user.o presupuesto.o actors.o linkedlistactores.o canales.o linkedlistcanales.o linkedlistprograma.o dato.o anuncios.o linkedlistadvertisements.o pelicula.o planner.o
+	gcc main.o linkedlist.o user.o presupuesto.o actors.o linkedlistactores.o canales.o linkedlistcanales.o linkedlistprograma.o dato.o anuncios.o linkedlistadvertisements.o pelicula.o planner.o -g -o project
 
 gdb: project
 	gdb -tui ./project
