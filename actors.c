@@ -438,7 +438,7 @@ void menuActors(){
 			printf("\t4- Listar actores\n");	
 			printf("\t5- Editar actores\n");	
 			printf("\t6- Eliminar actores\n");
-			printf("\t7- Salir\n");
+			printf("\t7- Volver\n");
 			printf("\tEscoge una opción: ");
 			scanf("%d", &option);
 			scanf("%c", &aux);	
