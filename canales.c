@@ -227,8 +227,8 @@ Programa solicitarDatosPrograma () {
     solicitarPalabra("\tIntroduce cadena del programa: ", p.cadena, 0);
     solicitarPalabra("\tIntroduce categoria del programa: ", p.categoria, 0);
     printf("\tIntroduce hora emision del programa (HH:mm): ");
-    scanf("%s", p.emisio);
-    fflush(stdin);
+    fgets(p.emisio, MAX_CHAR_SIMPLE, stdin);
+	p.emisio[strlen(p.emisio) - 1] = '\0';
     p.duracio = solicitarFloat("\tIntroduce duracion del programa: ", MINUTOS);
 
     return p;
@@ -440,7 +440,44 @@ int assignarAlPrograma(int numeros, char letra) {
 
     return correcto;
 }
+PLANNER_Date convertirFormato (char emision[MAX_CHAR_SIMPLE]) {
+	PLANNER_Date pd;
 
+	char subHora[3];
+    strncpy(subHora, emision, 2);
+    subHora[2] = '\0'; // Agregar el carácter nulo al final para formar un string válido
+
+    // Obtener los minutos (posición 3 a 4)
+    char subMinuto[3];
+    strncpy(subMinuto, emision + 3, 2);
+    subMinuto[2] = '\0'; // Agregar el carácter nulo al final para formar un string válido
+
+    // Convertir las subcadenas a enteros usando atoi
+    printf ("Hora: %d | Minuto: %d\n", atoi(subHora), atoi(subMinuto));
+	pd.hour = atoi(subHora);
+	pd.minutes = atoi(subMinuto);	
+
+	return pd;
+}
+
+int programasSeSolapan (char nombreCanal[MAX_CHAR_SIMPLE], int duracion, char emision[MAX_CHAR_SIMPLE]) {
+	LinkedList4 programa = programaFileToList();
+	Programa p;
+	PLANNER_Date newPd, oldPd;
+
+	LINKEDLISTPROGRAMA_goToHead(&programa);
+	while (!LINKEDLISTPROGRAMA_isAtEnd(programa)) {
+		p = LINKEDLISTPROGRAMA_get(&programa);
+		if (!strcmp(p.cadena, nombreCanal)) {
+	    	newPd = convertirFormato(emision);
+			oldPd = convertirFormato(p.emisio);	
+			if (PLANNER_isOverlapping(PLANNER_getSeconds(newPd), duracion, PLANNER_getSeconds(oldPd), p.duracio)) {
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
 
 /***********************************************
 *
@@ -456,19 +493,18 @@ void anadirProgramaACanal (LinkedList3 * canales) {
 
     p = solicitarDatosPrograma();
     if (canalUnico(p.cadena, &c) && nombreUnico(p.nom, &aux)) {
-        for (int i = 0; i < 3; i++) {
-            p.actorID[i].num = 0;
-            p.actorID[i].letra = 'a';
-        }
-        programa = programaFileToList();
-        LINKEDLISTPROGRAMA_add(&programa, p);
-        actualizarFicheroPrograma(programa);
-        LINKEDLISTCANALES_add(canales, c);
-        printf ("Se ha añadido el programa correctamente\n");
-    }
-    else {
+			for (int i = 0; i < 3; i++) {
+    	        p.actorID[i].num = 0;
+       		    p.actorID[i].letra = 'a';
+	       	}
+	        programa = programaFileToList();
+			LINKEDLISTPROGRAMA_add(&programa, p);
+        	actualizarFicheroPrograma(programa);
+	        LINKEDLISTCANALES_add(canales, c);
+   		    printf ("Se ha añadido el programa correctamente\n");
+	} else {
         printf ("No existe ningun canal con este nombre o ya hay un programa con este nombre.\n");
-    }
+	}
 }
 
 /***********************************************
@@ -557,11 +593,10 @@ void eliminarCanal(){
 void eliminarPrograma(LinkedList3 *canales) {
     char nombreCanal[MAX_CHAR_SIMPLE];
     char nombrePrograma[MAX_CHAR_SIMPLE];
+	int hay = 0;
 
-    printf("Introduce el nombre del canal: ");
-    solicitarPalabra("", nombreCanal, NOMBRE_CANAL);
-    printf("Introduce el nombre del programa a eliminar: ");
-    solicitarPalabra("", nombrePrograma, NOMBRE_PROGRAMA);
+    solicitarPalabra("Introduce el nombre del canal: ", nombreCanal, NOMBRE_CANAL);
+    solicitarPalabra("Introduce el nombre del programa a eliminar: ", nombrePrograma, NOMBRE_PROGRAMA);
 
     LINKEDLISTCANALES_goToHead(canales);
     while (!LINKEDLISTCANALES_isAtEnd(*canales)) {
@@ -572,11 +607,21 @@ void eliminarPrograma(LinkedList3 *canales) {
             while (!LINKEDLISTPROGRAMA_isAtEnd(c.programas)) {
                 Programa p = LINKEDLISTPROGRAMA_get(&c.programas);
                 if (strcmp(p.nom, nombrePrograma) == 0) {
-                    LINKEDLISTPROGRAMA_remove(&c.programas);
-                    printf("Programa \"%s\" eliminado del canal \"%s\".\n", nombrePrograma, nombreCanal);
-                    actualizarFicheroPrograma(c.programas);
-                    return;
-                }
+					for (int i = 0; i < 3; i++) {
+						if (p.actorID[i].num != 0) {
+							hay = 1;
+						}
+					}
+	                if (!hay) {  
+						LINKEDLISTPROGRAMA_remove(&c.programas);
+    	                printf("Programa \"%s\" eliminado del canal \"%s\".\n", nombrePrograma, nombreCanal);
+        	            actualizarFicheroPrograma(c.programas);
+            	        return;
+                	} else {
+						printf ("Hay actores contratados.\n");
+						return;
+					}
+				}
                 LINKEDLISTPROGRAMA_next(&c.programas);
             }
             printf("No se encontró el programa \"%s\" en el canal \"%s\".\n", nombrePrograma, nombreCanal);
