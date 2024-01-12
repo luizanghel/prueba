@@ -32,11 +32,12 @@ DniActor solicitarDniActor (char texto[MAX_CHAR_SIMPLE]) {
 void mostrarActoresDisponibles (LinkedList2 list) {
 	Actor actor;
 	int i = 0;
-
+	int found = 0;
 	LINKEDLISTactors_goToHead(&list);
 	while (!LINKEDLISTactors_isAtEnd(list)) {
 		actor = LINKEDLISTactors_get(&list);
 		if (!actor.contractat) {
+			found = 1;
 			printf ("--Actor numero %d--\n", i+1);
 			printf ("  Identificador: %d%c\n", actor.dni.numeros, actor.dni.letra);
 			printf ("  Nombre y apellidos: %s %s %s\n", actor.nombre, actor.apellido1, actor.apellido2);
@@ -45,7 +46,7 @@ void mostrarActoresDisponibles (LinkedList2 list) {
 		}
 		LINKEDLISTactors_next(&list);
 	}
-	if (!i) {
+	if (!found) {
 		printf ("ERROR (No hay actores disponibles)\n");
 	}
 	

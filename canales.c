@@ -492,7 +492,11 @@ void anadirProgramaACanal (LinkedList3 * canales) {
     LinkedList4 programa;
 
     p = solicitarDatosPrograma();
-    if (canalUnico(p.cadena, &c) && nombreUnico(p.nom, &aux)) {
+    if (canalUnico(p.cadena, &c)) {
+		if (nombreUnico(p.nom, &aux)) {
+			if (!programasSeSolapan (p.nom, p.duracio, p.emisio)) {
+				printf ("Si\n");
+			}	
 			for (int i = 0; i < 3; i++) {
     	        p.actorID[i].num = 0;
        		    p.actorID[i].letra = 'a';
@@ -502,8 +506,11 @@ void anadirProgramaACanal (LinkedList3 * canales) {
         	actualizarFicheroPrograma(programa);
 	        LINKEDLISTCANALES_add(canales, c);
    		    printf ("Se ha añadido el programa correctamente\n");
+		} else {
+			printf ("Ya hay un programa con este canal.\n");
+		}
 	} else {
-        printf ("No existe ningun canal con este nombre o ya hay un programa con este nombre.\n");
+        printf ("No existe ningun canal con este nombre.\n");
 	}
 }
 
