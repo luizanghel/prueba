@@ -375,32 +375,32 @@ void runOption (int option, Persona *p) {
 
     switch (option) {
         case 1:
-            printf ("Su nombre actual es %s.", p->nombre);
+            printf ("Su nombre actual es %s. ", p->nombre);
             solicitarPalabra("Introduce nombre a modificar: ", cambio, option--);
             strcpy(p->nombre, cambio);
             break;
         case 2:
-            printf ("Su primer apellido actual es %s.", p->apellido1);
+            printf ("Su primer apellido actual es %s. ", p->apellido1);
             solicitarPalabra("Introduce primer apellido a modificar: ", cambio, option--);
             strcpy(p->apellido1, cambio);
             break;
         case 3:
-            printf ("Su segundo apellido actual es %s.", p->apellido2);
+            printf ("Su segundo apellido actual es %s. ", p->apellido2);
             solicitarPalabra("Introduce segundo apellido a modificar: ", cambio, option--);
             strcpy(p->apellido2, cambio);
             break;
         case 4:
-            printf ("Su correo actual es %s.", p->correo);
+            printf ("Su correo actual es %s. ", p->correo);
             solicitarCorreo("Introduce correo a modificar: ", cambio);
             strcpy(p->correo, cambio);
             break;
         case 5:
-            printf ("Su contraseña actual es %s.", p->password);
+            printf ("Su contraseña actual es %s. ", p->password);
             solicitarContrasena("Introduce contraseña a modificar: ", cambio);
             strcpy(p->password, cambio);
             break;
         case 6:
-            printf ("Su numero de telefono actual es %d.", p->telefono);
+            printf ("Su numero de telefono actual es %d. ", p->telefono);
             numero = solicitarTelefono("Introduce telefono a modificar: ", 9);
             p->telefono = numero;
             break;
@@ -557,6 +557,9 @@ int solicitarVerificacion () {
 		fgets(confirmacion, MAX_CHAR_SIMPLE, stdin);
 		confirmacion[strlen(confirmacion) - 1] = '\0';
 		todoAMinusculas(confirmacion);
+		if (strcmp(confirmacion, "si") != 0 && strcmp(confirmacion, "no") != 0) {
+			printf ("ERROR: Debes introducir 'SI' o 'NO'\n");
+		}
 	} while (strcmp(confirmacion, "si") && strcmp(confirmacion, "no"));
 
 	if (!strcmp(confirmacion, "si")) {
