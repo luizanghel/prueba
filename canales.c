@@ -549,8 +549,7 @@ void eliminarCanal(){
     char nombre[MAX_CHAR_SIMPLE];
 
     lista = canalesFileToList(&num_canales);
-    printf("\nEnter the canal name to remove: ");
-    scanf("%s", nombre);
+	solicitarPalabra("Introduce el nombre del canal a eliminar: ", nombre, NOMBRE);
     eliminarC(&lista, nombre);
 
 }
